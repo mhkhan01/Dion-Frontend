@@ -1,0 +1,1109 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/lib/auth-context';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
+
+interface Booking {
+  id: string;
+  booking_request_id?: string; // Add booking request ID
+  property_id: string;
+  start_date: string;
+  end_date: string;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'paid';
+  created_at: string;
+  property: {
+    title: string;
+    address: string;
+    price: number;
+  };
+  invoice?: {
+    id: string;
+    amount: number;
+    status: 'unpaid' | 'paid';
+    stripe_payment_url: string | null;
+  };
+}
+
+export default function ContractorDashboard() {
+  const { user, loading, signOut } = useAuth();
+  const router = useRouter();
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loadingBookings, setLoadingBookings] = useState(false);
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [contractorName, setContractorName] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activityTab, setActivityTab] = useState<'active' | 'pending'>('active');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set(['search']));
+  const [filterValues, setFilterValues] = useState({
+    search: '',
+    postcode: '',
+    startDate: '',
+    endDate: ''
+  });
+  const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
+  const [contactInfo, setContactInfo] = useState({
+    company_name: '',
+    company_email: '',
+    company_address: '',
+    phone: ''
+  });
+  const [contractorFullName, setContractorFullName] = useState('');
+
+  const fetchContractorData = async () => {
+    if (!user?.id) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('contractor')
+        .select('full_name, company_name, company_email, company_address, phone')
+        .eq('id', user.id)
+        .single();
+      
+      if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching contractor data:', error);
+        return;
+      }
+      
+      if (data) {
+        console.log('Contractor data fetched:', data);
+        setContractorFullName(data.full_name || user?.full_name || '');
+        setContactInfo({
+          company_name: data.company_name || '',
+          company_email: data.company_email || user?.email || '',
+          company_address: data.company_address || '',
+          phone: data.phone || ''
+        });
+      } else {
+        console.log('No contractor data found, using user data');
+        // Initialize with empty values if no record exists
+        setContractorFullName(user?.full_name || '');
+        setContactInfo({
+          company_name: '',
+          company_email: user?.email || '',
+          company_address: '',
+          phone: ''
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching contractor data:', error);
+    }
+  };
+
+  const handleContactInfoUpdate = async () => {
+    if (!user?.id) return;
+    
+    try {
+      // First, check if contractor record exists
+      const { data: existingContractor, error: fetchError } = await supabase
+        .from('contractor')
+        .select('id')
+        .eq('id', user.id)
+        .single();
+      
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        console.error('Error checking contractor data:', fetchError);
+        alert('Error checking contractor information. Please try again.');
+        return;
+      }
+      
+      let result;
+      if (existingContractor) {
+        // Update existing record
+        result = await supabase
+          .from('contractor')
+          .update({
+            company_name: contactInfo.company_name,
+            company_email: contactInfo.company_email,
+            company_address: contactInfo.company_address,
+            phone: contactInfo.phone
+          })
+          .eq('id', user.id);
+      } else {
+        // Insert new record
+        result = await supabase
+          .from('contractor')
+          .insert({
+            id: user.id,
+            email: user.email || '',
+            full_name: user.full_name || '',
+            role: 'contractor',
+            company_name: contactInfo.company_name,
+            company_email: contactInfo.company_email,
+            company_address: contactInfo.company_address,
+            phone: contactInfo.phone
+          });
+      }
+      
+      if (result.error) {
+        console.error('Error updating contractor data:', result.error);
+        alert(`Error updating contact information: ${result.error.message}`);
+      } else {
+        alert('Contact information updated successfully!');
+      }
+    } catch (error) {
+      console.error('Error updating contractor data:', error);
+      alert(`Error updating contact information: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
+  useEffect(() => {
+    console.log('Contractor dashboard auth check:', { user, loading, userRole: user?.role });
+    
+    if (!loading && !user) {
+      console.log('No user found, redirecting to login');
+      router.push('/auth/login');
+      return;
+    }
+
+    if (user && user.role !== 'contractor') {
+      console.log('User role is not contractor:', user.role, 'redirecting to home');
+      router.push('/');
+      return;
+    }
+    
+    console.log('User is contractor, staying on dashboard');
+  }, [user, loading, router]);
+
+  // Close filter dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isFilterDropdownOpen) {
+        const target = event.target as Element;
+        if (!target.closest('.filter-dropdown-container')) {
+          setIsFilterDropdownOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isFilterDropdownOpen]);
+
+  useEffect(() => {
+    if (user) {
+      fetchContractorName();
+      fetchBookings();
+    } else {
+      // For preview purposes, set loading to false immediately if no user
+      setLoadingBookings(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (activeTab === 'contact-info' && user?.id) {
+      console.log('Fetching contractor data for contact-info tab');
+      fetchContractorData();
+    }
+  }, [activeTab, user?.id]);
+
+  // Initialize full name from user data as fallback
+  useEffect(() => {
+    if (user?.full_name && !contractorFullName) {
+      setContractorFullName(user.full_name);
+    }
+  }, [user?.full_name, contractorFullName]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (openDropdownId) {
+        setOpenDropdownId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openDropdownId]);
+
+  const fetchContractorName = async () => {
+    if (!user?.id) return;
+    
+    try {
+      const { data: contractorData, error } = await supabase
+        .from('contractor')
+        .select('full_name')
+        .eq('id', user.id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching contractor name:', error);
+        return;
+      }
+
+      if (contractorData?.full_name) {
+        setContractorName(contractorData.full_name);
+      }
+    } catch (error) {
+      console.error('Error fetching contractor name:', error);
+    }
+  };
+
+  const fetchBookings = async () => {
+    try {
+      setLoadingBookings(true);
+      
+      // Fetch booking requests for this contractor
+      const { data: bookingRequests, error: requestsError } = await supabase
+        .from('booking_requests')
+        .select(`
+          *,
+          booking_dates(*)
+        `)
+        .or(`user_id.eq.${user?.id},email.eq.${user?.email}`)
+        .order('created_at', { ascending: false });
+
+      if (requestsError) {
+        console.error('Error fetching booking requests:', requestsError);
+        return;
+      }
+
+      console.log('Fetched booking requests:', bookingRequests);
+
+      // Transform booking requests into bookings format for display
+      const transformedBookings: Booking[] = [];
+      
+      if (bookingRequests) {
+        for (const request of bookingRequests) {
+          console.log('Request data:', request);
+          console.log('Budget per person week:', request.budget_per_person_week);
+          if (request.booking_dates && request.booking_dates.length > 0) {
+            for (const bookingDate of request.booking_dates) {
+              transformedBookings.push({
+                id: bookingDate.id,
+                booking_request_id: request.id, // Add the booking request ID
+                property_id: request.assigned_property_id || '',
+                start_date: bookingDate.start_date,
+                end_date: bookingDate.end_date,
+                status: request.status as 'pending' | 'confirmed' | 'cancelled' | 'paid',
+                created_at: request.created_at,
+                property: {
+                  title: `${request.company_name || 'N/A'} | Team Size: ${request.team_size || 'N/A'}`,
+                  address: request.project_postcode || 'Location TBD',
+                  price: request.budget_per_person_week || 0
+                }
+              });
+            }
+          }
+        }
+      }
+
+      setBookings(transformedBookings);
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+    } finally {
+      setLoadingBookings(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    if (user) {
+      await signOut();
+    }
+    router.push('/');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-booking-bg">
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-booking-teal"></div>
+        </div>
+      </div>
+    );
+  }
+
+  const displayUser = user;
+
+  const activeBookings = bookings.filter(b => b.status === 'confirmed' || b.status === 'paid');
+  const pendingBookings = bookings.filter(b => b.status === 'pending');
+
+  const renderMainContent = () => {
+    switch (activeTab) {
+      case 'dashboard':
+        return (
+          <div className="space-y-6">
+            {/* Header with Search and Create Button */}
+            <div className="flex flex-col space-y-4">
+              <div>
+                <h1 className="text-xl sm:text-2xl font-bold text-booking-dark">Analytics</h1>
+                <p className="text-sm sm:text-base text-booking-gray">Accommodation booking overview</p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 items-start">
+                <button 
+                  onClick={() => router.push('/contractor-form')}
+                  className="w-full sm:w-auto text-white px-6 py-3 rounded-lg transition-all duration-200 font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-105 whitespace-nowrap"
+                  style={{ background: 'linear-gradient(to right, #00BAB5, rgba(0, 186, 181, 0.54))' }}
+                >
+                  Create Booking Request
+                </button>
+              </div>
+            </div>
+
+            {/* Analytics Tiles */}
+            <div className="grid grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6 max-w-4xl mx-auto">
+              {/* Active Requests Analytics */}
+              <div className="rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 text-white" style={{ background: 'linear-gradient(to top, #00BAB5, rgba(0, 186, 181, 0.54))' }}>
+                <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
+                  <h3 className="text-sm sm:text-base lg:text-lg font-semibold">Active Requests</h3>
+                  <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                    <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 sm:mb-2">{activeBookings.length}</div>
+                <div className="text-xs sm:text-sm opacity-90 mb-2 sm:mb-3 lg:mb-4">Currently active projects</div>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                    <span>Confirmed: {activeBookings.filter(b => b.status === 'confirmed').length}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-white bg-opacity-60 rounded-full"></div>
+                    <span>Paid: {activeBookings.filter(b => b.status === 'paid').length}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pending Requests Analytics */}
+              <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 shadow-lg border border-gray-100">
+                <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
+                  <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-booking-dark">Pending Requests</h3>
+                  <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                    <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-1 sm:mb-2">{pendingBookings.length}</div>
+                <div className="text-xs sm:text-sm text-booking-gray mb-2 sm:mb-3 lg:mb-4">Awaiting approval</div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2 sm:mb-3 lg:mb-4">
+                  <div className="bg-yellow-500 h-2 rounded-full" style={{width: `${Math.min((pendingBookings.length / 10) * 100, 100)}%`}}></div>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0 text-xs sm:text-sm text-booking-gray">
+                  <span>This week: {pendingBookings.length}</span>
+                  <span>+{Math.floor(Math.random() * 5)}% from last week</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Activity Lists */}
+            <div className="space-y-4">
+                <div className="flex flex-col gap-4">
+                  <h3 className="text-base sm:text-lg font-semibold text-booking-dark">Request Activity</h3>
+                  <div className="flex space-x-1">
+                    <button 
+                      onClick={() => setActivityTab('active')}
+                      className={`px-3 py-1 text-xs sm:text-sm font-medium rounded-lg transition-all duration-200 ${
+                        activityTab === 'active'
+                          ? 'text-booking-teal border-b-2 border-booking-teal bg-booking-bg'
+                          : 'text-booking-gray hover:text-booking-dark'
+                      }`}
+                    >
+                      Active
+                    </button>
+                    <button 
+                      onClick={() => setActivityTab('pending')}
+                      className={`px-3 py-1 text-xs sm:text-sm font-medium rounded-lg transition-all duration-200 ${
+                        activityTab === 'pending'
+                          ? 'text-booking-teal border-b-2 border-booking-teal bg-booking-bg'
+                          : 'text-booking-gray hover:text-booking-dark'
+                      }`}
+                    >
+                      Pending
+                    </button>
+                  </div>
+                </div>
+
+              {/* Search Bar and Filters for Request Activity */}
+              <div className="flex flex-col gap-4">
+                <div className="w-full sm:flex-1 sm:max-w-md">
+                  {/* Multi-Select Filter Dropdown */}
+                  <div className="flex flex-col gap-2 sm:gap-4">
+                    {/* Filter Type Multi-Select Dropdown */}
+                    <div className="relative filter-dropdown-container">
+                      <button
+                        onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
+                        className="w-full sm:w-28 md:w-32 lg:w-36 px-2 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent bg-white flex items-center justify-between"
+                        style={{ fontSize: '11px' }}
+                      >
+                        <span>
+                          {selectedFilters.size === 1 && selectedFilters.has('search') ? 'Search All' :
+                           selectedFilters.size === 1 && selectedFilters.has('postcode') ? 'Postcode' :
+                           selectedFilters.size === 1 && selectedFilters.has('startDate') ? 'Start Date' :
+                           selectedFilters.size === 1 && selectedFilters.has('endDate') ? 'End Date' :
+                           `${selectedFilters.size} Filters`}
+                        </span>
+                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      
+                      {isFilterDropdownOpen && (
+                        <div className="absolute top-full left-0 z-10 w-full sm:w-48 bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
+                          <div className="p-2 space-y-1">
+                            {[
+                              { value: 'search', label: 'Search All' },
+                              { value: 'postcode', label: 'Filter by Postcode' },
+                              { value: 'startDate', label: 'Filter by Start Date' },
+                              { value: 'endDate', label: 'Filter by End Date' }
+                            ].map((option) => (
+                              <label key={option.value} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedFilters.has(option.value)}
+                                  onChange={(e) => {
+                                    const newSelectedFilters = new Set(selectedFilters);
+                                    if (e.target.checked) {
+                                      newSelectedFilters.add(option.value);
+                                    } else {
+                                      newSelectedFilters.delete(option.value);
+                                      // Clear the specific filter value when unchecking
+                                      setFilterValues(prev => ({ ...prev, [option.value]: '' }));
+                                    }
+                                    setSelectedFilters(newSelectedFilters);
+                                  }}
+                                  className="w-3 h-3 text-booking-teal focus:ring-booking-teal"
+                                />
+                                <span className="text-xs" style={{ fontSize: '11px' }}>{option.label}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+              </div>
+              
+                    {/* Multiple Filter Inputs */}
+                    <div className="flex-1 space-y-2">
+                      {selectedFilters.has('search') && (
+                        <div className="relative">
+                          <input
+                            type="text"
+                            placeholder="Search requests..."
+                            value={filterValues.search}
+                            onChange={(e) => setFilterValues(prev => ({ ...prev, search: e.target.value }))}
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          />
+                          <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                        </div>
+                      )}
+                      
+                      {selectedFilters.has('postcode') && (
+                        <div className="relative">
+                          <input
+                            type="text"
+                            placeholder="e.g., SW1A 1AA"
+                            value={filterValues.postcode}
+                            onChange={(e) => setFilterValues(prev => ({ ...prev, postcode: e.target.value }))}
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          />
+                          <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                        </div>
+                      )}
+                      
+                      {selectedFilters.has('startDate') && (
+                        <div className="relative">
+                          <input
+                            type="date"
+                            placeholder="Select start date"
+                            value={filterValues.startDate}
+                            onChange={(e) => setFilterValues(prev => ({ ...prev, startDate: e.target.value }))}
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          />
+                          <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
+                      
+                      {selectedFilters.has('endDate') && (
+                        <div className="relative">
+                          <input
+                            type="date"
+                            placeholder="Select end date"
+                            value={filterValues.endDate}
+                            onChange={(e) => setFilterValues(prev => ({ ...prev, endDate: e.target.value }))}
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          />
+                          <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Clear Filter Button */}
+                  {(Object.values(filterValues).some(value => value) || selectedFilters.size > 1 || !selectedFilters.has('search')) && (
+                    <button
+                      onClick={() => {
+                        setSelectedFilters(new Set(['search']));
+                        setFilterValues({
+                          search: '',
+                          postcode: '',
+                          startDate: '',
+                          endDate: ''
+                        });
+                      }}
+                      className="mt-2 text-xs text-booking-gray hover:text-booking-dark underline"
+                    >
+                      Clear Filter
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              <div>
+                {(() => {
+                  const filteredBookings = activityTab === 'active' ? activeBookings : pendingBookings;
+                    
+                    let filteredResults = filteredBookings;
+                    
+                    // Apply multiple filters simultaneously with separate values
+                    
+                    // Search filter
+                    if (selectedFilters.has('search') && filterValues.search) {
+                      filteredResults = filteredResults.filter(booking => 
+                        booking.property.title.toLowerCase().includes(filterValues.search.toLowerCase()) ||
+                        booking.property.address.toLowerCase().includes(filterValues.search.toLowerCase())
+                      );
+                    }
+                    
+                    // Postcode filter
+                    if (selectedFilters.has('postcode') && filterValues.postcode) {
+                      filteredResults = filteredResults.filter(booking => 
+                        booking.property.address.toLowerCase().includes(filterValues.postcode.toLowerCase())
+                      );
+                    }
+                    
+                    // Start date filter
+                    if (selectedFilters.has('startDate') && filterValues.startDate) {
+                      const filterStartDate = new Date(filterValues.startDate);
+                      filteredResults = filteredResults.filter(booking => {
+                        const bookingStartDate = new Date(booking.start_date);
+                        
+                        // Normalize dates to compare only the date part (ignore time)
+                        const filterDate = new Date(filterStartDate.getFullYear(), filterStartDate.getMonth(), filterStartDate.getDate());
+                        const startDate = new Date(bookingStartDate.getFullYear(), bookingStartDate.getMonth(), bookingStartDate.getDate());
+                        
+                        // Show only bookings that start on the exact filter date
+                        return startDate.getTime() === filterDate.getTime();
+                      });
+                    }
+                    
+                    // End date filter
+                    if (selectedFilters.has('endDate') && filterValues.endDate) {
+                      const filterEndDate = new Date(filterValues.endDate);
+                      filteredResults = filteredResults.filter(booking => {
+                        const bookingEndDate = new Date(booking.end_date);
+                        
+                        // Normalize dates to compare only the date part (ignore time)
+                        const filterDate = new Date(filterEndDate.getFullYear(), filterEndDate.getMonth(), filterEndDate.getDate());
+                        const endDate = new Date(bookingEndDate.getFullYear(), bookingEndDate.getMonth(), bookingEndDate.getDate());
+                        
+                        // Show only bookings that end on the exact filter date
+                        return endDate.getTime() === filterDate.getTime();
+                      });
+                    }
+                    
+                    const filteredBySearch = filteredResults;
+
+                  if (filteredBySearch.length > 0) {
+                    return (
+                      <div className="space-y-2">
+                        {filteredBySearch.map((booking) => (
+                          <div key={booking.id} className="flex items-center justify-between py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                            <div className="flex items-center space-x-4 flex-1 min-w-0">
+                              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                                activityTab === 'active' ? 'bg-booking-teal' : 'bg-yellow-500'
+                              }`}>
+                                <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  {activityTab === 'active' ? (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  ) : (
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                  )}
+                                </svg>
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="text-base font-semibold text-booking-dark truncate">{booking.property.title}</h4>
+                                <p className="text-sm text-booking-gray truncate">{booking.property.address}</p>
+                                <p className="text-sm text-booking-gray truncate">
+                                  {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-4 flex-shrink-0">
+                              <div className="text-right">
+                                <div className="text-sm font-semibold text-booking-dark">{booking.property.price}</div>
+                                <div className="text-xs text-booking-gray">per night</div>
+                              </div>
+                              <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                                booking.status === 'confirmed' 
+                                  ? 'bg-green-100 text-green-800' 
+                                  : booking.status === 'paid'
+                                  ? 'bg-blue-100 text-blue-800'
+                                  : 'bg-yellow-100 text-yellow-800'
+                              }`}>
+                                {booking.status === 'confirmed' ? 'Confirmed' : 
+                                 booking.status === 'paid' ? 'Paid' : 'Pending'}
+                              </span>
+                              <div className="relative">
+                                <button 
+                                  onClick={() => setOpenDropdownId(openDropdownId === booking.id ? null : booking.id)}
+                                  className="text-booking-gray hover:text-booking-dark p-1"
+                                >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                                </svg>
+                                </button>
+                                {booking.status === 'pending' && openDropdownId === booking.id && (
+                                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10 border border-gray-200">
+                                    <div className="py-1">
+                                      <button 
+                                        onClick={() => {
+                                          setOpenDropdownId(null);
+                                          // Add edit functionality here
+                                          console.log('Edit booking:', booking.id);
+                                        }}
+                                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                      >
+                                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                        </svg>
+                                        Edit
+                              </button>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div className="text-center py-6">
+                        <div className="w-10 h-10 bg-booking-bg rounded-full flex items-center justify-center mx-auto mb-3">
+                          <svg className="w-5 h-5 text-booking-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {activityTab === 'active' ? (
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            ) : (
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            )}
+                          </svg>
+                        </div>
+                        <h3 className="text-base font-semibold text-booking-dark mb-1">
+                          No {activityTab === 'active' ? 'Active' : 'Pending'} Requests
+                        </h3>
+                        <p className="text-sm text-booking-gray">
+                          {activityTab === 'active' 
+                            ? "You don't have any active booking requests at the moment."
+                            : "You don't have any pending booking requests at the moment."
+                          }
+                        </p>
+                      </div>
+                    );
+                  }
+                })()}
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'booking-requests':
+        return (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold text-booking-dark mb-2">Booking Requests</h2>
+              <p className="text-booking-gray">Manage your pending booking requests</p>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
+              {pendingBookings.length > 0 ? (
+                <div className="p-6">
+                  {pendingBookings.map((booking) => (
+                    <div key={booking.id} className="border-b border-gray-100 last:border-b-0 py-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h3 className="text-sm lg:text-base font-semibold text-booking-dark mb-1">
+                            {booking.property.title}
+                          </h3>
+                          <p className="text-xs lg:text-sm text-booking-gray mb-2">{booking.property.address}</p>
+                          <div className="flex flex-col space-y-1">
+                            <span className="text-xs lg:text-sm text-booking-gray">
+                              {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
+                            </span>
+                            <span className="text-xs lg:text-sm text-booking-teal font-semibold">
+                              {booking.property.price || 0} per night
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs lg:text-sm font-medium">
+                          Pending
+                        </span>
+                          <button
+                            onClick={() => router.push(`/contractor-form?edit=${booking.booking_request_id}`)}
+                            className="text-booking-teal hover:text-booking-dark text-xs lg:text-sm font-medium underline"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="p-12 text-center">
+                  <div className="w-16 h-16 bg-booking-bg rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-booking-gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-semibold text-booking-dark mb-2">No Pending Requests</h3>
+                  <p className="text-booking-gray">You don't have any pending booking requests.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        );
+
+
+      case 'contact-info':
+        return (
+          <div className="space-y-4 sm:space-y-6">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-booking-dark mb-2">Contact Information</h2>
+              <p className="text-sm sm:text-base text-booking-gray">Manage your contact details and preferences</p>
+            </div>
+
+            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
+              <div className="space-y-4 sm:space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-booking-dark mb-2">Full Name</label>
+                  <input 
+                    type="text" 
+                    value={contractorFullName} 
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-booking-dark mb-2">Company Email</label>
+                  <input 
+                    type="email" 
+                    value={displayUser?.email || ''} 
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    readOnly
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-booking-dark mb-2">Phone</label>
+                  <input 
+                    type="tel" 
+                    value={contactInfo.phone}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
+                    placeholder="Enter phone number"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-booking-dark mb-2">Company Name</label>
+                  <input 
+                    type="text" 
+                    value={contactInfo.company_name}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, company_name: e.target.value }))}
+                    placeholder="Enter company name"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-booking-dark mb-2">Company Address</label>
+                  <textarea 
+                    value={contactInfo.company_address}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, company_address: e.target.value }))}
+                    placeholder="Enter company address"
+                    rows={3}
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-booking-dark mb-2">Role</label>
+                  <input 
+                    type="text" 
+                    value="Contractor" 
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    readOnly
+                  />
+                </div>
+                <div className="pt-3 sm:pt-4">
+                  <button 
+                    onClick={handleContactInfoUpdate}
+                    className="w-full sm:w-auto bg-booking-teal text-white px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl hover:bg-opacity-90 transition-all duration-200 font-medium"
+                  >
+                    Update Information
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+      {/* Mobile Header */}
+      <div className="lg:hidden text-white p-4 flex items-center justify-between" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
+        <div className="flex items-center space-x-3">
+          <img 
+            src="/Asset 3@4x.png" 
+            alt="Booking Hub Logo" 
+            className="h-8 w-auto"
+          />
+          <div>
+            <p className="text-lg font-semibold text-white">Client Portal</p>
+          </div>
+        </div>
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2 rounded-lg hover:bg-gray-700 transition-colors"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div className="lg:hidden fixed inset-0 z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)}></div>
+          <div className="fixed top-0 left-0 h-full w-64 bg-booking-dark text-white transform transition-transform duration-300 ease-in-out">
+            <div className="p-4 border-b border-gray-700" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col items-center space-y-2">
+                  <img 
+                    src="/Asset 3@4x.png" 
+                    alt="Booking Hub Logo" 
+                    className="h-12 w-auto"
+                  />
+                  <p className="text-sm font-bold" style={{ color: '#0B1D37' }}>Client Portal</p>
+                </div>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            {/* Mobile Navigation */}
+            <nav className="p-4 space-y-2">
+              <button
+                onClick={() => { setActiveTab('dashboard'); setIsMobileMenuOpen(false); }}
+                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                  activeTab === 'dashboard'
+                    ? 'bg-white text-booking-dark'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
+                  </svg>
+                  <span className="text-sm font-medium">Dashboard</span>
+                  {activeTab === 'dashboard' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+                </div>
+              </button>
+
+              <button
+                onClick={() => { setActiveTab('booking-requests'); setIsMobileMenuOpen(false); }}
+                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                  activeTab === 'booking-requests'
+                    ? 'bg-white text-booking-dark'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  <span className="text-sm font-medium">Booking Requests</span>
+                  {activeTab === 'booking-requests' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+                </div>
+              </button>
+
+
+              <button
+                onClick={() => { setActiveTab('contact-info'); setIsMobileMenuOpen(false); }}
+                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                  activeTab === 'contact-info'
+                    ? 'bg-white text-booking-dark'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <span className="text-sm font-medium">Contact Information</span>
+                  {activeTab === 'contact-info' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+                </div>
+              </button>
+            </nav>
+
+            {/* Mobile Profile Section */}
+            <div className="p-4 border-t border-gray-700 mt-auto">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-8 h-8 bg-booking-teal rounded-full flex items-center justify-center">
+                  <span className="text-white font-semibold text-sm">
+                    {contractorName ? contractorName.charAt(0).toUpperCase() : 'C'}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-white">{contractorName || 'Contractor'}</p>
+                  <p className="text-xs text-gray-300">Client</p>
+                </div>
+              </div>
+              <button
+                onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
+                className="w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200"
+              >
+                <div className="flex items-center space-x-3">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  <span className="text-sm font-medium">Logout</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:flex w-64 bg-booking-dark text-white flex-col min-h-screen">
+        {/* Logo/Header */}
+        <div className="p-6 border-b border-gray-700" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
+          <div className="flex flex-col items-center space-y-2">
+            <img 
+              src="/Asset 3@4x.png" 
+              alt="Booking Hub Logo" 
+              className="h-12 w-auto"
+            />
+            <p className="text-sm font-bold" style={{ color: '#0B1D37' }}>Client Portal</p>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-2">
+          <button
+            onClick={() => setActiveTab('dashboard')}
+            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+              activeTab === 'dashboard'
+                ? 'bg-white text-booking-dark'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
+              </svg>
+              <span className="text-sm lg:text-sm font-medium">Dashboard</span>
+              {activeTab === 'dashboard' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+            </div>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('booking-requests')}
+            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+              activeTab === 'booking-requests'
+                ? 'bg-white text-booking-dark'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <span className="text-sm lg:text-sm font-medium">Booking Requests</span>
+              {activeTab === 'booking-requests' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+            </div>
+          </button>
+
+
+          <button
+            onClick={() => setActiveTab('contact-info')}
+            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+              activeTab === 'contact-info'
+                ? 'bg-white text-booking-dark'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+            }`}
+          >
+            <div className="flex items-center space-x-3">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span className="text-sm lg:text-sm font-medium">Contact Information</span>
+              {activeTab === 'contact-info' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+            </div>
+          </button>
+        </nav>
+
+        {/* Profile Section */}
+        <div className="p-4 border-t border-gray-700">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="w-8 h-8 bg-booking-teal rounded-full flex items-center justify-center">
+              <span className="text-white font-semibold text-sm">
+                {contractorName ? contractorName.charAt(0).toUpperCase() : 'C'}
+              </span>
+            </div>
+            <div>
+              <p className="text-sm lg:text-sm font-medium text-white">{contractorName || 'Contractor'}</p>
+              <p className="text-xs lg:text-sm text-gray-300">Client</p>
+            </div>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200"
+          >
+            <div className="flex items-center space-x-3">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              <span className="text-sm lg:text-sm font-medium">Logout</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+        {renderMainContent()}
+      </div>
+    </div>
+  );
+}

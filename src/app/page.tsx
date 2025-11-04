@@ -335,10 +335,10 @@ export default function HomePage() {
         <img src="/Tata Steel.webp" alt="" fetchPriority="high" loading="eager" />
       </div>
 
-      <div className="min-h-screen">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#F6F6F4] px-4 sm:px-6 py-4 sm:py-6 lg:py-8">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-[#F6F6F4] px-4 sm:px-6 lg:px-12 py-4 sm:py-6 lg:py-8">
+        <div className="w-full lg:max-w-none mx-auto flex items-center justify-center">
+          <div className="w-full max-w-7xl flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
             <a href="/">
@@ -383,6 +383,7 @@ export default function HomePage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
+          </div>
         </div>
 
         {/* Mobile Sidebar Menu - Visible only on mobile */}
@@ -494,6 +495,7 @@ export default function HomePage() {
         )}
       </header>
 
+      <div className="min-h-screen overflow-x-hidden">
       {/* Hero Section */}
       <section 
         className="relative h-[50vh] sm:h-[60vh] md:h-[65vh] lg:h-[70vh] flex items-center justify-center"
@@ -526,8 +528,9 @@ export default function HomePage() {
       </section>
 
       {/* Proud To Support Section */}
-      <section className="bg-white pt-4 sm:pt-6 md:pt-8 lg:pt-10 pb-8 sm:pb-10 md:pb-12 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white pt-4 sm:pt-6 md:pt-8 lg:pt-10 pb-8 sm:pb-10 md:pb-12 px-4 sm:px-6 lg:px-12">
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-7xl">
           {/* Section Header */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#0B1D37] mb-3 sm:mb-4">
@@ -581,60 +584,64 @@ export default function HomePage() {
 
             
           </div>
+          </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="bg-[#F6F6F4] pt-4 sm:pt-6 md:pt-8 lg:pt-10 pb-6 sm:pb-12 md:pb-16 lg:pb-20 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-[#F6F6F4] pt-4 sm:pt-6 md:pt-8 lg:pt-10 pb-6 sm:pb-12 md:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-12">
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-7xl">
           <div className="text-center mb-6 sm:mb-12 md:mb-16">
             <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#0B1D37] mb-2 sm:mb-4">How It Works</h2>
             <p className="text-base sm:text-lg md:text-xl text-[#4B4E53] max-w-3xl mx-auto leading-relaxed">Three simple steps to streamline your corporate accommodation process</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
             {/* Step 1 */}
-            <div className="bg-white rounded-lg shadow-lg p-1 pb-3 sm:p-6 md:p-8 text-center">
-              <div className="w-6 h-6 sm:w-12 sm:h-12 bg-[#00BAB5] rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-lg mx-auto mb-1 sm:mb-4 md:mb-6">01</div>
-              <div className="w-8 h-8 sm:w-16 sm:h-16 mx-auto mb-1 sm:mb-4 md:mb-6 flex items-center justify-center">
-                <svg className="w-4 h-4 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#0B1D37]" fill="currentColor" viewBox="0 0 20 20">
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 text-center h-full flex flex-col">
+              <div className="w-6 h-6 sm:w-12 sm:h-12 bg-[#00BAB5] rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-lg mx-auto mb-2 sm:mb-4 md:mb-6">01</div>
+              <div className="w-8 h-8 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-4 md:mb-6 flex items-center justify-center">
+                <svg className="w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#0B1D37]" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h3 className="text-xs sm:text-lg md:text-xl lg:text-xl font-bold text-[#0B1D37] mb-1 sm:mb-3 md:mb-4" >Submit Your Request</h3>
-              <p className="text-xs sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-tight sm:leading-relaxed" >Fill out our simple form with your accommodation requirements, dates, and preferences.</p>
+              <h3 className="text-base sm:text-lg md:text-xl lg:text-xl font-bold text-[#0B1D37] mb-2 sm:mb-3 md:mb-4">Submit Your Request</h3>
+              <p className="text-sm sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-relaxed flex-grow">Fill out our simple form with your accommodation requirements, dates, and preferences.</p>
             </div>
 
             {/* Step 2 */}
-            <div className="bg-white rounded-lg shadow-lg p-1 pb-3 sm:p-6 md:p-8 text-center">
-              <div className="w-6 h-6 sm:w-12 sm:h-12 bg-[#00BAB5] rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-lg mx-auto mb-1 sm:mb-4 md:mb-6">02</div>
-              <div className="w-8 h-8 sm:w-16 sm:h-16 mx-auto mb-1 sm:mb-4 md:mb-6 flex items-center justify-center">
-                <svg className="w-4 h-4 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#0B1D37]" fill="currentColor" viewBox="0 0 20 20">
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 text-center h-full flex flex-col">
+              <div className="w-6 h-6 sm:w-12 sm:h-12 bg-[#00BAB5] rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-lg mx-auto mb-2 sm:mb-4 md:mb-6">02</div>
+              <div className="w-8 h-8 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-4 md:mb-6 flex items-center justify-center">
+                <svg className="w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#0B1D37]" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h3 className="text-xs sm:text-lg md:text-xl lg:text-xl font-bold text-[#0B1D37] mb-1 sm:mb-3 md:mb-4" >We Handle the Search</h3>
-              <p className="text-xs sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-tight sm:leading-relaxed" >Our team finds and vets suitable accommodations that meet your corporate standards and budget.</p>
+              <h3 className="text-base sm:text-lg md:text-xl lg:text-xl font-bold text-[#0B1D37] mb-2 sm:mb-3 md:mb-4">We Handle the Search</h3>
+              <p className="text-sm sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-relaxed flex-grow">Our team finds and vets suitable accommodations that meet your corporate standards and budget.</p>
             </div>
 
             {/* Step 3 */}
-            <div className="bg-white rounded-lg shadow-lg p-2 pb-3 sm:p-6 md:p-8 text-center col-span-2 sm:col-span-2 lg:col-span-1 max-w-[50%] sm:max-w-none mx-auto">
-              <div className="w-6 h-6 sm:w-12 sm:h-12 bg-[#00BAB5] rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-lg mx-auto mb-1 sm:mb-4 md:mb-6">03</div>
-              <div className="w-8 h-8 sm:w-16 sm:h-16 mx-auto mb-1 sm:mb-4 md:mb-6 flex items-center justify-center">
-                <svg className="w-4 h-4 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#0B1D37]" fill="currentColor" viewBox="0 0 20 20">
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 text-center h-full flex flex-col sm:col-span-2 lg:col-span-1">
+              <div className="w-6 h-6 sm:w-12 sm:h-12 bg-[#00BAB5] rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-lg mx-auto mb-2 sm:mb-4 md:mb-6">03</div>
+              <div className="w-8 h-8 sm:w-16 sm:h-16 mx-auto mb-2 sm:mb-4 md:mb-6 flex items-center justify-center">
+                <svg className="w-6 h-6 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#0B1D37]" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h3 className="text-xs sm:text-lg md:text-xl lg:text-xl font-bold text-[#0B1D37] mb-1 sm:mb-3 md:mb-4" >Book & Confirm</h3>
-              <p className="text-xs sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-tight sm:leading-relaxed" >Review options, approve your selection, and we handle all booking logistics under one contract.</p>
+              <h3 className="text-base sm:text-lg md:text-xl lg:text-xl font-bold text-[#0B1D37] mb-2 sm:mb-3 md:mb-4">Book & Confirm</h3>
+              <p className="text-sm sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-relaxed flex-grow">Review options, approve your selection, and we handle all booking logistics under one contract.</p>
             </div>
+          </div>
           </div>
         </div>
       </section>
 
       {/* Who We Serve Section */}
-      <section className="bg-gradient-to-br from-gray-50 to-white py-8 sm:py-12 md:py-16 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-gradient-to-br from-gray-50 to-white py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-12">
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-7xl">
           {/* Section Header with Better Visual Hierarchy */}
           <div className="text-center mb-6 sm:mb-8 md:mb-10">
             <div className="inline-flex items-center justify-center w-10 sm:w-16 h-1 bg-[#00BAB5] rounded-full mb-4"></div>
@@ -693,23 +700,26 @@ export default function HomePage() {
               BOOK ACCOMMODATION
             </button>
           </div>
+          </div>
         </div>
       </section>
 
       {/* Bottom Call-to-Action */}
-      <section className="bg-white py-8 sm:py-12 md:py-16 px-4 sm:px-6">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="bg-white py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-12">
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-4xl text-center">
           <p className="text-xs sm:text-xl md:text-2xl text-[#4B4E53] mb-6 sm:mb-8">Ready to simplify your corporate accommodation process?</p>
           <button className="bg-[#00BAB5] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-xs sm:text-lg font-semibold hover:bg-[#00A5A0] transition-colors">
             Get Started Now
           </button>
+          </div>
         </div>
       </section>
 
 
       {/* Why Choose Booking Hub Section */}
       <section 
-        className="relative py-12 sm:py-16 md:py-20 px-6 sm:px-6"
+        className="relative py-12 sm:py-16 md:py-20 px-6 sm:px-6 lg:px-12"
         style={{
           backgroundImage: 'url(/Houses.webp)',
           backgroundSize: '100% 100%',
@@ -721,7 +731,8 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[rgba(11,29,52,0.88)]"></div>
         
         {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto">
+        <div className="relative z-10 w-full flex justify-center">
+          <div className="w-full max-w-7xl">
           {/* Section Header */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4">Why Choose Booking Hub?</h2>
@@ -775,13 +786,15 @@ export default function HomePage() {
               <p className="text-[7px] sm:text-base text-[#4B4E53] leading-tight sm:leading-relaxed" >AI-powered optimization for cost savings, availability matching, and preference learning.</p>
             </div>
           </div>
+          </div>
         </div>
       </section>
 
 
       {/* Google Reviews Section */}
-      <section className="bg-white py-12 sm:py-16 md:py-20 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12">
+        <div className="w-full flex justify-center">
+          <div className="w-full max-w-7xl">
           {/* Section Header */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <div className="flex items-center justify-center mb-4 sm:mb-6">
@@ -884,13 +897,15 @@ export default function HomePage() {
               </svg>
             </button>
           </div>
+          </div>
         </div>
       </section>
 
 
             {/* Explore Properties Section */}
-            <section className="bg-[#F6F6F4] py-12 sm:py-16 md:py-20 px-4 sm:px-6">
-              <div className="max-w-none mx-auto">
+            <section className="bg-[#F6F6F4] py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12">
+              <div className="w-full flex justify-center">
+                <div className="w-full max-w-7xl">
           {/* Section Header */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#0B1D37] mb-3 sm:mb-4">Explore Properties</h2>
@@ -987,12 +1002,13 @@ export default function HomePage() {
               );
             })()}
           </div>
-        </div>
+                </div>
+              </div>
             </section>
 
             {/* Our Property Partners Section */}
             <section 
-              className="relative py-12 sm:py-16 md:py-20 px-4 sm:px-6"
+              className="relative py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12"
               style={{
                 backgroundImage: 'url(/Houses-1.webp)',
                 backgroundSize: '100% 100%',
@@ -1004,7 +1020,8 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-[rgba(11,29,52,0.88)]"></div>
               
               {/* Content */}
-              <div className="relative z-10 max-w-sm sm:max-w-4xl mx-auto text-center px-8 sm:px-0">
+              <div className="relative z-10 w-full flex justify-center px-8 sm:px-0">
+                <div className="w-full max-w-4xl text-center">
                 <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6 sm:mb-8">
                   Our Property Partners
                 </h2>
@@ -1032,12 +1049,14 @@ export default function HomePage() {
                     Join our network of trusted accommodation providers
                   </p>
                 </div>
+                </div>
               </div>
             </section>
 
             {/* FAQ Section */}
-            <section className="bg-[#F6F6F4] py-12 sm:py-16 md:py-20 px-4 sm:px-6">
-              <div className="max-w-7xl mx-auto">
+            <section className="bg-[#F6F6F4] py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12">
+              <div className="w-full flex justify-center">
+                <div className="w-full max-w-7xl">
                 {/* Section Header */}
                 <div className="text-center mb-8 sm:mb-12 md:mb-16">
                   <h2 className="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#0B1D37] mb-3 sm:mb-4">FAQ</h2>
@@ -1074,15 +1093,16 @@ export default function HomePage() {
                     </div>
                   ))}
                 </div>
+                </div>
               </div>
             </section>
 
             {/* App Download Section */}
-            <section className="bg-white py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+            <section className="bg-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12">
               <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-2 gap-4 lg:gap-2 items-center">
+                <div className="grid grid-cols-2 gap-4 lg:gap-8 items-center justify-items-center">
                   {/* Left Content */}
-                  <div className="text-left lg:pr-4">
+                  <div className="text-left lg:pr-4 justify-self-end">
                     <div className="mb-2">
                       <span className="text-xs sm:text-base text-[#00BAB5]">Download the</span>
                     </div>
@@ -1125,7 +1145,7 @@ export default function HomePage() {
                   </div>
 
                   {/* Right Content - Mobile Mockup Image */}
-                  <div className="flex justify-start lg:pl-2">
+                  <div className="flex justify-start lg:justify-center justify-self-start">
                     <div className="relative">
                       <img 
                         src="/Mobile-Mockup.webp" 
@@ -1139,8 +1159,9 @@ export default function HomePage() {
             </section>
 
             {/* Footer Section */}
-            <footer className="bg-[#0B1D37] py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6">
-              <div className="max-w-7xl mx-auto">
+            <footer className="bg-[#0B1D37] py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 lg:px-12">
+              <div className="w-full flex justify-center">
+                <div className="w-full max-w-7xl">
                 <div className="grid gap-2 sm:gap-8 md:gap-12 mb-6 sm:mb-8" style={{gridTemplateColumns: isMobile ? '1fr 1.2fr 0.8fr' : '1fr 1fr 1fr'}}>
                   {/* Branding Section */}
                   <div className="space-y-4 sm:space-y-6">
@@ -1240,9 +1261,10 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
+                </div>
               </div>
             </footer>
-          </div>
+      </div>
         </>
       );
 }

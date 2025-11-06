@@ -43,15 +43,19 @@ export default function HomePage() {
   // Handle screen size detection for carousel
   useEffect(() => {
     const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 641);
+      if (typeof window !== 'undefined') {
+        setIsMobile(window.innerWidth < 641);
+      }
     };
 
     // Check on mount
     checkScreenSize();
 
     // Add resize listener
-    window.addEventListener('resize', checkScreenSize);
-    return () => window.removeEventListener('resize', checkScreenSize);
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', checkScreenSize);
+      return () => window.removeEventListener('resize', checkScreenSize);
+    }
   }, []);
 
   // Rotating word animation
@@ -644,7 +648,7 @@ export default function HomePage() {
           </p>
           <div className="flex justify-center w-full">
             <button 
-              onClick={() => window.location.href = '/booking-request'}
+              onClick={() => { if (typeof window !== 'undefined') window.location.href = '/booking-request'; }}
               style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
               className="bg-[#00BAB5] text-white px-3 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 rounded-lg text-xs sm:text-base md:text-lg hover:bg-[#00A5A0] transition-colors mt-1 sm:mt-4"
             >
@@ -941,7 +945,7 @@ export default function HomePage() {
             {/* CTA Button */}
             <div className="text-center">
               <button 
-                onClick={() => window.location.href = '/booking-request'}
+                onClick={() => { if (typeof window !== 'undefined') window.location.href = '/booking-request'; }}
                 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }}
                 className="bg-[#00BAB5] text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl hover:bg-[#00A5A0] transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
               >
@@ -1166,7 +1170,7 @@ export default function HomePage() {
                       <div 
                         className="flex gap-2 sm:gap-4 md:gap-6 transition-transform duration-700 ease-out carousel-slide"
                         style={{ 
-                          transform: `translateX(-${currentImageIndex * (isMobile ? 168 : window.innerWidth >= 768 ? 344 : 256)}px)`,
+                          transform: `translateX(-${currentImageIndex * (isMobile ? 168 : (typeof window !== 'undefined' && window.innerWidth >= 768) ? 344 : 256)}px)`,
                           width: 'calc(6 * 120px + 5 * 8px)',
                           willChange: 'transform'
                         }}
@@ -1247,7 +1251,7 @@ export default function HomePage() {
                 
                 <div className="space-y-4">
                   <button 
-                    onClick={() => window.location.href = '/auth/signup/partner'}
+                    onClick={() => { if (typeof window !== 'undefined') window.location.href = '/auth/signup/partner'; }}
                     style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }}
                     className="bg-[#00BAB5] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-xs sm:text-lg hover:bg-[#00A5A0] transition-colors"
                   >

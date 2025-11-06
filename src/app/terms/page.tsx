@@ -30,8 +30,8 @@ export default function TermsPage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/">
-              <img src="/Asset 3@4x.png" alt="Booking Hub Logo" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto" />
+            <a href="/" className="py-1">
+              <img src="/blue-teal.webp" alt="Booking Hub Logo" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain" style={{ maxWidth: '100%' }} />
             </a>
           </div>
 
@@ -88,8 +88,8 @@ export default function TermsPage() {
               <div className="flex flex-col h-full">
                 {/* Sidebar Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                  <a href="/">
-                    <img src="/Asset 3@4x.png" alt="Booking Hub Logo" className="h-8 w-auto" />
+                  <a href="/" className="py-1">
+                    <img src="/blue-teal.webp" alt="Booking Hub Logo" className="h-8 w-auto object-contain" style={{ maxWidth: '100%' }} />
                   </a>
                   <button 
                     onClick={() => setIsMobileMenuOpen(false)}

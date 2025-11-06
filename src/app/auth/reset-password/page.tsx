@@ -79,13 +79,14 @@ export default function ResetPasswordPage() {
       {/* Main content */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen py-4 px-2 sm:py-8 sm:px-4 pb-12 sm:pb-16">
         {/* Logo */}
-        <div className="mb-4 sm:mb-8 w-full max-w-xs sm:max-w-2xl">
+        <div className="mb-4 sm:mb-8 w-full max-w-xs sm:max-w-2xl py-2">
           <Image
-            src="/Asset 3@4x.png"
+            src="/blue-teal.webp"
             alt="Booking Hub Logo"
             width={800}
             height={200}
-            className="w-full h-auto"
+            className="w-full h-auto object-contain"
+            style={{ maxWidth: '100%' }}
             priority
           />
         </div>

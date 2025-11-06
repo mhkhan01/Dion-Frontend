@@ -53,6 +53,7 @@ export default function ContractorDashboard() {
     client_type: ''
   });
   const [contractorFullName, setContractorFullName] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const fetchContractorData = async () => {
     if (!user?.id) return;
@@ -147,9 +148,9 @@ export default function ContractorDashboard() {
       
       if (result.error) {
         console.error('Error updating contractor data:', result.error);
-        alert(`Error updating contact information: ${result.error.message}`);
       } else {
-        alert('Contact information updated successfully!');
+        setShowSuccessMessage(true);
+        setTimeout(() => setShowSuccessMessage(false), 5000);
       }
     } catch (error) {
       console.error('Error updating contractor data:', error);
@@ -862,6 +863,11 @@ export default function ContractorDashboard() {
                     <option value="Other">Other</option>
                   </select>
                 </div>
+                {showSuccessMessage && (
+                  <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
+                    <p className="text-sm sm:text-base font-medium">Your information has been updated successfully!</p>
+                  </div>
+                )}
                 <div className="pt-3 sm:pt-4">
                   <button 
                     onClick={handleContactInfoUpdate}
@@ -886,9 +892,10 @@ export default function ContractorDashboard() {
       <div className="lg:hidden text-white p-4 flex items-center justify-between" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
         <div className="flex items-center space-x-3">
           <img 
-            src="/Asset 3@4x.png" 
+            src="/blue-teal.webp" 
             alt="Booking Hub Logo" 
-            className="h-8 w-auto"
+            className="h-8 w-auto object-contain py-1"
+            style={{ maxWidth: '100%' }}
           />
           <div>
             <p className="text-lg font-semibold text-white">Client Portal</p>
@@ -911,11 +918,12 @@ export default function ContractorDashboard() {
           <div className="fixed top-0 left-0 h-full w-64 bg-booking-dark text-white transform transition-transform duration-300 ease-in-out">
             <div className="p-4 border-b border-gray-700" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
               <div className="flex items-center justify-between">
-                <div className="flex flex-col items-center space-y-2">
+                <div className="flex flex-col items-center space-y-2 py-2">
                   <img 
-                    src="/Asset 3@4x.png" 
+                    src="/blue-teal.webp" 
                     alt="Booking Hub Logo" 
-                    className="h-12 w-auto"
+                    className="h-12 w-auto object-contain"
+                    style={{ maxWidth: '100%' }}
                   />
                   <p className="text-sm font-bold" style={{ color: '#0B1D37' }}>Client Portal</p>
                 </div>
@@ -1019,11 +1027,12 @@ export default function ContractorDashboard() {
       <div className="hidden lg:flex w-64 bg-booking-dark text-white flex-col min-h-screen">
         {/* Logo/Header */}
         <div className="p-6 border-b border-gray-700" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
-          <div className="flex flex-col items-center space-y-2">
+          <div className="flex flex-col items-center space-y-2 py-2">
             <img 
-              src="/Asset 3@4x.png" 
+              src="/blue-teal.webp" 
               alt="Booking Hub Logo" 
-              className="h-12 w-auto"
+              className="h-12 w-auto object-contain"
+              style={{ maxWidth: '100%' }}
             />
             <p className="text-sm font-bold" style={{ color: '#0B1D37' }}>Client Portal</p>
           </div>

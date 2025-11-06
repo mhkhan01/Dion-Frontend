@@ -167,13 +167,16 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto sm:max-w-6xl max-w-xs max-h-[85vh] sm:max-h-[95vh]">
         {/* Header with Logo and Close Button */}
         <div className="flex items-center justify-between p-3 sm:p-6 border-b border-gray-200">
-          <Image
-            src="/Asset 3@4x.png"
-            alt="Booking Hub Logo"
-            width={200}
-            height={50}
-            className="h-6 sm:h-24 w-auto"
-          />
+          <div className="py-1">
+            <Image
+              src="/blue-teal.webp"
+              alt="Booking Hub Logo"
+              width={200}
+              height={50}
+              className="h-6 sm:h-24 w-auto object-contain"
+              style={{ maxWidth: '100%' }}
+            />
+          </div>
           <button
             onClick={handleClose}
             className="p-1 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"

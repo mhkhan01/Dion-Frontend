@@ -101,7 +101,7 @@ export default function RootLayout({
         
         {/* Preload critical images for faster loading */}
         <link rel="preload" href="/Port%20talbot-1.webp" as="image" type="image/webp" />
-        <link rel="preload" href="/Asset 3@4x.png" as="image" type="image/png" />
+        <link rel="preload" href="/blue-teal.webp" as="image" type="image/webp" />
         <link rel="preload" href="/Houses.webp" as="image" type="image/webp" />
         <link rel="preload" href="/Houses-1.webp" as="image" type="image/webp" />
         <link rel="preload" href="/Mobile-Mockup.png" as="image" type="image/png" />

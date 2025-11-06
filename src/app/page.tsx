@@ -439,13 +439,13 @@ export default function HomePage() {
       </div>
 
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#F6F6F4] px-4 sm:px-6 lg:px-12 py-4 sm:py-6 lg:py-8">
-        <div className="w-full lg:max-w-none mx-auto flex items-center justify-center">
-          <div className="w-full max-w-7xl flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-[#F6F6F4] px-4 sm:px-6 lg:px-12 py-4 sm:py-6 lg:py-8 overflow-visible">
+        <div className="w-full lg:max-w-none mx-auto flex items-center justify-center overflow-visible">
+          <div className="w-full max-w-7xl flex items-center justify-between overflow-visible">
           {/* Logo */}
-          <div className="flex items-center">
-            <a href="/">
-              <img src="/Asset 3@4x.png" alt="Booking Hub Logo" fetchPriority="high" loading="eager" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto" />
+          <div className="flex items-center overflow-visible">
+            <a href="/" className="block py-2">
+              <img src="/blue-teal.webp" alt="Booking Hub Logo" fetchPriority="high" loading="eager" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain block" style={{ maxWidth: '100%', display: 'block' }} />
             </a>
           </div>
 
@@ -514,8 +514,8 @@ export default function HomePage() {
               <div className="flex flex-col h-full">
                 {/* Sidebar Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                  <a href="/">
-                    <img src="/Asset 3@4x.png" alt="Booking Hub Logo" fetchPriority="high" loading="eager" className="h-8 w-auto" />
+                  <a href="/" className="py-2">
+                    <img src="/blue-teal.webp" alt="Booking Hub Logo" fetchPriority="high" loading="eager" className="h-7 w-auto object-contain" style={{ maxWidth: '100%' }} />
                   </a>
                   <button 
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -1162,11 +1162,11 @@ export default function HomePage() {
                     )}
 
                     {/* Carousel Container with sliding animation - shows 3 images */}
-                    <div className="flex items-center gap-2 sm:gap-4 md:gap-6 overflow-hidden w-full max-w-xs sm:max-w-4xl lg:max-w-5xl mx-auto">
+                    <div className="flex items-center gap-2 sm:gap-4 md:gap-6 overflow-hidden w-full max-w-xs sm:max-w-2xl md:max-w-6xl mx-auto">
                       <div 
                         className="flex gap-2 sm:gap-4 md:gap-6 transition-transform duration-700 ease-out carousel-slide"
                         style={{ 
-                          transform: `translateX(-${currentImageIndex * (isMobile ? 168 : 128)}px)`,
+                          transform: `translateX(-${currentImageIndex * (isMobile ? 168 : window.innerWidth >= 768 ? 344 : 256)}px)`,
                           width: 'calc(6 * 120px + 5 * 8px)',
                           willChange: 'transform'
                         }}
@@ -1383,15 +1383,15 @@ export default function HomePage() {
             </section>
 
             {/* Footer Section */}
-            <footer className="bg-[#0B1D37] py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 lg:px-12">
-              <div className="w-full flex justify-center">
-                <div className="w-full max-w-7xl">
-                <div className="grid gap-2 sm:gap-8 md:gap-12 mb-6 sm:mb-8" style={{gridTemplateColumns: isMobile ? '1fr 1.2fr 0.8fr' : '1fr 1fr 1fr'}}>
+            <footer className="bg-[#0B1D37] py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 overflow-visible">
+              <div className="w-full flex justify-center overflow-visible">
+                <div className="w-full max-w-7xl overflow-visible">
+                <div className="grid gap-2 sm:gap-8 md:gap-12 mb-6 sm:mb-8 overflow-visible" style={{gridTemplateColumns: isMobile ? '1fr 1.2fr 0.8fr' : '1fr 1fr 1fr'}}>
                   {/* Branding Section */}
-                  <div className="space-y-4 sm:space-y-6">
+                  <div className="space-y-4 sm:space-y-6 overflow-visible">
                     {/* Logo */}
-                    <div className="flex items-center">
-                      <img src="/Asset 3@4x.png" alt="Booking Hub Logo" loading="eager" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto" />
+                    <div className="flex items-start py-3 overflow-visible">
+                      <img src="/white-teal.webp" alt="Booking Hub Logo" loading="eager" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain block" style={{ maxWidth: '100%', display: 'block' }} />
                     </div>
                     
                     {/* Description */}

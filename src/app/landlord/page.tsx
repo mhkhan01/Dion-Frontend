@@ -1366,9 +1366,10 @@ export default function PartnerDashboard() {
       <div className="lg:hidden text-white p-4 flex items-center justify-between" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
         <div className="flex items-center space-x-3">
           <img 
-            src="/Asset 3@4x.png" 
+            src="/blue-teal.webp" 
             alt="Booking Hub Logo" 
-            className="h-8 w-auto"
+            className="h-8 w-auto object-contain py-1"
+            style={{ maxWidth: '100%' }}
           />
           <div>
             <p className="text-lg font-semibold text-white">Partner Portal</p>
@@ -1391,11 +1392,12 @@ export default function PartnerDashboard() {
           <div className="fixed top-0 left-0 h-full w-64 bg-booking-dark text-white transform transition-transform duration-300 ease-in-out">
             <div className="p-4" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
               <div className="flex items-center justify-between">
-                <div className="flex flex-col items-center space-y-2">
+                <div className="flex flex-col items-center space-y-2 py-2">
                   <img 
-                    src="/Asset 3@4x.png" 
+                    src="/blue-teal.webp" 
                     alt="Booking Hub Logo" 
-                    className="h-12 w-auto"
+                    className="h-12 w-auto object-contain"
+                    style={{ maxWidth: '100%' }}
                   />
                   <p className="text-sm font-bold" style={{ color: '#0B1D37' }}>Partner Portal</p>
                 </div>
@@ -1498,11 +1500,12 @@ export default function PartnerDashboard() {
       <div className="hidden lg:flex w-64 bg-booking-dark text-white flex-col min-h-screen">
         {/* Logo/Header */}
         <div className="p-6" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
-          <div className="flex flex-col items-center space-y-2">
+          <div className="flex flex-col items-center space-y-2 py-2">
             <img 
-              src="/Asset 3@4x.png" 
+              src="/blue-teal.webp" 
               alt="Booking Hub Logo" 
-              className="h-12 w-auto"
+              className="h-12 w-auto object-contain"
+              style={{ maxWidth: '100%' }}
             />
             <p className="text-sm font-bold" style={{ color: '#0B1D37' }}>Partner Portal</p>
           </div>

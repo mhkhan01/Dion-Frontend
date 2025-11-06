@@ -235,13 +235,16 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
         {/* Header */}
         <div className="flex items-center justify-between p-3 sm:p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <Image
-              src="/Asset 3@4x.png"
-              alt="Booking Hub Logo"
-              width={120}
-              height={30}
-              className="h-6 sm:h-12 w-auto"
-            />
+            <div className="py-1">
+              <Image
+                src="/blue-teal.webp"
+                alt="Booking Hub Logo"
+                width={120}
+                height={30}
+                className="h-6 sm:h-12 w-auto object-contain"
+                style={{ maxWidth: '100%' }}
+              />
+            </div>
             <div>
               <h2 className="text-xs sm:text-xl font-bold text-booking-dark">{displayProperty.property_name}</h2>
               <p className="text-[10px] sm:text-sm text-booking-gray">{displayProperty.property_type}</p>

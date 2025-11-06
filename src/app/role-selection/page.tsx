@@ -24,11 +24,12 @@ export default function RoleSelectionPage() {
       {/* Main content container with safe areas */}
       <div className="flex-1 flex flex-col justify-center items-center px-6 py-8 safe-area-inset-x safe-area-inset-y">
         {/* Logo/Brand section */}
-        <div className="mb-12 flex justify-center">
+        <div className="mb-12 flex justify-center py-2">
           <img 
-            src="/Asset 3@4x.png" 
+            src="/blue-teal.webp" 
             alt="Booking Hub Logo" 
-            className="h-16 w-auto sm:h-20 md:h-24"
+            className="h-16 w-auto sm:h-20 md:h-24 object-contain"
+            style={{ maxWidth: '100%' }}
           />
         </div>
 

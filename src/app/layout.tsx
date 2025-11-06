@@ -1,10 +1,32 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 import { AuthProvider } from '@/lib/auth-context';
 import StatusBarInit from './statusbar-init';
 
 const inter = Inter({ subsets: ['latin'] });
+
+const avenirNext = localFont({
+  src: [
+    {
+      path: '../fonts/AvenirNextLTPro-Regular.otf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/AvenirNextLTPro-MediumCn.otf',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../fonts/AvenirNextLTPro-Bold.otf',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-avenir',
+});
 
 export const metadata: Metadata = {
   title: 'Property Booking System',
@@ -68,7 +90,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className={`h-full ${avenirNext.variable}`}>
       {/* 🧠 Add PWA + iOS Safe Area Meta Tags here */}
       <head>
         <meta

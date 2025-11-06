@@ -416,19 +416,12 @@ export default function HomePage() {
         <img src="/Birmingham.webp" alt="" fetchPriority="high" loading="eager" />
         <img src="/Bristol.webp" alt="" fetchPriority="high" loading="eager" />
         <img src="/Cardiff.webp" alt="" fetchPriority="high" loading="eager" />
-        <img src="/Crane Cardiff.webp" alt="" fetchPriority="high" loading="eager" />
-        <img src="/House driveway.webp" alt="" fetchPriority="high" loading="eager" />
-        <img src="/Houses - 2.webp" alt="" fetchPriority="high" loading="eager" />
         <img src="/London.webp" alt="" fetchPriority="high" loading="eager" />
-        <img src="/London Construction.webp" alt="" fetchPriority="high" loading="eager" />
         <img src="/Manchester.webp" alt="" fetchPriority="high" loading="eager" />
         <img src="/Milford heaven.webp" alt="" fetchPriority="high" loading="eager" />
-        <img src="/NHS workers.webp" alt="" fetchPriority="high" loading="eager" />
         <img src="/Port Talbot.webp" alt="" fetchPriority="high" loading="eager" />
-        <img src="/Rail Workers.webp" alt="" fetchPriority="high" loading="eager" />
         <img src="/sizewell.webp" alt="" fetchPriority="high" loading="eager" />
         <img src="/Swansea.webp" alt="" fetchPriority="high" loading="eager" />
-        <img src="/Swansea - 1.webp" alt="" fetchPriority="high" loading="eager" />
         
         {/* Logo carousel images */}
         <img src="/ABP-logo.webp" alt="" fetchPriority="high" loading="eager" />
@@ -1131,22 +1124,12 @@ export default function HomePage() {
                 { src: "/Birmingham.webp", alt: "Birmingham", title: "Birmingham" },
                 { src: "/Bristol.webp", alt: "Bristol", title: "Bristol" },
                 { src: "/Cardiff.webp", alt: "Cardiff", title: "Cardiff" },
-                { src: "/Crane Cardiff.webp", alt: "Crane Cardiff", title: "Crane Cardiff" },
-                { src: "/House driveway.webp", alt: "House Driveway", title: "House Driveway" },
-                { src: "/Houses.webp", alt: "Houses", title: "Houses" },
-                { src: "/Houses-1.webp", alt: "Houses", title: "Houses" },
-                { src: "/Houses - 2.webp", alt: "Houses", title: "Houses" },
                 { src: "/London.webp", alt: "London", title: "London" },
-                { src: "/London Construction.webp", alt: "London Construction", title: "London Construction" },
                 { src: "/Manchester.webp", alt: "Manchester", title: "Manchester" },
-                { src: "/Milford heaven.webp", alt: "Milford Heaven", title: "Milford Heaven" },
-                { src: "/NHS workers.webp", alt: "NHS Workers", title: "NHS Workers" },
+                { src: "/Milford heaven.webp", alt: "Milford Haven", title: "Milford Haven" },
                 { src: "/Port Talbot.webp", alt: "Port Talbot", title: "Port Talbot" },
-                { src: "/Port talbot-1.webp", alt: "Port Talbot", title: "Port Talbot" },
-                { src: "/Rail Workers.webp", alt: "Rail Workers", title: "Rail Workers" },
                 { src: "/sizewell.webp", alt: "Sizewell", title: "Sizewell" },
-                { src: "/Swansea.webp", alt: "Swansea", title: "Swansea" },
-                { src: "/Swansea - 1.webp", alt: "Swansea", title: "Swansea" }
+                { src: "/Swansea.webp", alt: "Swansea", title: "Swansea" }
               ];
 
               return (

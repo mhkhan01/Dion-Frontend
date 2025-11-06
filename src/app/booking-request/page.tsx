@@ -244,8 +244,8 @@ export default function BookingRequestPage() {
         <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
           <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200 mt-4 mb-4 sm:mt-0 sm:mb-0">
             {/* Form Title */}
-            <h1 className="text-base sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-2 sm:mb-8 text-center leading-tight">
-              Request Your Corporate Stay
+            <h1 className="text-base sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-1 sm:mb-2 text-center leading-tight">
+              Request Accommodation
             </h1>
             <p className="text-[8px] sm:text-sm text-booking-gray mb-2 sm:mb-6 text-center leading-tight">
               Submit your requirements and we'll handle the rest
@@ -335,7 +335,7 @@ export default function BookingRequestPage() {
                     </div>
                   </div>
                 ))}
-                <div className="mt-1 sm:mt-2 grid grid-cols-2 sm:grid-cols-1 gap-2">
+                <div className="mt-3">
                   <button
                     type="button"
                     onClick={(e) => {
@@ -343,7 +343,7 @@ export default function BookingRequestPage() {
                       console.log('Button clicked!');
                       addBooking();
                     }}
-                    className="bg-booking-teal text-white px-4 py-[0.6rem] sm:py-2 rounded-md hover:bg-booking-dark transition-colors duration-200 text-[8px] sm:text-sm font-medium flex items-center justify-center"
+                    className="w-full sm:w-auto bg-booking-teal text-white px-4 py-2 rounded-md hover:bg-booking-dark transition-colors duration-200 text-xs sm:text-sm font-medium"
                   >
                     + Add Booking
                   </button>
@@ -367,116 +367,19 @@ export default function BookingRequestPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
+                  <label htmlFor="budgetPerPerson" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
                     Nightly budget
                   </label>
-                  <div className="relative">
-                    {/* Dropdown trigger */}
-                    <button
-                      type="button"
-                      onClick={() => setBudgetDropdownOpen(!budgetDropdownOpen)}
-                      className="w-full px-3 sm:px-4 py-[0.75rem] sm:py-3 border border-booking-teal rounded bg-white text-left focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[8px] sm:text-base flex items-center min-h-0"
-                    >
-                      <span className={selectedBudgetOption ? "text-booking-dark" : "text-gray-500"}>
-                        {selectedBudgetOption || "Select budget option..."}
-                      </span>
-                    </button>
-                    
-                    {/* Dropdown arrow */}
-                    <div className="absolute right-3 top-[50%] sm:top-3 -translate-y-1/2 sm:translate-y-0 pointer-events-none">
-                      <svg className="w-3 h-3 sm:w-5 sm:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
-
-                    {/* Dropdown content */}
-                    {budgetDropdownOpen && (
-                      <div className="absolute top-full left-0 right-0 z-50 mt-1 shadow-lg" style={{backgroundColor: '#F6F6F4', borderRadius: '12px'}}>
-                        <div className="p-2 sm:p-3">
-                          <div 
-                            onClick={() => selectBudgetOption('£ 200')}
-                            className={`flex items-center justify-between py-1 sm:py-2 px-2 rounded cursor-pointer hover:bg-gray-50 transition-colors ${
-                              selectedBudgetOption === '£ 200' ? 'bg-booking-teal/10' : ''
-                            }`}
-                          >
-                            <div className="flex items-center">
-                              <span className="text-booking-gray mr-2">=</span>
-                              <span className={`text-[8px] sm:text-sm ${
-                                selectedBudgetOption === '£ 200' 
-                                  ? 'text-booking-dark font-medium' 
-                                  : 'text-booking-gray'
-                              }`}>
-                                £ 200
-                              </span>
-                            </div>
-                            {selectedBudgetOption === '£ 200' && (
-                              <span className="text-booking-teal text-[8px] sm:text-sm">✓</span>
-                            )}
-                          </div>
-                          <div 
-                            onClick={() => selectBudgetOption('£ 200 - £ 300')}
-                            className={`flex items-center justify-between py-1 sm:py-2 px-2 rounded cursor-pointer hover:bg-gray-50 transition-colors ${
-                              selectedBudgetOption === '£ 200 - £ 300' ? 'bg-booking-teal/10' : ''
-                            }`}
-                          >
-                            <div className="flex items-center">
-                              <span className="text-booking-gray mr-2">=</span>
-                              <span className={`text-[8px] sm:text-sm ${
-                                selectedBudgetOption === '£ 200 - £ 300' 
-                                  ? 'text-booking-dark font-medium' 
-                                  : 'text-booking-gray'
-                              }`}>
-                                £ 200 - £ 300
-                              </span>
-                            </div>
-                            {selectedBudgetOption === '£ 200 - £ 300' && (
-                              <span className="text-booking-teal text-[8px] sm:text-sm">✓</span>
-                            )}
-                          </div>
-                          <div 
-                            onClick={() => selectBudgetOption('£ 300 - £ 400')}
-                            className={`flex items-center justify-between py-1 sm:py-2 px-2 rounded cursor-pointer hover:bg-gray-50 transition-colors ${
-                              selectedBudgetOption === '£ 300 - £ 400' ? 'bg-booking-teal/10' : ''
-                            }`}
-                          >
-                            <div className="flex items-center">
-                              <span className="text-booking-gray mr-2">=</span>
-                              <span className={`text-[8px] sm:text-sm ${
-                                selectedBudgetOption === '£ 300 - £ 400' 
-                                  ? 'text-booking-dark font-medium' 
-                                  : 'text-booking-gray'
-                              }`}>
-                                £ 300 - £ 400
-                              </span>
-                            </div>
-                            {selectedBudgetOption === '£ 300 - £ 400' && (
-                              <span className="text-booking-teal text-[8px] sm:text-sm">✓</span>
-                            )}
-                          </div>
-                          <div 
-                            onClick={() => selectBudgetOption('£ 400+')}
-                            className={`flex items-center justify-between py-1 sm:py-2 px-2 rounded cursor-pointer hover:bg-gray-50 transition-colors ${
-                              selectedBudgetOption === '£ 400+' ? 'bg-booking-teal/10' : ''
-                            }`}
-                          >
-                            <div className="flex items-center">
-                              <span className="text-booking-gray mr-2">=</span>
-                              <span className={`text-[8px] sm:text-sm ${
-                                selectedBudgetOption === '£ 400+' 
-                                  ? 'text-booking-dark font-medium' 
-                                  : 'text-booking-gray'
-                              }`}>
-                                £ 400+
-                              </span>
-                            </div>
-                            {selectedBudgetOption === '£ 400+' && (
-                              <span className="text-booking-teal text-[8px] sm:text-sm">✓</span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <input
+                    type="number"
+                    id="budgetPerPerson"
+                    name="budgetPerPerson"
+                    value={selectedBudgetOption}
+                    onChange={(e) => setSelectedBudgetOption(e.target.value)}
+                    min="0"
+                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Enter budget amount"
+                  />
                 </div>
               </div>
 
@@ -583,7 +486,7 @@ export default function BookingRequestPage() {
                 <div className="pt-2 sm:pt-4">
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
                     <p className="text-green-800 text-[8px] sm:text-base font-medium">
-                      Thanks — your request has been received.
+                      Thanks — your request has been received. And your client account has been created.
                     </p>
                   </div>
                 </div>

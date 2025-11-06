@@ -460,7 +460,7 @@ export default function HomePage() {
               Request a Booking
             </a>
             <a 
-              href="/auth/signup/landlord" 
+              href="/auth/signup/partner" 
               style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
               className="bg-[#E9ECEF] text-[#0B1D37] hover:bg-[#dee2e6] transition-colors px-4 py-2 rounded-md text-base lg:text-lg border-2 border-[#0B1D37]"
             >
@@ -481,8 +481,8 @@ export default function HomePage() {
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-32 lg:w-36 shadow-lg z-50 rounded-lg bg-white border border-gray-200">
                 <div className="py-1">
-                  <a href="/auth/signup/contractor" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Client login</a>
-                  <a href="/auth/signup/landlord" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Partner login</a>
+                  <a href="/auth/signup/client" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Client login</a>
+                  <a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Partner login</a>
                 </div>
               </div>
             )}
@@ -547,7 +547,7 @@ export default function HomePage() {
                       Request a Booking
                     </a>
                     <a 
-                      href="/auth/signup/landlord" 
+                      href="/auth/signup/partner" 
                       style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
                       className="block bg-[#E9ECEF] text-[#0B1D37] hover:bg-[#dee2e6] transition-colors px-4 py-2 rounded-md text-base text-center border-2 border-[#0B1D37]"
                       onClick={() => setIsMobileMenuOpen(false)}
@@ -575,7 +575,7 @@ export default function HomePage() {
                       <div className="absolute left-12 -top-8 w-36 shadow-lg z-50 rounded-lg bg-white border border-gray-200">
                         <div className="py-1">
                           <a 
-                            href="/auth/signup/contractor" 
+                            href="/auth/signup/client" 
                             style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
                             className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
                             onClick={() => {
@@ -586,7 +586,7 @@ export default function HomePage() {
                             Client login
                           </a>
                           <a 
-                            href="/auth/signup/landlord" 
+                            href="/auth/signup/partner" 
                             style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
                             className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
                             onClick={() => {
@@ -1247,7 +1247,7 @@ export default function HomePage() {
                 
                 <div className="space-y-4">
                   <button 
-                    onClick={() => window.location.href = '/auth/signup/landlord'}
+                    onClick={() => window.location.href = '/auth/signup/partner'}
                     style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }}
                     className="bg-[#00BAB5] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-xs sm:text-lg hover:bg-[#00A5A0] transition-colors"
                   >
@@ -1422,7 +1422,7 @@ export default function HomePage() {
                       <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Home</a></li>
                       <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">How We Help You</a></li>
                       <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Book Accommodation</a></li>
-                      <li><a href="/auth/signup/landlord" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Become a Partner</a></li>
+                      <li><a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Become a Partner</a></li>
                       <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Contact Us</a></li>
                     </ul>
                   </div>

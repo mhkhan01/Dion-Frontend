@@ -40,7 +40,7 @@ export default function TermsAndConditionsPage() {
             <a href="#" className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">About</a>
             <a href="/contact" className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">Contact</a>
             <a href="/booking-request" className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">Request a Booking</a>
-            <a href="/auth/signup/landlord" className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">List Your Property</a>
+            <a href="/auth/signup/partner" className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">List Your Property</a>
           </nav>
 
           {/* Desktop User Menu - Hidden on mobile, visible on tablet and up */}
@@ -56,8 +56,8 @@ export default function TermsAndConditionsPage() {
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-32 lg:w-36 shadow-lg z-50 rounded-lg bg-white border border-gray-200">
                 <div className="py-1">
-                  <a href="/auth/signup/contractor" className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Client login</a>
-                  <a href="/auth/signup/landlord" className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Partner login</a>
+                  <a href="/auth/signup/client" className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Client login</a>
+                  <a href="/auth/signup/partner" className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Partner login</a>
                 </div>
               </div>
             )}
@@ -126,7 +126,7 @@ export default function TermsAndConditionsPage() {
                       Request a Booking
                     </a>
                     <a 
-                      href="/auth/signup/landlord" 
+                      href="/auth/signup/partner" 
                       className="block text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base font-medium py-2"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -153,7 +153,7 @@ export default function TermsAndConditionsPage() {
                       <div className="absolute left-12 -top-8 w-36 shadow-lg z-50 rounded-lg bg-white border border-gray-200">
                         <div className="py-1">
                           <a 
-                            href="/auth/signup/contractor" 
+                            href="/auth/signup/client" 
                             className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
                             onClick={() => {
                               setIsDropdownOpen(false);
@@ -163,7 +163,7 @@ export default function TermsAndConditionsPage() {
                             Client login
                           </a>
                           <a 
-                            href="/auth/signup/landlord" 
+                            href="/auth/signup/partner" 
                             className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
                             onClick={() => {
                               setIsDropdownOpen(false);

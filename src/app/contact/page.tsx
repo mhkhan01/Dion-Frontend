@@ -13,6 +13,8 @@ export default function ContactPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -75,37 +77,172 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#0B1D37' }}>
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#F6F6F4] px-4 sm:px-6 py-4 sm:py-6 lg:py-8">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-[#F6F6F4] px-4 sm:px-6 lg:px-12 py-4 sm:py-6 lg:py-8">
+        <div className="w-full lg:max-w-none mx-auto flex items-center justify-center">
+          <div className="w-full max-w-7xl flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <img src="/Asset 3@4x.png" alt="Booking Hub Logo" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto" />
+            <a href="/">
+              <img src="/Asset 3@4x.png" alt="Booking Hub Logo" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto" />
+            </a>
           </div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Hidden on mobile, visible on tablet and up */}
           <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-auto mr-4 lg:mr-6">
-            <a href="/" className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">About</a>
-            <a href="/contact" className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">Contact</a>
-            <a href="/booking-request" className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">Request a Booking</a>
-            <a href="/auth/signup/landlord" className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">List Your Property</a>
+            <a href="/contact" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">Contact Us</a>
+            <a 
+              href="/booking-request" 
+              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+              className="bg-[#00BAB5] text-white hover:bg-[#009a96] transition-colors px-4 py-2 rounded-md text-base lg:text-lg border-2 border-[#0B1D37]"
+            >
+              Request a Booking
+            </a>
+            <a 
+              href="/auth/signup/partner" 
+              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+              className="bg-[#E9ECEF] text-[#0B1D37] hover:bg-[#dee2e6] transition-colors px-4 py-2 rounded-md text-base lg:text-lg border-2 border-[#0B1D37]"
+            >
+              List Your Property
+            </a>
           </nav>
 
-          {/* Desktop User Menu */}
+          {/* Desktop User Menu - Hidden on mobile, visible on tablet and up */}
           <div className="hidden md:block relative">
-            <button className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors">
+            <button 
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors"
+            >
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
               </svg>
             </button>
+            {isDropdownOpen && (
+              <div className="absolute right-0 mt-2 w-32 lg:w-36 shadow-lg z-50 rounded-lg bg-white border border-gray-200">
+                <div className="py-1">
+                  <a href="/auth/signup/client" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Client login</a>
+                  <a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Partner login</a>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <button className="md:hidden w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors">
+          {/* Mobile Menu Button - Visible only on mobile */}
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors"
+          >
             <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
+          </div>
         </div>
+
+        {/* Mobile Sidebar Menu - Visible only on mobile */}
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <div 
+              className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+              onClick={() => setIsMobileMenuOpen(false)}
+            ></div>
+            
+            {/* Sidebar */}
+            <div className="md:hidden fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 mobile-menu-container">
+              <div className="flex flex-col h-full">
+                {/* Sidebar Header */}
+                <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                  <a href="/">
+                    <img src="/Asset 3@4x.png" alt="Booking Hub Logo" className="h-8 w-auto" />
+                  </a>
+                  <button 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Sidebar Navigation */}
+                <div className="flex-1 px-6 py-8">
+                  <nav className="space-y-4">
+                    <a 
+                      href="/contact" 
+                      style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                      className="block text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base py-2"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Contact Us
+                    </a>
+                    <a 
+                      href="/booking-request" 
+                      style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                      className="block bg-[#00BAB5] text-white hover:bg-[#009a96] transition-colors px-4 py-2 rounded-md text-base text-center border-2 border-[#0B1D37]"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Request a Booking
+                    </a>
+                    <a 
+                      href="/auth/signup/partner" 
+                      style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                      className="block bg-[#E9ECEF] text-[#0B1D37] hover:bg-[#dee2e6] transition-colors px-4 py-2 rounded-md text-base text-center border-2 border-[#0B1D37]"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      List Your Property
+                    </a>
+                  </nav>
+                </div>
+
+                {/* Sidebar Footer with User Menu */}
+                <div className="p-6 border-t border-gray-200">
+                  <div className="relative">
+                    <div className="flex items-center">
+                      <button 
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors"
+                      >
+                        <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                        </svg>
+                      </button>
+                    </div>
+                    
+                    {isDropdownOpen && (
+                      <div className="absolute left-12 -top-8 w-36 shadow-lg z-50 rounded-lg bg-white border border-gray-200">
+                        <div className="py-1">
+                          <a 
+                            href="/auth/signup/client" 
+                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
+                            onClick={() => {
+                              setIsDropdownOpen(false);
+                              setIsMobileMenuOpen(false);
+                            }}
+                          >
+                            Client login
+                          </a>
+                          <a 
+                            href="/auth/signup/partner" 
+                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
+                            onClick={() => {
+                              setIsDropdownOpen(false);
+                              setIsMobileMenuOpen(false);
+                            }}
+                          >
+                            Partner login
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
       </header>
 
       {/* Main Content */}

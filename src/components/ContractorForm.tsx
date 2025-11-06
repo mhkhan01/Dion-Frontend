@@ -260,6 +260,7 @@ export default function ContractorForm() {
               return;
             }
           }
+          //comment to see issues
         } else {
           // Normal mode - save all valid booking dates
           // For new requests, save all bookings with valid dates
@@ -743,8 +744,8 @@ export default function ContractorForm() {
         {/* Form Container */}
         <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200">
           {/* Form Title */}
-          <h1 className="text-base sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-4 sm:mb-8 text-center leading-tight">
-            Request Your Corporate Stay
+          <h1 className="text-base sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-1 sm:mb-2 text-center leading-tight">
+            Request Accommodation
           </h1>
           <p className="text-xs sm:text-sm text-booking-gray mb-4 sm:mb-6 text-center">
             Submit your requirements and we'll handle the rest
@@ -860,116 +861,19 @@ export default function ContractorForm() {
                 />
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+                <label htmlFor="budgetPerPerson" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
                   Nightly budget
                 </label>
-                <div className="relative" ref={dropdownRef}>
-                  {/* Dropdown trigger */}
-                  <button
-                    type="button"
-                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded bg-white text-left focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-sm sm:text-base"
-                  >
-                    <span className={selectedBudgetOption ? "text-booking-dark" : "text-gray-500"}>
-                      {selectedBudgetOption || "Select budget option..."}
-                    </span>
-                  </button>
-                  
-                  {/* Dropdown arrow */}
-                  <div className="absolute right-3 top-2 sm:top-3 pointer-events-none">
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
-
-                  {/* Dropdown content */}
-                  {isDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 z-50 mt-1 shadow-lg" style={{backgroundColor: '#F6F6F4', borderRadius: '12px'}}>
-                      <div className="p-2 sm:p-3">
-                        <div 
-                          onClick={() => selectBudgetOption('£ 200')}
-                          className={`flex items-center justify-between py-1 sm:py-2 px-2 rounded cursor-pointer hover:bg-gray-50 transition-colors ${
-                            selectedBudgetOption === '£ 200' ? 'bg-booking-teal/10' : ''
-                          }`}
-                        >
-                          <div className="flex items-center">
-                            <span className="text-booking-gray mr-2">=</span>
-                            <span className={`text-xs sm:text-sm ${
-                              selectedBudgetOption === '£ 200' 
-                                ? 'text-booking-dark font-medium' 
-                                : 'text-booking-gray'
-                            }`}>
-                              £ 200
-                            </span>
-                          </div>
-                          {selectedBudgetOption === '£ 200' && (
-                            <span className="text-booking-teal text-xs sm:text-sm">✓</span>
-                          )}
-                        </div>
-                        <div 
-                          onClick={() => selectBudgetOption('£ 200 - £ 300')}
-                          className={`flex items-center justify-between py-1 sm:py-2 px-2 rounded cursor-pointer hover:bg-gray-50 transition-colors ${
-                            selectedBudgetOption === '£ 200 - £ 300' ? 'bg-booking-teal/10' : ''
-                          }`}
-                        >
-                          <div className="flex items-center">
-                            <span className="text-booking-gray mr-2">=</span>
-                            <span className={`text-xs sm:text-sm ${
-                              selectedBudgetOption === '£ 200 - £ 300' 
-                                ? 'text-booking-dark font-medium' 
-                                : 'text-booking-gray'
-                            }`}>
-                              £ 200 - £ 300
-                            </span>
-                          </div>
-                          {selectedBudgetOption === '£ 200 - £ 300' && (
-                            <span className="text-booking-teal text-xs sm:text-sm">✓</span>
-                          )}
-                        </div>
-                        <div 
-                          onClick={() => selectBudgetOption('£ 300 - £ 400')}
-                          className={`flex items-center justify-between py-1 sm:py-2 px-2 rounded cursor-pointer hover:bg-gray-50 transition-colors ${
-                            selectedBudgetOption === '£ 300 - £ 400' ? 'bg-booking-teal/10' : ''
-                          }`}
-                        >
-                          <div className="flex items-center">
-                            <span className="text-booking-gray mr-2">=</span>
-                            <span className={`text-xs sm:text-sm ${
-                              selectedBudgetOption === '£ 300 - £ 400' 
-                                ? 'text-booking-dark font-medium' 
-                                : 'text-booking-gray'
-                            }`}>
-                              £ 300 - £ 400
-                            </span>
-                          </div>
-                          {selectedBudgetOption === '£ 300 - £ 400' && (
-                            <span className="text-booking-teal text-xs sm:text-sm">✓</span>
-                          )}
-                        </div>
-                        <div 
-                          onClick={() => selectBudgetOption('£ 400+')}
-                          className={`flex items-center justify-between py-1 sm:py-2 px-2 rounded cursor-pointer hover:bg-gray-50 transition-colors ${
-                            selectedBudgetOption === '£ 400+' ? 'bg-booking-teal/10' : ''
-                          }`}
-                        >
-                          <div className="flex items-center">
-                            <span className="text-booking-gray mr-2">=</span>
-                            <span className={`text-xs sm:text-sm ${
-                              selectedBudgetOption === '£ 400+' 
-                                ? 'text-booking-dark font-medium' 
-                                : 'text-booking-gray'
-                            }`}>
-                              £ 400+
-                            </span>
-                          </div>
-                          {selectedBudgetOption === '£ 400+' && (
-                            <span className="text-booking-teal text-xs sm:text-sm">✓</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <input
+                  type="number"
+                  id="budgetPerPerson"
+                  name="budgetPerPerson"
+                  value={selectedBudgetOption}
+                  onChange={(e) => setSelectedBudgetOption(e.target.value)}
+                  min="0"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  placeholder="Enter budget amount"
+                />
               </div>
             </div>
 

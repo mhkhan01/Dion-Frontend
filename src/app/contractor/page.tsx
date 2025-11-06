@@ -49,7 +49,8 @@ export default function ContractorDashboard() {
     company_name: '',
     company_email: '',
     company_address: '',
-    phone: ''
+    phone: '',
+    client_type: ''
   });
   const [contractorFullName, setContractorFullName] = useState('');
 
@@ -59,7 +60,7 @@ export default function ContractorDashboard() {
     try {
       const { data, error } = await supabase
         .from('contractor')
-        .select('full_name, company_name, company_email, company_address, phone')
+        .select('full_name, company_name, company_email, company_address, phone, client_type, role')
         .eq('id', user.id)
         .single();
       
@@ -71,11 +72,14 @@ export default function ContractorDashboard() {
       if (data) {
         console.log('Contractor data fetched:', data);
         setContractorFullName(data.full_name || user?.full_name || '');
+        // If client_type is null and role is 'contractor', default to 'Client'
+        const displayClientType = data.client_type || (data.role === 'contractor' ? 'Client' : '');
         setContactInfo({
           company_name: data.company_name || '',
           company_email: data.company_email || user?.email || '',
           company_address: data.company_address || '',
-          phone: data.phone || ''
+          phone: data.phone || '',
+          client_type: displayClientType
         });
       } else {
         console.log('No contractor data found, using user data');
@@ -85,7 +89,8 @@ export default function ContractorDashboard() {
           company_name: '',
           company_email: user?.email || '',
           company_address: '',
-          phone: ''
+          phone: '',
+          client_type: 'Client' // Default to 'Client' for new records
         });
       }
     } catch (error) {
@@ -119,7 +124,8 @@ export default function ContractorDashboard() {
             company_name: contactInfo.company_name,
             company_email: contactInfo.company_email,
             company_address: contactInfo.company_address,
-            phone: contactInfo.phone
+            phone: contactInfo.phone,
+            client_type: contactInfo.client_type
           })
           .eq('id', user.id);
       } else {
@@ -134,7 +140,8 @@ export default function ContractorDashboard() {
             company_name: contactInfo.company_name,
             company_email: contactInfo.company_email,
             company_address: contactInfo.company_address,
-            phone: contactInfo.phone
+            phone: contactInfo.phone,
+            client_type: contactInfo.client_type
           });
       }
       
@@ -843,12 +850,17 @@ export default function ContractorDashboard() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-booking-dark mb-2">Role</label>
-                  <input 
-                    type="text" 
-                    value="Contractor" 
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                    readOnly
-                  />
+                  <select 
+                    value={contactInfo.client_type}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, client_type: e.target.value }))}
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent bg-white"
+                  >
+                    <option value="Client">Client</option>
+                    <option value="Contractor Company">Contractor Company</option>
+                    <option value="Insurance Company">Insurance Company</option>
+                    <option value="Council or Housing Association">Council or Housing Association</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
                 <div className="pt-3 sm:pt-4">
                   <button 

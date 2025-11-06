@@ -77,7 +77,7 @@ export default function Navbar() {
                 <Link href="/auth/login" className="btn btn-ghost">
                   Sign In
                 </Link>
-                <Link href="/auth/signup/contractor" className="btn btn-primary">
+                <Link href="/auth/signup/client" className="btn btn-primary">
                   Get Started
                 </Link>
               </>
@@ -147,7 +147,7 @@ export default function Navbar() {
 //             ) : (
 //               <>
 //                 <Link href="/auth/login" className="btn btn-ghost">Sign In</Link>
-//                 <Link href="/auth/signup/contractor" className="btn btn-primary">Get Started</Link>
+//                 <Link href="/auth/signup/client" className="btn btn-primary">Get Started</Link>
 //               </>
 //             )}
 //           </div>
@@ -256,7 +256,7 @@ export default function Navbar() {
 // //                 <Link href="/auth/login" className="btn btn-ghost">
 // //                   Sign In
 // //                 </Link>
-// //                 <Link href="/auth/signup/contractor" className="btn btn-primary">
+// //                 <Link href="/auth/signup/client" className="btn btn-primary">
 // //                   Get Started
 // //                 </Link>
 // //               </div>
@@ -358,7 +358,7 @@ export default function Navbar() {
 // //                   <Link href="/auth/login" className="btn btn-ghost">
 // //                     Sign In
 // //                   </Link>
-// //                   <Link href="/auth/signup/contractor" className="btn btn-primary">
+// //                   <Link href="/auth/signup/client" className="btn btn-primary">
 // //                     Get Started
 // //                   </Link>
 // //                 </div>

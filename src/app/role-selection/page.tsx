@@ -10,9 +10,9 @@ export default function RoleSelectionPage() {
     
     // Navigate to appropriate signup page
     if (role === 'client') {
-      window.location.href = '/auth/signup/contractor';
+      window.location.href = '/auth/signup/client';
     } else if (role === 'partner') {
-      window.location.href = '/auth/signup/landlord';
+      window.location.href = '/auth/signup/partner';
     }
   };
 

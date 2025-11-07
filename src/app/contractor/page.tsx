@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import ContractorFormModal from '@/components/ContractorFormModal';
 
 interface Booking {
   id: string;
@@ -56,6 +57,9 @@ export default function ContractorDashboard() {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [selectedBookingDetails, setSelectedBookingDetails] = useState<any>(null);
   const [isBookingDetailsModalOpen, setIsBookingDetailsModalOpen] = useState(false);
+  const [isBookingFormModalOpen, setIsBookingFormModalOpen] = useState(false);
+  const [editingBookingRequestId, setEditingBookingRequestId] = useState<string | null>(null);
+  const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
 
   const fetchContractorData = async () => {
     if (!user?.id) return;
@@ -225,13 +229,19 @@ export default function ContractorDashboard() {
       if (openDropdownId) {
         setOpenDropdownId(null);
       }
+      if (isRoleDropdownOpen) {
+        const target = event.target as HTMLElement;
+        if (!target.closest('.role-dropdown-container')) {
+          setIsRoleDropdownOpen(false);
+        }
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [openDropdownId]);
+  }, [openDropdownId, isRoleDropdownOpen]);
 
   const fetchContractorName = async () => {
     if (!user?.id) return;
@@ -389,7 +399,10 @@ export default function ContractorDashboard() {
               </div>
               <div className="flex flex-col sm:flex-row gap-4 items-start">
                 <button 
-                  onClick={() => router.push('/contractor-form')}
+                  onClick={() => {
+                    setEditingBookingRequestId(null);
+                    setIsBookingFormModalOpen(true);
+                  }}
                   className="w-full sm:w-auto text-white px-6 py-3 rounded-lg transition-all duration-200 font-avenir tracking-wide font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-105 whitespace-nowrap"
                   style={{ background: 'linear-gradient(to right, #00BAB5, rgba(0, 186, 181, 0.54))' }}
                 >
@@ -799,8 +812,8 @@ export default function ContractorDashboard() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-booking-dark mb-2">Booking Requests</h2>
-              <p className="text-booking-gray">Manage your pending booking requests</p>
+              <h2 className="text-2xl font-avenir-bold font-bold text-booking-dark mb-2">Booking Requests</h2>
+              <p className="font-avenir tracking-wide text-booking-gray">Manage your pending booking requests</p>
             </div>
 
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
@@ -810,26 +823,29 @@ export default function ContractorDashboard() {
                     <div key={booking.id} className="border-b border-gray-100 last:border-b-0 py-3">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
-                          <h3 className="text-sm lg:text-base font-semibold text-booking-dark mb-1">
+                          <h3 className="text-sm lg:text-base font-avenir tracking-wide font-semibold text-booking-dark mb-1">
                             {booking.property.title}
                           </h3>
-                          <p className="text-xs lg:text-sm text-booking-gray mb-2">{booking.property.address}</p>
+                          <p className="text-xs lg:text-sm font-avenir-regular text-booking-gray mb-2">{booking.property.address}</p>
                           <div className="flex flex-col space-y-1">
-                            <span className="text-xs lg:text-sm text-booking-gray">
+                            <span className="text-xs lg:text-sm font-avenir-regular text-booking-gray">
                               {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
                             </span>
-                            <span className="text-xs lg:text-sm text-booking-teal font-semibold">
+                            <span className="text-xs lg:text-sm font-avenir-regular text-booking-teal font-semibold">
                               {booking.property.price || 0} per night
                             </span>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs lg:text-sm font-medium">
+                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs lg:text-sm font-avenir-regular font-medium">
                           Pending
                         </span>
                           <button
-                            onClick={() => router.push(`/contractor-form?edit=${booking.booking_request_id}`)}
-                            className="text-booking-teal hover:text-booking-dark text-xs lg:text-sm font-medium underline"
+                            onClick={() => {
+                              setEditingBookingRequestId(booking.booking_request_id || null);
+                              setIsBookingFormModalOpen(true);
+                            }}
+                            className="text-booking-teal hover:text-booking-dark text-xs lg:text-sm font-avenir-regular font-medium underline"
                           >
                             Edit
                           </button>
@@ -856,75 +872,92 @@ export default function ContractorDashboard() {
 
       case 'contact-info':
         return (
-          <div className="space-y-4 sm:space-y-6">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-booking-dark mb-2">Contact Information</h2>
-              <p className="text-sm sm:text-base text-booking-gray">Manage your contact details and preferences</p>
+          <div className="space-y-4 sm:space-y-6 h-full overflow-hidden">
+            <div className="space-y-1">
+              <h2 className="text-xl sm:text-2xl font-avenir-bold font-bold text-booking-dark">Contact Information</h2>
+              <p className="text-sm sm:text-base font-avenir tracking-wide text-booking-gray">Manage your contact details and preferences</p>
             </div>
 
             <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
               <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Full Name</label>
                   <input 
                     type="text" 
-                    value={contractorFullName} 
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    value={contractorFullName}
+                    placeholder="Full Name"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                     readOnly
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Company Email</label>
                   <input 
                     type="email" 
-                    value={displayUser?.email || ''} 
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    value={displayUser?.email || ''}
+                    placeholder="Company Email"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                     readOnly
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Phone</label>
                   <input 
                     type="tel" 
                     value={contactInfo.phone}
                     onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
                     placeholder="Enter phone number"
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Company Name</label>
                   <input 
                     type="text" 
                     value={contactInfo.company_name}
                     onChange={(e) => setContactInfo(prev => ({ ...prev, company_name: e.target.value }))}
                     placeholder="Enter company name"
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Company Address</label>
                   <textarea 
                     value={contactInfo.company_address}
                     onChange={(e) => setContactInfo(prev => ({ ...prev, company_address: e.target.value }))}
                     placeholder="Enter company address"
                     rows={3}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent resize-none"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent resize-none"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-booking-dark mb-2">Role</label>
-                  <select 
-                    value={contactInfo.client_type}
-                    onChange={(e) => setContactInfo(prev => ({ ...prev, client_type: e.target.value }))}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent bg-white"
-                  >
-                    <option value="Client">Client</option>
-                    <option value="Contractor Company">Contractor Company</option>
-                    <option value="Insurance Company">Insurance Company</option>
-                    <option value="Council or Housing Association">Council or Housing Association</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  <div className="relative role-dropdown-container">
+                    <button
+                      type="button"
+                      onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent bg-white text-left flex items-center justify-between"
+                    >
+                      <span>{contactInfo.client_type || 'Select Role'}</span>
+                      <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    {isRoleDropdownOpen && (
+                      <div className="relative z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto">
+                        {['Contractor Company', 'Insurance Company', 'Council or Housing Association', 'Other'].map((role) => (
+                          <button
+                            key={role}
+                            type="button"
+                            onClick={() => {
+                              setContactInfo(prev => ({ ...prev, client_type: role }));
+                              setIsRoleDropdownOpen(false);
+                            }}
+                            className={`w-full px-4 py-3 text-left text-sm sm:text-base font-avenir tracking-wide hover:bg-gray-50 transition-colors ${
+                              contactInfo.client_type === role ? 'bg-booking-bg text-booking-teal' : 'text-booking-dark'
+                            }`}
+                          >
+                            {role}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 {showSuccessMessage && (
                   <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
@@ -934,7 +967,7 @@ export default function ContractorDashboard() {
                 <div className="pt-3 sm:pt-4">
                   <button 
                     onClick={handleContactInfoUpdate}
-                    className="w-full sm:w-auto bg-booking-teal text-white px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl hover:bg-opacity-90 transition-all duration-200 font-medium"
+                    className="w-full sm:w-auto bg-booking-teal text-white px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-avenir-regular rounded-lg sm:rounded-xl hover:bg-opacity-90 transition-all duration-200 font-medium"
                   >
                     Update Information
                   </button>
@@ -1183,7 +1216,7 @@ export default function ContractorDashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+      <div className="flex-1 p-4 sm:p-6 lg:p-8 overflow-x-hidden lg:overflow-y-auto">
         {renderMainContent()}
       </div>
 
@@ -1328,6 +1361,19 @@ export default function ContractorDashboard() {
           </div>
         </div>
       )}
+
+      {/* Booking Form Modal */}
+      <ContractorFormModal
+        isOpen={isBookingFormModalOpen}
+        onClose={() => {
+          setIsBookingFormModalOpen(false);
+          setEditingBookingRequestId(null);
+        }}
+        editingBookingRequestId={editingBookingRequestId}
+        onSuccess={() => {
+          fetchBookings();
+        }}
+      />
     </div>
   );
 }

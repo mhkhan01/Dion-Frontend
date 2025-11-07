@@ -804,7 +804,7 @@ export default function ContractorForm() {
                       </button>
                     </div>
                   )}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-4">
                     <div>
                       <label className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
                         Start Date
@@ -844,7 +844,7 @@ export default function ContractorForm() {
             </div>
 
             {/* Line 3: How many people + Nightly Budget */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
               <div>
                 <label htmlFor="teamSize" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
                   How many people?
@@ -879,7 +879,7 @@ export default function ContractorForm() {
             </div>
 
             {/* Line 4: Name + Company Name */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
               <div>
                 <label htmlFor="fullName" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
                   Name *
@@ -913,7 +913,7 @@ export default function ContractorForm() {
             </div>
 
             {/* Line 5: Company Email + Phone */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
               <div>
                 <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
                   Company Email *

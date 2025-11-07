@@ -342,15 +342,15 @@ export default function ContractorFormModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 overflow-y-auto">
       <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full my-8 max-h-[90vh] overflow-y-auto">
         {/* Modal Header */}
-        <div className="sticky top-0 bg-white px-6 py-4 flex items-center justify-between rounded-t-2xl border-b border-gray-200">
+        <div className="sticky top-0 bg-white px-6 py-4 flex items-center justify-between rounded-t-2xl">
           <div className="flex items-center space-x-3">
             <img 
               src="/blue-teal.webp" 
               alt="Logo" 
               className="h-6 sm:h-10 w-auto object-contain"
             />
-            <h2 className="text-xl font-avenir-bold font-bold text-booking-dark">
-              {editingBookingRequestId ? 'Edit Booking Request' : 'Create Booking Request'}
+            <h2 className="text-xl font-avenir-bold text-booking-dark">
+              {editingBookingRequestId ? 'Edit Request' : 'Create Request'}
             </h2>
           </div>
           <button
@@ -365,12 +365,12 @@ export default function ContractorFormModal({
         </div>
 
         {/* Form Content */}
-        <div className="px-6 py-6">
+        <div className="px-6 py-6 pb-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Line 1: Where do you need accommodation? + Postcode */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="city" className="block text-sm font-medium text-booking-dark mb-2">
+                <label htmlFor="city" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Where do you need accommodation?
                 </label>
                 <input
@@ -380,11 +380,11 @@ export default function ContractorFormModal({
                   value={formData.city}
                   onChange={handleInputChange}
                   placeholder="e.g. London"
-                  className="w-full px-4 py-3 text-base border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                 />
               </div>
               <div>
-                <label htmlFor="projectPostcode" className="block text-sm font-medium text-booking-dark mb-2">
+                <label htmlFor="projectPostcode" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Accommodation Postcode
                 </label>
                 <input
@@ -393,7 +393,7 @@ export default function ContractorFormModal({
                   name="projectPostcode"
                   value={formData.projectPostcode}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 text-base border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="Enter postcode"
                 />
               </div>
@@ -401,7 +401,7 @@ export default function ContractorFormModal({
 
             {/* Line 2: Booking dates */}
             <div>
-              <label className="block text-sm font-medium text-booking-dark mb-2">
+              <label className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 Booking Dates
               </label>
               {bookings.map((booking, index) => (
@@ -417,28 +417,28 @@ export default function ContractorFormModal({
                       </button>
                     </div>
                   )}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-booking-dark mb-2">
+                      <label className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                         Start Date
                       </label>
                       <input
                         type="date"
                         value={booking.startDate}
                         onChange={(e) => updateBooking(booking.id, 'startDate', e.target.value)}
-                        className="w-full px-4 py-3 text-base border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                        className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                         required
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-booking-dark mb-2">
+                      <label className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                         End Date
                       </label>
                       <input
                         type="date"
                         value={booking.endDate}
                         onChange={(e) => updateBooking(booking.id, 'endDate', e.target.value)}
-                        className="w-full px-4 py-3 text-base border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                        className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                         required
                       />
                     </div>
@@ -449,7 +449,7 @@ export default function ContractorFormModal({
                 <button
                   type="button"
                   onClick={addBooking}
-                  className="w-full sm:w-auto bg-booking-teal text-white px-4 py-2 rounded-lg hover:bg-booking-dark transition-colors duration-200 text-sm font-medium"
+                  className="w-full sm:w-auto bg-booking-teal text-white px-4 py-2 rounded-lg hover:bg-booking-dark transition-colors duration-200 text-sm font-avenir tracking-wide"
                 >
                   + Add Booking
                 </button>
@@ -457,9 +457,9 @@ export default function ContractorFormModal({
             </div>
 
             {/* Line 3: How many people + Nightly Budget */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="teamSize" className="block text-sm font-medium text-booking-dark mb-2">
+                <label htmlFor="teamSize" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   How many people?
                 </label>
                 <input
@@ -469,14 +469,14 @@ export default function ContractorFormModal({
                   value={formData.teamSize}
                   onChange={handleInputChange}
                   min="1"
-                  className="w-full px-4 py-3 text-base border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="Number of people"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="budgetPerPerson" className="block text-sm font-medium text-booking-dark mb-2">
-                  Nightly budget (per person)
+                <label htmlFor="budgetPerPerson" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Nightly budget
                 </label>
                 <input
                   type="number"
@@ -485,16 +485,16 @@ export default function ContractorFormModal({
                   value={selectedBudgetOption}
                   onChange={(e) => setSelectedBudgetOption(e.target.value)}
                   min="0"
-                  className="w-full px-4 py-3 text-base border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                  placeholder="Enter budget amount"
+                  className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  placeholder="Enter budget"
                 />
               </div>
             </div>
 
             {/* Line 4: Name + Company Name */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-booking-dark mb-2">
+                <label htmlFor="fullName" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Name *
                 </label>
                 <input
@@ -503,13 +503,13 @@ export default function ContractorFormModal({
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 text-base border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="Your full name"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="companyName" className="block text-sm font-medium text-booking-dark mb-2">
+                <label htmlFor="companyName" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Company Name *
                 </label>
                 <input
@@ -518,17 +518,17 @@ export default function ContractorFormModal({
                   name="companyName"
                   value={formData.companyName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 text-base border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                  placeholder="Your company name"
+                  className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  placeholder="Company name"
                   required
                 />
               </div>
             </div>
 
             {/* Line 5: Company Email + Phone */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-booking-dark mb-2">
+                <label htmlFor="email" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Company Email *
                 </label>
                 <input
@@ -537,13 +537,13 @@ export default function ContractorFormModal({
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 text-base border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="your.email@company.com"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-booking-dark mb-2">
+                <label htmlFor="phone" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Phone *
                 </label>
                 <input
@@ -552,7 +552,7 @@ export default function ContractorFormModal({
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 text-base border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="Your phone number"
                   required
                 />
@@ -561,7 +561,7 @@ export default function ContractorFormModal({
 
             {/* Terms and Submit Button */}
             <div className="pt-4 space-y-4">
-              <p className="text-xs sm:text-sm text-center text-booking-gray">
+              <p className="text-xs sm:text-sm text-center text-booking-gray font-avenir tracking-wide">
                 By submitting, you agree to our{' '}
                 <a href="/terms" target="_blank" className="text-booking-teal hover:underline">
                   Client Terms & Conditions
@@ -571,7 +571,7 @@ export default function ContractorFormModal({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-booking-teal text-white px-6 py-3 rounded-lg font-avenir tracking-wide font-bold text-base hover:bg-opacity-90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-booking-teal text-white px-6 py-3 rounded-lg font-avenir tracking-wide text-base hover:bg-opacity-90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Submitting...' : editingBookingRequestId ? 'Update Request' : 'Submit Request'}
               </button>

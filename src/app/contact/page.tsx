@@ -250,7 +250,7 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto">
           {/* Title Section */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }}>
               Contact Us
             </h1>
           </div>
@@ -260,7 +260,7 @@ export default function ContactPage() {
             {/* Left Column - Contact Information */}
             <div className="space-y-8 sm:space-y-12">
               {/* Email */}
-              <div className="flex items-start space-x-4 sm:space-x-6">
+              <div className="flex items-center space-x-4 sm:space-x-6">
                 <div className="flex-shrink-0">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center border border-black">
                     <svg className="w-6 h-6 sm:w-8 sm:h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
@@ -270,13 +270,12 @@ export default function ContactPage() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-[#00BAB5] text-lg sm:text-xl font-semibold mb-2">Email</h3>
-                  <p className="text-white text-sm sm:text-base">info@booking-hub.co.uk</p>
+                  <p className="text-white text-lg sm:text-xl" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}>info@booking-hub.co.uk</p>
                 </div>
               </div>
 
               {/* Phone */}
-              <div className="flex items-start space-x-4 sm:space-x-6">
+              <div className="flex items-center space-x-4 sm:space-x-6">
                 <div className="flex-shrink-0">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center border border-black">
                     <svg className="w-6 h-6 sm:w-8 sm:h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
@@ -285,13 +284,12 @@ export default function ContactPage() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-[#00BAB5] text-lg sm:text-xl font-semibold mb-2">Phone</h3>
-                  <p className="text-white text-sm sm:text-base">0330 043 7522</p>
+                  <p className="text-white text-lg sm:text-xl" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}>0330 043 7522</p>
                 </div>
               </div>
 
               {/* Address */}
-              <div className="flex items-start space-x-4 sm:space-x-6">
+              <div className="flex items-center space-x-4 sm:space-x-6">
                 <div className="flex-shrink-0">
                   <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white rounded-full flex items-center justify-center border border-black">
                     <svg className="w-6 h-6 sm:w-8 sm:h-8 text-black" fill="currentColor" viewBox="0 0 20 20">
@@ -300,8 +298,7 @@ export default function ContactPage() {
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-[#00BAB5] text-lg sm:text-xl font-semibold mb-2">Registered office</h3>
-                  <p className="text-white text-sm sm:text-base">
+                  <p className="text-white text-lg sm:text-xl" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}>
                     SA12 Business Centre, Seaway Parade,<br />
                     Baglan Energy Park, Port Talbot<br />
                     SA12 7BR
@@ -312,7 +309,7 @@ export default function ContactPage() {
 
             {/* Right Column - Contact Form */}
             <div className="bg-white rounded-lg p-6 sm:p-8 md:p-10 shadow-xl" style={{ backgroundColor: 'rgba(246, 246, 244, 0.06)' }}>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8">Send Message</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}>Send Message</h2>
               
               {/* Success/Error Messages */}
               {submitStatus === 'success' && (

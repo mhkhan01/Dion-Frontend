@@ -42,6 +42,8 @@ module.exports = {
       fontFamily: {
         sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'sans-serif'],
         avenir: ['var(--font-avenir)', 'sans-serif'],
+        'avenir-bold': ['var(--font-avenir-bold)', 'sans-serif'],
+        'avenir-regular': ['var(--font-avenir-regular)', 'sans-serif'],
       },
       fontSize: {
         'xs': ['0.75rem', { lineHeight: '1rem' }],

@@ -28,6 +28,20 @@ const avenirNext = localFont({
   variable: '--font-avenir',
 });
 
+const avenirBold = localFont({
+  src: '../fonts/AvenirNextLTPro-Bold.otf',
+  weight: '700',
+  style: 'normal',
+  variable: '--font-avenir-bold',
+});
+
+const avenirRegular = localFont({
+  src: '../fonts/AvenirNextLTPro-Regular.otf',
+  weight: '400',
+  style: 'normal',
+  variable: '--font-avenir-regular',
+});
+
 export const metadata: Metadata = {
   title: 'Property Booking System',
   description: 'A modern property booking platform for contractors and landlords',
@@ -90,7 +104,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`h-full ${avenirNext.variable}`}>
+    <html lang="en" className={`h-full ${avenirNext.variable} ${avenirBold.variable} ${avenirRegular.variable}`}>
       {/* 🧠 Add PWA + iOS Safe Area Meta Tags here */}
       <head>
         <meta

@@ -1363,10 +1363,10 @@ export default function PartnerDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
       {/* Mobile Header */}
-      <div className="lg:hidden text-white p-4 flex items-center justify-between" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
+      <div className="lg:hidden bg-booking-dark text-white p-4 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <img 
-            src="/blue-teal.webp" 
+            src="/white-teal.webp" 
             alt="Booking Hub Logo" 
             className="h-8 w-auto object-contain py-1"
             style={{ maxWidth: '100%' }}
@@ -1390,16 +1390,16 @@ export default function PartnerDashboard() {
         <div className="lg:hidden fixed inset-0 z-50">
           <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)}></div>
           <div className="fixed top-0 left-0 h-full w-64 bg-booking-dark text-white transform transition-transform duration-300 ease-in-out">
-            <div className="p-4" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
+            <div className="p-4 bg-booking-dark">
               <div className="flex items-center justify-between">
                 <div className="flex flex-col items-center space-y-2 py-2">
                   <img 
-                    src="/blue-teal.webp" 
+                    src="/white-teal.webp" 
                     alt="Booking Hub Logo" 
                     className="h-12 w-auto object-contain"
                     style={{ maxWidth: '100%' }}
                   />
-                  <p className="text-sm font-bold" style={{ color: '#0B1D37' }}>Partner Portal</p>
+                  <p className="text-sm font-bold text-white">Partner Portal</p>
                 </div>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -1413,7 +1413,7 @@ export default function PartnerDashboard() {
             </div>
             
             {/* Mobile Navigation */}
-            <nav className="p-4 space-y-2">
+            <nav className="p-4 space-y-2 font-avenir">
               <button
                 onClick={() => { setActiveTab('dashboard'); setIsMobileMenuOpen(false); }}
                 className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
@@ -1427,7 +1427,7 @@ export default function PartnerDashboard() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
                   </svg>
-                  <span className="text-sm font-medium">Dashboard</span>
+                  <span className="text-sm font-avenir font-medium">Dashboard</span>
                   {activeTab === 'dashboard' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
                 </div>
               </button>
@@ -1444,7 +1444,7 @@ export default function PartnerDashboard() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
-                  <span className="text-sm font-medium">My Properties</span>
+                  <span className="text-sm font-avenir font-medium">My Properties</span>
                   {activeTab === 'my-properties' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
                 </div>
               </button>
@@ -1461,14 +1461,14 @@ export default function PartnerDashboard() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
-                  <span className="text-sm font-medium">Contact Information</span>
+                  <span className="text-sm font-avenir font-medium">Contact Information</span>
                   {activeTab === 'contact-info' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
                 </div>
               </button>
             </nav>
 
             {/* Mobile Profile Section */}
-            <div className="p-4 border-t border-gray-700 mt-auto">
+            <div className="p-4 mt-auto">
               <div className="flex items-center space-x-3 mb-4">
                 <div className="w-8 h-8 bg-booking-teal rounded-full flex items-center justify-center">
                   <span className="text-white font-semibold text-sm">
@@ -1476,8 +1476,8 @@ export default function PartnerDashboard() {
                   </span>
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-white">{partnerName || 'Partner'}</p>
-                  <p className="text-xs text-gray-300">Partner</p>
+                  <p className="text-sm font-avenir font-medium text-white">{partnerName || 'Partner'}</p>
+                  <p className="text-xs font-avenir text-gray-300">Partner</p>
                 </div>
               </div>
               <button
@@ -1488,7 +1488,7 @@ export default function PartnerDashboard() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
-                  <span className="text-sm font-medium">Logout</span>
+                  <span className="text-sm font-avenir font-medium">Logout</span>
                 </div>
               </button>
             </div>
@@ -1499,20 +1499,20 @@ export default function PartnerDashboard() {
       {/* Desktop Sidebar */}
       <div className="hidden lg:flex w-64 bg-booking-dark text-white flex-col min-h-screen">
         {/* Logo/Header */}
-        <div className="p-6" style={{ background: 'linear-gradient(to bottom, #F6F6F4, #0B1D37)' }}>
+        <div className="p-6 bg-booking-dark">
           <div className="flex flex-col items-center space-y-2 py-2">
             <img 
-              src="/blue-teal.webp" 
+              src="/white-teal.webp" 
               alt="Booking Hub Logo" 
               className="h-12 w-auto object-contain"
               style={{ maxWidth: '100%' }}
             />
-            <p className="text-sm font-bold" style={{ color: '#0B1D37' }}>Partner Portal</p>
+            <p className="text-sm font-bold text-white">Partner Portal</p>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-4 space-y-2 font-avenir">
           <button
             onClick={() => setActiveTab('dashboard')}
             className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
@@ -1526,7 +1526,7 @@ export default function PartnerDashboard() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
               </svg>
-              <span className="text-sm lg:text-sm font-medium">Dashboard</span>
+              <span className="text-sm lg:text-base font-medium">Dashboard</span>
               {activeTab === 'dashboard' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
             </div>
           </button>
@@ -1544,7 +1544,7 @@ export default function PartnerDashboard() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
               </svg>
-              <span className="text-sm lg:text-sm font-medium">My Properties</span>
+              <span className="text-sm lg:text-base font-medium">My Properties</span>
               {activeTab === 'my-properties' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
             </div>
           </button>
@@ -1561,14 +1561,14 @@ export default function PartnerDashboard() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
-              <span className="text-sm lg:text-sm font-medium">Contact Information</span>
+              <span className="text-sm lg:text-base font-medium">Contact Information</span>
               {activeTab === 'contact-info' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
             </div>
           </button>
         </nav>
 
         {/* Profile Section */}
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-4">
           <div className="flex items-center space-x-3 mb-4">
             <div className="w-8 h-8 bg-booking-teal rounded-full flex items-center justify-center">
               <span className="text-white font-semibold text-sm">
@@ -1576,8 +1576,8 @@ export default function PartnerDashboard() {
               </span>
             </div>
             <div>
-              <p className="text-sm lg:text-sm font-medium text-white">{partnerName || 'Partner'}</p>
-              <p className="text-xs lg:text-sm text-gray-300">Partner</p>
+              <p className="text-sm lg:text-base font-avenir font-medium text-white">{partnerName || 'Partner'}</p>
+              <p className="text-xs lg:text-sm font-avenir text-gray-300">Partner</p>
             </div>
           </div>
           <button
@@ -1588,7 +1588,7 @@ export default function PartnerDashboard() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-              <span className="text-sm lg:text-sm font-medium">Logout</span>
+              <span className="text-sm lg:text-base font-avenir font-medium">Logout</span>
             </div>
           </button>
         </div>

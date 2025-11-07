@@ -1149,7 +1149,7 @@ export default function HomePage() {
                     )}
 
                     {/* Carousel Container with sliding animation - shows 3 images */}
-                    <div className="flex items-center gap-2 sm:gap-4 md:gap-6 overflow-hidden w-full max-w-xs sm:max-w-2xl md:max-w-6xl mx-auto">
+                    <div className="flex items-center gap-2 sm:gap-4 md:gap-6 overflow-hidden w-full max-w-xs sm:max-w-2xl lg:max-w-6xl mx-auto">
                       <div 
                         className="flex gap-2 sm:gap-4 md:gap-6 transition-transform duration-700 ease-out carousel-slide"
                         style={{ 

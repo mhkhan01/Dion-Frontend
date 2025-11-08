@@ -193,25 +193,50 @@ export default function LandlordSignupPage() {
       {/* Back Button */}
       <Link 
         href="/" 
-        className="absolute top-4 left-4 z-20 flex items-center gap-3 text-[#F6F6F4] transition-colors duration-200 group hover:text-[#00BAB5]"
+        className="absolute top-4 left-4 z-20 flex items-center justify-center bg-booking-teal text-white rounded-full sm:rounded-lg w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-lg"
         aria-label="Back to home"
       >
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
-          className="h-8 w-8 sm:h-10 sm:w-10" 
+          className="h-5 w-5" 
           fill="none" 
           viewBox="0 0 24 24" 
           stroke="currentColor"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        <span className="text-xl sm:text-2xl font-bold text-[#F6F6F4]">Back</span>
+        <span className="hidden sm:inline text-sm sm:text-base">Back to Home</span>
       </Link>
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen py-4 px-2 sm:py-8 sm:px-4 pb-12 sm:pb-16">
+      <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-2 sm:px-4 pb-12 sm:pb-16 -mt-4">
+        {/* Logo on Background */}
+        <div className="flex justify-center -mb-12 sm:-mb-16 lg:-mb-20">
+          <Image
+            src="/white-teal.webp"
+            alt="Logo"
+            width={300}
+            height={300}
+            className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 object-contain drop-shadow-2xl"
+            priority
+            style={{
+              animation: 'flip 5s ease-in-out infinite'
+            }}
+          />
+          <style jsx>{`
+            @keyframes flip {
+              0%, 60% {
+                transform: rotateY(0deg);
+              }
+              100% {
+                transform: rotateY(360deg);
+              }
+            }
+          `}</style>
+        </div>
+
         {/* Form Container */}
-        <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200 mt-4 mb-4 sm:mt-0 sm:mb-0">
+        <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200">
           
           {/* Form Title */}
           <h1 className="text-base sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-4 sm:mb-8 text-center leading-tight">

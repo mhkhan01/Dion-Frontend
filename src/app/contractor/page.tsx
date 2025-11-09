@@ -316,7 +316,13 @@ export default function ContractorDashboard() {
         .from('booking_requests')
         .select(`
           *,
-          booking_dates(*)
+          booking_dates(
+            id,
+            start_date,
+            end_date,
+            status,
+            created_at
+          )
         `)
         .or(`user_id.eq.${user?.id},email.eq.${user?.email}`)
         .order('created_at', { ascending: false });
@@ -337,13 +343,14 @@ export default function ContractorDashboard() {
           console.log('Budget per person week:', request.budget_per_person_week);
           if (request.booking_dates && request.booking_dates.length > 0) {
             for (const bookingDate of request.booking_dates) {
+              console.log('Booking date status:', bookingDate.status);
               transformedBookings.push({
                 id: bookingDate.id,
                 booking_request_id: request.id, // Add the booking request ID
                 property_id: request.assigned_property_id || '',
                 start_date: bookingDate.start_date,
                 end_date: bookingDate.end_date,
-                status: request.status as 'pending' | 'confirmed' | 'cancelled' | 'paid',
+                status: (bookingDate.status || request.status) as 'pending' | 'confirmed' | 'cancelled' | 'paid',
                 created_at: request.created_at,
                 property: {
                   title: `${request.company_name || 'N/A'} | Number of people: ${request.team_size || 'N/A'}`,
@@ -472,7 +479,7 @@ export default function ContractorDashboard() {
                           : 'text-booking-gray hover:text-booking-dark'
                       }`}
                     >
-                      Active
+                      Confirmed
                     </button>
                     <button 
                       onClick={() => setActivityTab('pending')}
@@ -784,19 +791,20 @@ export default function ContractorDashboard() {
           <div className="space-y-6">
             <div>
               <h2 className="text-2xl font-avenir-bold tracking-wide font-bold text-booking-dark">Booking Requests</h2>
-              <p className="font-avenir font-medium tracking-wide text-booking-gray">Manage your pending booking requests</p>
+              <p className="font-avenir font-medium tracking-wide text-booking-gray">Manage your booking requests</p>
             </div>
 
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
-              {pendingBookings.length > 0 ? (
+              {bookings.length > 0 ? (
                 <div className="p-6">
-                  {pendingBookings.map((booking) => (
+                  {bookings.map((booking) => (
                     <div key={booking.id} className="border-b border-gray-100 last:border-b-0 py-3">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
                           <h3 className="text-sm lg:text-base font-avenir font-semibold tracking-wide text-booking-dark whitespace-nowrap lg:whitespace-normal overflow-hidden text-ellipsis">
                             {booking.property.title}
                           </h3>
+                          <p className="text-xs lg:text-sm font-avenir font-semibold tracking-wide text-booking-teal mb-0.5">{booking.id}</p>
                           <p className="text-xs lg:text-sm font-avenir font-medium tracking-wide text-booking-gray mb-0.5">{booking.property.address}</p>
                           <div className="flex flex-col">
                             <span className="text-xs lg:text-sm font-avenir font-medium tracking-wide text-booking-gray">
@@ -808,9 +816,16 @@ export default function ContractorDashboard() {
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs lg:text-sm font-avenir font-medium tracking-wide">
-                          Pending
-                        </span>
+                          <span className={`px-2 py-1 rounded-full text-xs lg:text-sm font-avenir font-medium tracking-wide ${
+                            booking.status === 'confirmed' 
+                              ? 'bg-green-100 text-green-800' 
+                              : booking.status === 'paid'
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-yellow-100 text-yellow-800'
+                          }`}>
+                            {booking.status === 'confirmed' ? 'Confirmed' : 
+                             booking.status === 'paid' ? 'Paid' : 'Pending'}
+                          </span>
                           <button
                             onClick={() => {
                               setEditingBookingRequestId(booking.booking_request_id || null);
@@ -832,8 +847,8 @@ export default function ContractorDashboard() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-avenir-bold tracking-wide font-semibold text-booking-dark mb-2">No Pending Requests</h3>
-                  <p className="font-avenir font-medium tracking-wide text-booking-gray">You don't have any pending booking requests.</p>
+                  <h3 className="text-lg font-avenir-bold tracking-wide font-semibold text-booking-dark mb-2">No Booking Requests</h3>
+                  <p className="font-avenir font-medium tracking-wide text-booking-gray">You don't have any booking requests.</p>
                 </div>
               )}
             </div>
@@ -844,7 +859,7 @@ export default function ContractorDashboard() {
       case 'contact-info':
         return (
           <div className="space-y-4 sm:space-y-6 h-full overflow-hidden">
-            <div>
+            <div className="space-y-1">
               <h2 className="text-xl sm:text-2xl font-avenir-bold tracking-wide font-bold text-booking-dark">Contact Information</h2>
               <p className="text-sm sm:text-base font-avenir font-medium tracking-wide text-booking-gray">Manage your contact details and preferences</p>
             </div>

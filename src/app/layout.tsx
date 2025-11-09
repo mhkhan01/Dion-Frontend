@@ -118,7 +118,6 @@ export default function RootLayout({
         <link rel="preload" href="/blue-teal.webp" as="image" type="image/webp" />
         <link rel="preload" href="/Houses.webp" as="image" type="image/webp" />
         <link rel="preload" href="/Houses-1.webp" as="image" type="image/webp" />
-        <link rel="preload" href="/Mobile-Mockup.png" as="image" type="image/png" />
         
         {/* Preload carousel images */}
         <link rel="preload" href="/bedford.webp" as="image" type="image/webp" />

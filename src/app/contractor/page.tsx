@@ -282,7 +282,8 @@ export default function ContractorDashboard() {
           booking_dates(
             id,
             start_date,
-            end_date
+            end_date,
+            status
           )
         `)
         .eq('id', bookingRequestId)
@@ -295,6 +296,15 @@ export default function ContractorDashboard() {
 
       // Filter to only show the specific booking_date that was clicked
       if (bookingRequest && bookingRequest.booking_dates) {
+        const specificDate = bookingRequest.booking_dates.find(
+          (date: any) => date.id === bookingDateId
+        );
+        
+        // Use the booking_date status if available, otherwise fall back to booking_request status
+        if (specificDate && specificDate.status) {
+          bookingRequest.status = specificDate.status;
+        }
+        
         bookingRequest.booking_dates = bookingRequest.booking_dates.filter(
           (date: any) => date.id === bookingDateId
         );

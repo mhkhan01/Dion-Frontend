@@ -349,7 +349,7 @@ export default function ContractorFormModal({
               alt="Logo" 
               className="h-6 sm:h-10 w-auto object-contain"
             />
-            <h2 className="text-xl font-avenir-bold text-booking-dark">
+            <h2 className="text-xl font-avenir-bold text-booking-dark sm:text-3xl sm:absolute sm:left-1/2 sm:-translate-x-1/2">
               {editingBookingRequestId ? 'Edit Request' : 'Create Request'}
             </h2>
           </div>

@@ -227,6 +227,7 @@ export default function BookingRequestPage() {
           href="/" 
           className="absolute top-4 left-4 z-20 flex items-center justify-center bg-booking-teal text-white rounded-full sm:rounded-lg w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-lg"
           aria-label="Back to home"
+          style={{ fontFamily: 'var(--font-avenir-regular)' }}
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -241,7 +242,7 @@ export default function BookingRequestPage() {
         </Link>
 
         {/* Main Content */}
-        <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-2 sm:px-4 pb-12 sm:pb-16 -mt-4">
+        <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-2 sm:px-4 pb-12 sm:pb-16 -mt-12 sm:-mt-16">
           {/* Logo on Background */}
           <div className="flex justify-center -mb-12 sm:-mb-16 lg:-mb-20">
             <Image
@@ -269,10 +270,10 @@ export default function BookingRequestPage() {
 
           <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200">
             {/* Form Title */}
-            <h1 className="text-base sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-1 sm:mb-2 text-center leading-tight">
+            <h1 className="text-base sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-1 sm:mb-2 text-center leading-tight" style={{ fontFamily: 'var(--font-avenir-bold)' }}>
               Request Accommodation
             </h1>
-            <p className="text-[8px] sm:text-sm text-booking-gray mb-2 sm:mb-6 text-center leading-tight">
+            <p className="text-xs sm:text-xl text-booking-gray mb-2 sm:mb-6 text-center leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
               Submit your requirements and we'll handle the rest
             </p>
 
@@ -280,14 +281,14 @@ export default function BookingRequestPage() {
               {/* Email validation error message */}
               {emailError && (
                 <div className="rounded-xl bg-red-50 border border-red-200 p-3 sm:p-4">
-                  <div className="text-xs sm:text-sm text-red-800">{emailError}</div>
+                  <div className="text-xs sm:text-sm text-red-800" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{emailError}</div>
                 </div>
               )}
 
               {/* Line 1: Where do you need accommodation? + Postcode */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
                 <div>
-                  <label htmlFor="city" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
+                  <label htmlFor="city" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Where do you need accommodation?
                   </label>
                   <input
@@ -295,18 +296,20 @@ export default function BookingRequestPage() {
                     id="city"
                     name="city"
                     placeholder="e.g. London"
-                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                   />
                 </div>
                 <div>
-                  <label htmlFor="projectPostcode" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
+                  <label htmlFor="projectPostcode" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Accommodation Postcode
                   </label>
                   <input
                     type="text"
                     id="projectPostcode"
                     name="projectPostcode"
-                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                     placeholder="Enter postcode"
                   />
                 </div>
@@ -315,7 +318,7 @@ export default function BookingRequestPage() {
               {/* Line 2: Booking dates */}
               <div>
                 <div className="mb-0.5 sm:mb-2">
-                  <label className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
+                  <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Booking Dates
                   </label>
                 </div>
@@ -326,7 +329,8 @@ export default function BookingRequestPage() {
                         <button
                           type="button"
                           onClick={() => removeBooking(booking.id)}
-                          className="text-red-500 hover:text-red-700 text-[8px] sm:text-sm"
+                          className="text-red-500 hover:text-red-700 text-xs sm:text-sm"
+                          style={{ fontFamily: 'var(--font-avenir-regular)' }}
                         >
                           Remove
                         </button>
@@ -334,26 +338,28 @@ export default function BookingRequestPage() {
                     </div>
                     <div className="grid grid-cols-2 gap-2 sm:gap-4">
                       <div>
-                        <label className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
+                        <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                           Start Date
                         </label>
                         <input
                           type="date"
                           value={booking.startDate}
                           onChange={(e) => updateBooking(booking.id, 'startDate', e.target.value)}
-                          className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          style={{ fontFamily: 'var(--font-avenir-regular)' }}
                           required
                         />
                       </div>
                       <div>
-                        <label className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
+                        <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                           End Date
                         </label>
                         <input
                           type="date"
                           value={booking.endDate}
                           onChange={(e) => updateBooking(booking.id, 'endDate', e.target.value)}
-                          className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          style={{ fontFamily: 'var(--font-avenir-regular)' }}
                           required
                         />
                       </div>
@@ -369,6 +375,7 @@ export default function BookingRequestPage() {
                       addBooking();
                     }}
                     className="w-full sm:w-auto bg-booking-teal text-white px-4 py-2 rounded-md hover:bg-booking-dark transition-colors duration-200 text-xs sm:text-sm font-medium"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                   >
                     + Add Booking
                   </button>
@@ -378,7 +385,7 @@ export default function BookingRequestPage() {
               {/* Line 3: How many people + Nightly Budget */}
               <div className="grid grid-cols-2 gap-2 sm:gap-4">
                 <div>
-                  <label htmlFor="teamSize" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
+                  <label htmlFor="teamSize" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     How many people?
                   </label>
                   <input
@@ -386,13 +393,14 @@ export default function BookingRequestPage() {
                     id="teamSize"
                     name="teamSize"
                     min="1"
-                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                     placeholder="Number of people"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="budgetPerPerson" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
+                  <label htmlFor="budgetPerPerson" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Nightly budget
                   </label>
                   <input
@@ -402,8 +410,9 @@ export default function BookingRequestPage() {
                     value={selectedBudgetOption}
                     onChange={(e) => setSelectedBudgetOption(e.target.value)}
                     min="0"
-                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                    placeholder="Enter budget amount"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Enter budget"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                   />
                 </div>
               </div>
@@ -411,7 +420,7 @@ export default function BookingRequestPage() {
               {/* Line 4: Name + Company Name */}
               <div className="grid grid-cols-2 gap-2 sm:gap-4">
                 <div>
-                  <label htmlFor="name" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
+                  <label htmlFor="name" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Name *
                   </label>
                   <input
@@ -420,13 +429,14 @@ export default function BookingRequestPage() {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                    placeholder="Your full name"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Full name"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="companyName" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight">
+                  <label htmlFor="companyName" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Company Name *
                   </label>
                   <input
@@ -435,8 +445,9 @@ export default function BookingRequestPage() {
                     name="companyName"
                     value={formData.companyName}
                     onChange={handleInputChange}
-                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                    placeholder="Your company name"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Company name"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                     required
                   />
                 </div>
@@ -445,7 +456,7 @@ export default function BookingRequestPage() {
               {/* Line 5: Company Email + Phone */}
               <div className="grid grid-cols-2 gap-2 sm:gap-4">
                 <div>
-                  <label htmlFor="email" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+                  <label htmlFor="email" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Company Email *
                   </label>
                   <input
@@ -454,13 +465,14 @@ export default function BookingRequestPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                    placeholder="your.email@company.com"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="email@company.com"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="phone" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+                  <label htmlFor="phone" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Phone *
                   </label>
                   <input
@@ -469,8 +481,9 @@ export default function BookingRequestPage() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                    placeholder="Your phone number"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Phone number"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                     required
                   />
                 </div>
@@ -479,28 +492,30 @@ export default function BookingRequestPage() {
               {/* Line 6: Password + Confirm Password */}
               <div className="grid grid-cols-2 gap-2 sm:gap-4">
                 <div>
-                  <label htmlFor="password" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+                  <label htmlFor="password" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Password *
                   </label>
                   <input
                     type="password"
                     id="password"
                     name="password"
-                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                     placeholder="Create a password"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                     required
                   />
                 </div>
                 <div>
-                  <label htmlFor="confirmPassword" className="block text-[8px] sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+                  <label htmlFor="confirmPassword" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Confirm Password *
                   </label>
                   <input
                     type="password"
                     id="confirmPassword"
                     name="confirmPassword"
-                    className="w-full px-3 sm:px-4 py-1 sm:py-3 text-[8px] sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                    placeholder="Confirm your password"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Confirm password"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                     required
                   />
                 </div>
@@ -510,7 +525,7 @@ export default function BookingRequestPage() {
               {showThankYou && (
                 <div className="pt-2 sm:pt-4">
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                    <p className="text-green-800 text-[8px] sm:text-base font-medium">
+                    <p className="text-green-800 text-xs sm:text-base font-medium" style={{ fontFamily: 'var(--font-avenir-regular)' }}>
                       Thanks — your request has been received. And your client account has been created.
                     </p>
                   </div>
@@ -519,7 +534,7 @@ export default function BookingRequestPage() {
 
               {/* Terms and Conditions */}
               <div className="pt-1 sm:pt-2">
-                <p className="text-[8px] sm:text-sm text-booking-gray text-center leading-tight">
+                <p className="text-xs sm:text-lg text-booking-gray text-center leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                   By submitting, you agree to our{' '}
                   <a 
                     href="/terms" 
@@ -535,7 +550,8 @@ export default function BookingRequestPage() {
               <div className="pt-2 sm:pt-4">
                 <button
                   type="submit"
-                  className="w-full bg-booking-teal text-white py-[0.6rem] sm:py-4 px-6 rounded-lg font-semibold text-[8px] sm:text-base hover:bg-booking-dark transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 flex items-center justify-center"
+                  className="w-full bg-booking-teal text-white py-[0.6rem] sm:py-4 px-6 rounded-lg font-semibold text-xs sm:text-base hover:bg-booking-dark transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 flex items-center justify-center"
+                  style={{ fontFamily: 'var(--font-avenir-regular)' }}
                 >
                   Submit Booking Request
                 </button>
@@ -543,10 +559,10 @@ export default function BookingRequestPage() {
 
               {/* Sign In Link */}
               <div className="pt-2 sm:pt-4">
-                <p className="text-[8px] sm:text-sm text-booking-gray text-center leading-tight">
+                <p className="text-xs sm:text-lg text-booking-gray text-center leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                   Already have an account?{' '}
                   <a 
-                    href="/auth/login" 
+                    href="/auth/login?type=contractor" 
                     className="text-booking-teal hover:text-booking-dark underline font-medium"
                   >
                     Sign in here

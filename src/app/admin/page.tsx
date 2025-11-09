@@ -5,7 +5,6 @@ import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import Navbar from '@/components/Navbar';
-import BookingTable from '@/components/BookingTable';
 
 interface DashboardStats {
   totalBookings: number;

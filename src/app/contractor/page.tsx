@@ -394,8 +394,8 @@ export default function ContractorDashboard() {
             {/* Header with Search and Create Button */}
             <div className="flex flex-col space-y-4">
               <div>
-                <h1 className="text-xl sm:text-2xl font-avenir-bold font-bold text-booking-dark">Analytics</h1>
-                <p className="text-sm sm:text-base font-avenir tracking-wide text-booking-gray">Accommodation booking overview</p>
+                <h1 className="text-xl sm:text-2xl font-avenir-bold tracking-wide font-bold text-booking-dark">Analytics</h1>
+                <p className="text-sm sm:text-base font-avenir font-medium tracking-wide text-booking-gray">Accommodation booking overview</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 items-start">
                 <button 
@@ -403,7 +403,7 @@ export default function ContractorDashboard() {
                     setEditingBookingRequestId(null);
                     setIsBookingFormModalOpen(true);
                   }}
-                  className="w-full sm:w-auto text-white px-6 py-3 rounded-lg transition-all duration-200 font-avenir tracking-wide font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-105 whitespace-nowrap"
+                  className="w-full sm:w-auto text-white px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-lg transition-all duration-200 font-avenir font-medium tracking-wide font-bold text-base sm:text-lg lg:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 whitespace-nowrap"
                   style={{ background: 'linear-gradient(to right, #00BAB5, rgba(0, 186, 181, 0.54))' }}
                 >
                   Create Booking Request
@@ -416,16 +416,16 @@ export default function ContractorDashboard() {
               {/* Active Requests Analytics */}
               <div className="rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 text-white" style={{ background: 'linear-gradient(to top, #00BAB5, rgba(0, 186, 181, 0.54))' }}>
                 <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
-                  <h3 className="text-sm sm:text-base lg:text-lg font-avenir-bold font-semibold">Active Requests</h3>
+                  <h3 className="text-sm sm:text-base lg:text-lg font-avenir-bold tracking-wide font-semibold">Active Requests</h3>
                   <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                     <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                 </div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-avenir tracking-wide font-bold mb-1 sm:mb-2">{activeBookings.length}</div>
-                <div className="text-xs sm:text-sm font-avenir tracking-wide opacity-90 mb-2 sm:mb-3 lg:mb-4">Currently active projects</div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm font-avenir tracking-wide">
+                <div className="text-xl sm:text-2xl lg:text-3xl font-avenir font-bold tracking-wide mb-1 sm:mb-2">{activeBookings.length}</div>
+                <div className="text-xs sm:text-sm font-avenir font-medium tracking-wide opacity-90 mb-2 sm:mb-3 lg:mb-4">Currently active projects</div>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm font-avenir font-medium tracking-wide">
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                     <span>Confirmed: {activeBookings.filter(b => b.status === 'confirmed').length}</span>
@@ -440,19 +440,19 @@ export default function ContractorDashboard() {
               {/* Pending Requests Analytics */}
               <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 shadow-lg border border-gray-100">
                 <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
-                  <h3 className="text-sm sm:text-base lg:text-lg font-avenir-bold font-semibold text-booking-dark">Pending Requests</h3>
+                  <h3 className="text-sm sm:text-base lg:text-lg font-avenir-bold tracking-wide font-semibold text-booking-dark">Pending Requests</h3>
                   <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 bg-yellow-100 rounded-full flex items-center justify-center">
                     <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
                   </div>
                 </div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-avenir tracking-wide font-bold text-booking-dark mb-1 sm:mb-2">{pendingBookings.length}</div>
-                <div className="text-xs sm:text-sm font-avenir tracking-wide text-booking-gray mb-2 sm:mb-3 lg:mb-4">Awaiting approval</div>
+                <div className="text-xl sm:text-2xl lg:text-3xl font-avenir font-bold tracking-wide text-booking-dark mb-1 sm:mb-2">{pendingBookings.length}</div>
+                <div className="text-xs sm:text-sm font-avenir font-medium tracking-wide text-booking-gray mb-2 sm:mb-3 lg:mb-4">Awaiting approval</div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2 sm:mb-3 lg:mb-4">
                   <div className="bg-yellow-500 h-2 rounded-full" style={{width: `${Math.min((pendingBookings.length / 10) * 100, 100)}%`}}></div>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0 text-xs sm:text-sm font-avenir tracking-wide text-booking-gray">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0 text-xs sm:text-sm font-avenir font-medium tracking-wide text-booking-gray">
                   <span>This week: {pendingBookings.length}</span>
                   <span>+{Math.floor(Math.random() * 5)}% from last week</span>
                 </div>
@@ -462,7 +462,7 @@ export default function ContractorDashboard() {
             {/* Activity Lists */}
             <div className="space-y-4">
                 <div className="flex flex-col gap-4">
-                  <h3 className="text-base sm:text-lg font-semibold text-booking-dark">Request Activity</h3>
+                  <h3 className="text-base sm:text-lg font-avenir-bold tracking-wide font-semibold text-booking-dark">Request Activity</h3>
                   <div className="flex space-x-1">
                     <button 
                       onClick={() => setActivityTab('active')}
@@ -496,13 +496,13 @@ export default function ContractorDashboard() {
                     <div className="relative filter-dropdown-container">
                       <button
                         onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
-                        className="w-full sm:w-28 md:w-32 lg:w-36 px-2 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent bg-white flex items-center justify-between gap-1.5"
+                        className="w-full sm:w-28 md:w-32 lg:w-36 px-2 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent bg-white flex items-center justify-between gap-1.5 font-avenir font-medium tracking-wide"
                         style={{ fontSize: '11px' }}
                       >
                         <svg className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                         </svg>
-                        <span className="font-avenir-regular flex-1 text-left">
+                        <span className="flex-1 text-left">
                           {selectedFilters.size === 1 && selectedFilters.has('search') ? 'Search All' :
                            selectedFilters.size === 1 && selectedFilters.has('postcode') ? 'Postcode' :
                            selectedFilters.size === 1 && selectedFilters.has('startDate') ? 'Start Date' :
@@ -540,7 +540,7 @@ export default function ContractorDashboard() {
                                   }}
                                   className="w-3 h-3 text-booking-teal focus:ring-booking-teal"
                                 />
-                                <span className="text-xs" style={{ fontSize: '11px' }}>{option.label}</span>
+                                <span className="text-xs font-avenir font-medium tracking-wide" style={{ fontSize: '11px' }}>{option.label}</span>
                               </label>
                             ))}
                           </div>
@@ -557,7 +557,7 @@ export default function ContractorDashboard() {
                             placeholder="Search requests..."
                             value={filterValues.search}
                             onChange={(e) => setFilterValues(prev => ({ ...prev, search: e.target.value }))}
-                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir-regular"
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir font-medium tracking-wide"
                           />
                           <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -572,7 +572,7 @@ export default function ContractorDashboard() {
                             placeholder="e.g., SW1A 1AA"
                             value={filterValues.postcode}
                             onChange={(e) => setFilterValues(prev => ({ ...prev, postcode: e.target.value }))}
-                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir-regular"
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir font-medium tracking-wide"
                           />
                           <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -587,7 +587,7 @@ export default function ContractorDashboard() {
                             placeholder="Select start date"
                             value={filterValues.startDate}
                             onChange={(e) => setFilterValues(prev => ({ ...prev, startDate: e.target.value }))}
-                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir-regular"
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir font-medium tracking-wide"
                           />
                           <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -602,7 +602,7 @@ export default function ContractorDashboard() {
                             placeholder="Select end date"
                             value={filterValues.endDate}
                             onChange={(e) => setFilterValues(prev => ({ ...prev, endDate: e.target.value }))}
-                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir-regular"
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir font-medium tracking-wide"
                           />
                           <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -624,7 +624,7 @@ export default function ContractorDashboard() {
                           endDate: ''
                         });
                       }}
-                      className="mt-2 text-xs text-booking-gray hover:text-booking-dark underline"
+                      className="mt-2 text-xs font-avenir font-medium tracking-wide text-booking-gray hover:text-booking-dark underline"
                     >
                       Clear Filter
                     </button>
@@ -709,32 +709,32 @@ export default function ContractorDashboard() {
                                 </svg>
                               </div>
                               <div className="flex-1 min-w-0">
-                                <h4 className="text-xs sm:text-base font-semibold text-booking-dark truncate">
+                                <h4 className="text-xs sm:text-base font-avenir-bold tracking-wide font-semibold text-booking-dark truncate">
                                   {(() => {
                                     const parts = booking.property.title.split(' | ');
                                     if (parts.length === 2) {
                                       return (
                                         <>
-                                          <span className="font-avenir-bold">{parts[0]}</span>
-                                          <span className="font-avenir tracking-wide"> | {parts[1]}</span>
+                                          <span className="font-avenir-bold tracking-wide">{parts[0]}</span>
+                                          <span className="font-avenir font-medium tracking-wide"> | {parts[1]}</span>
                                         </>
                                       );
                                     }
-                                    return <span className="font-avenir tracking-wide">{booking.property.title}</span>;
+                                    return <span className="font-avenir font-medium tracking-wide">{booking.property.title}</span>;
                                   })()}
                                 </h4>
-                                <p className="text-[10px] sm:text-sm font-avenir tracking-wide text-booking-gray truncate">{booking.property.address}</p>
-                                <p className="text-[10px] sm:text-sm font-avenir tracking-wide text-booking-gray truncate">
+                                <p className="text-[10px] sm:text-sm font-avenir font-medium tracking-wide text-booking-gray truncate">{booking.property.address}</p>
+                                <p className="text-[10px] sm:text-sm font-avenir font-medium tracking-wide text-booking-gray truncate">
                                   {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
                                 </p>
                               </div>
                             </div>
                             <div className="flex items-center space-x-4 flex-shrink-0">
                               <div className="text-right">
-                                <div className="text-sm font-avenir tracking-wide font-semibold text-booking-dark">{booking.property.price}</div>
-                                <div className="text-xs font-avenir tracking-wide text-booking-gray">per night</div>
+                                <div className="text-sm font-avenir font-semibold tracking-wide text-booking-dark">{booking.property.price}</div>
+                                <div className="text-xs font-avenir font-medium tracking-wide text-booking-gray">per night</div>
                               </div>
-                              <span className={`px-3 py-1 rounded-full text-xs font-avenir tracking-wide font-medium ${
+                              <span className={`px-3 py-1 rounded-full text-xs font-avenir font-medium tracking-wide ${
                                 booking.status === 'confirmed' 
                                   ? 'bg-green-100 text-green-800' 
                                   : booking.status === 'paid'
@@ -761,10 +761,10 @@ export default function ContractorDashboard() {
                             )}
                           </svg>
                         </div>
-                        <h3 className="text-base font-avenir-bold font-semibold text-booking-dark mb-1">
+                        <h3 className="text-base font-avenir-bold tracking-wide font-semibold text-booking-dark mb-1">
                           No {activityTab === 'active' ? 'Active' : 'Pending'} Requests
                         </h3>
-                        <p className="text-sm font-avenir tracking-wide text-booking-gray">
+                        <p className="text-sm font-avenir font-medium tracking-wide text-booking-gray">
                           {activityTab === 'active' 
                             ? "You don't have any active booking requests at the moment."
                             : "You don't have any pending booking requests at the moment."
@@ -783,8 +783,8 @@ export default function ContractorDashboard() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-avenir-bold font-bold text-booking-dark mb-2">Booking Requests</h2>
-              <p className="font-avenir tracking-wide text-booking-gray">Manage your pending booking requests</p>
+              <h2 className="text-2xl font-avenir-bold tracking-wide font-bold text-booking-dark">Booking Requests</h2>
+              <p className="font-avenir font-medium tracking-wide text-booking-gray">Manage your pending booking requests</p>
             </div>
 
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100">
@@ -794,21 +794,21 @@ export default function ContractorDashboard() {
                     <div key={booking.id} className="border-b border-gray-100 last:border-b-0 py-3">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
-                          <h3 className="text-sm lg:text-base font-avenir tracking-wide font-semibold text-booking-dark mb-1">
+                          <h3 className="text-sm lg:text-base font-avenir font-semibold tracking-wide text-booking-dark whitespace-nowrap lg:whitespace-normal overflow-hidden text-ellipsis">
                             {booking.property.title}
                           </h3>
-                          <p className="text-xs lg:text-sm font-avenir-regular text-booking-gray mb-2">{booking.property.address}</p>
-                          <div className="flex flex-col space-y-1">
-                            <span className="text-xs lg:text-sm font-avenir-regular text-booking-gray">
+                          <p className="text-xs lg:text-sm font-avenir font-medium tracking-wide text-booking-gray mb-0.5">{booking.property.address}</p>
+                          <div className="flex flex-col">
+                            <span className="text-xs lg:text-sm font-avenir font-medium tracking-wide text-booking-gray">
                               {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
                             </span>
-                            <span className="text-xs lg:text-sm font-avenir-regular text-booking-teal font-semibold">
+                            <span className="text-xs lg:text-sm font-avenir font-semibold tracking-wide text-booking-teal">
                               {booking.property.price || 0} per night
                             </span>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs lg:text-sm font-avenir-regular font-medium">
+                          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs lg:text-sm font-avenir font-medium tracking-wide">
                           Pending
                         </span>
                           <button
@@ -816,7 +816,7 @@ export default function ContractorDashboard() {
                               setEditingBookingRequestId(booking.booking_request_id || null);
                               setIsBookingFormModalOpen(true);
                             }}
-                            className="text-booking-teal hover:text-booking-dark text-xs lg:text-sm font-avenir-regular font-medium underline"
+                            className="text-booking-teal hover:text-booking-dark text-xs lg:text-sm font-avenir font-medium tracking-wide underline"
                           >
                             Edit
                           </button>
@@ -832,8 +832,8 @@ export default function ContractorDashboard() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-semibold text-booking-dark mb-2">No Pending Requests</h3>
-                  <p className="text-booking-gray">You don't have any pending booking requests.</p>
+                  <h3 className="text-lg font-avenir-bold tracking-wide font-semibold text-booking-dark mb-2">No Pending Requests</h3>
+                  <p className="font-avenir font-medium tracking-wide text-booking-gray">You don't have any pending booking requests.</p>
                 </div>
               )}
             </div>
@@ -844,9 +844,9 @@ export default function ContractorDashboard() {
       case 'contact-info':
         return (
           <div className="space-y-4 sm:space-y-6 h-full overflow-hidden">
-            <div className="space-y-1">
-              <h2 className="text-xl sm:text-2xl font-avenir-bold font-bold text-booking-dark">Contact Information</h2>
-              <p className="text-sm sm:text-base font-avenir tracking-wide text-booking-gray">Manage your contact details and preferences</p>
+            <div>
+              <h2 className="text-xl sm:text-2xl font-avenir-bold tracking-wide font-bold text-booking-dark">Contact Information</h2>
+              <p className="text-sm sm:text-base font-avenir font-medium tracking-wide text-booking-gray">Manage your contact details and preferences</p>
             </div>
 
             <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
@@ -856,7 +856,7 @@ export default function ContractorDashboard() {
                     type="text" 
                     value={contractorFullName}
                     placeholder="Full Name"
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir font-medium tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                     readOnly
                   />
                 </div>
@@ -865,7 +865,7 @@ export default function ContractorDashboard() {
                     type="email" 
                     value={displayUser?.email || ''}
                     placeholder="Company Email"
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir font-medium tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                     readOnly
                   />
                 </div>
@@ -875,7 +875,7 @@ export default function ContractorDashboard() {
                     value={contactInfo.phone}
                     onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
                     placeholder="Enter phone number"
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir font-medium tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -884,7 +884,7 @@ export default function ContractorDashboard() {
                     value={contactInfo.company_name}
                     onChange={(e) => setContactInfo(prev => ({ ...prev, company_name: e.target.value }))}
                     placeholder="Enter company name"
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir font-medium tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -893,16 +893,16 @@ export default function ContractorDashboard() {
                     onChange={(e) => setContactInfo(prev => ({ ...prev, company_address: e.target.value }))}
                     placeholder="Enter company address"
                     rows={3}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent resize-none"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir font-medium tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent resize-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Role</label>
+                  <label className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">Role</label>
                   <div className="relative role-dropdown-container">
                     <button
                       type="button"
                       onClick={() => setIsRoleDropdownOpen(!isRoleDropdownOpen)}
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent bg-white text-left flex items-center justify-between"
+                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir font-medium tracking-wide border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent bg-white text-left flex items-center justify-between"
                     >
                       <span>{contactInfo.client_type || 'Select Role'}</span>
                       <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -919,7 +919,7 @@ export default function ContractorDashboard() {
                               setContactInfo(prev => ({ ...prev, client_type: role }));
                               setIsRoleDropdownOpen(false);
                             }}
-                            className={`w-full px-4 py-3 text-left text-sm sm:text-base font-avenir tracking-wide hover:bg-gray-50 transition-colors ${
+                            className={`w-full px-4 py-3 text-left text-sm sm:text-base font-avenir font-medium tracking-wide hover:bg-gray-50 transition-colors ${
                               contactInfo.client_type === role ? 'bg-booking-bg text-booking-teal' : 'text-booking-dark'
                             }`}
                           >
@@ -932,13 +932,13 @@ export default function ContractorDashboard() {
                 </div>
                 {showSuccessMessage && (
                   <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
-                    <p className="text-sm sm:text-base font-medium">Your information has been updated successfully!</p>
+                    <p className="text-sm sm:text-base font-avenir font-medium tracking-wide">Your information has been updated successfully!</p>
                   </div>
                 )}
                 <div className="pt-3 sm:pt-4">
                   <button 
                     onClick={handleContactInfoUpdate}
-                    className="w-full sm:w-auto bg-booking-teal text-white px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-avenir-regular rounded-lg sm:rounded-xl hover:bg-opacity-90 transition-all duration-200 font-medium"
+                    className="w-full sm:w-auto bg-booking-teal text-white px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-avenir font-medium tracking-wide rounded-lg sm:rounded-xl hover:bg-opacity-90 transition-all duration-200"
                   >
                     Update Information
                   </button>

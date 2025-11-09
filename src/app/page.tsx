@@ -820,7 +820,11 @@ export default function HomePage() {
 
           {/* Enhanced CTA Button */}
           <div className="text-center">
-            <button style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="group bg-[#00BAB5] sm:bg-gradient-to-r sm:from-[#00BAB5] sm:to-[#00A5A0] text-white px-3 sm:px-8 py-2 sm:py-4 rounded-lg sm:rounded-xl text-xs sm:text-lg hover:bg-[#00A5A0] sm:hover:from-[#00A5A0] sm:hover:to-[#00BAB5] transition-colors sm:transition-all sm:duration-300 sm:shadow-lg sm:hover:shadow-xl sm:transform sm:hover:-translate-y-1">
+            <button 
+              onClick={() => { if (typeof window !== 'undefined') window.location.href = '/booking-request'; }}
+              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} 
+              className="group bg-[#00BAB5] sm:bg-gradient-to-r sm:from-[#00BAB5] sm:to-[#00A5A0] text-white px-3 sm:px-8 py-2 sm:py-4 rounded-lg sm:rounded-xl text-xs sm:text-lg hover:bg-[#00A5A0] sm:hover:from-[#00A5A0] sm:hover:to-[#00BAB5] transition-colors sm:transition-all sm:duration-300 sm:shadow-lg sm:hover:shadow-xl sm:transform sm:hover:-translate-y-1"
+            >
               BOOK ACCOMMODATION
             </button>
           </div>
@@ -1406,9 +1410,9 @@ export default function HomePage() {
                   <div className="space-y-4 sm:space-y-6">
                     <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-white text-xs sm:text-lg">Quick Links</h3>
                     <ul className="space-y-0 sm:space-y-3">
-                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Home</a></li>
+                      <li><a href="/" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Home</a></li>
                       <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">How We Help You</a></li>
-                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Book Accommodation</a></li>
+                      <li><a href="/booking-request" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Book Accommodation</a></li>
                       <li><a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Become a Partner</a></li>
                       <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Contact Us</a></li>
                     </ul>

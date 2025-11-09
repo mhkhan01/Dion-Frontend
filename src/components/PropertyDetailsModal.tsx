@@ -231,7 +231,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto sm:max-w-6xl max-w-xs max-h-[85vh] sm:max-h-[95vh]">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto sm:max-w-6xl max-w-xs max-h-[70vh] sm:max-h-[95vh]">
         {/* Header */}
         <div className="flex items-center justify-between p-3 sm:p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3">
@@ -246,15 +246,15 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
               />
             </div>
             <div>
-              <h2 className="text-xs sm:text-xl font-bold text-booking-dark">{displayProperty.property_name}</h2>
-              <p className="text-[10px] sm:text-sm text-booking-gray">{displayProperty.property_type}</p>
+              <h2 className="text-xs sm:text-xl font-avenir-bold font-bold text-booking-dark">{displayProperty.property_name}</h2>
+              <p className="text-[10px] sm:text-sm font-avenir-regular text-booking-gray">{displayProperty.property_type}</p>
             </div>
           </div>
           <div className="flex items-center space-x-2">
             {!isEditMode && (
               <button
                 onClick={handleEditClick}
-                className="px-3 sm:px-4 py-1 sm:py-2 bg-booking-teal text-white text-xs sm:text-sm font-medium rounded-lg hover:bg-opacity-90 transition-all duration-200 flex items-center space-x-1 sm:space-x-2"
+                className="px-3 sm:px-4 py-1 sm:py-2 bg-booking-teal text-white text-xs sm:text-sm font-avenir-regular font-medium rounded-lg hover:bg-opacity-90 transition-all duration-200 flex items-center space-x-1 sm:space-x-2"
               >
                 <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -278,7 +278,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
           {/* Property Photos */}
           {property.photos && property.photos.length > 0 && (
             <div>
-              <h3 className="text-sm sm:text-lg font-semibold text-booking-dark mb-2 sm:mb-4">Property Photos</h3>
+              <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">Property Photos</h3>
               <div className="relative max-w-[200px] sm:max-w-md mx-auto">
                 <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
                   <img
@@ -332,28 +332,28 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
 
           {/* Basic Details */}
           <div>
-            <h3 className="text-sm sm:text-lg font-semibold text-booking-dark mb-2 sm:mb-4">Basic Details</h3>
+            <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">Basic Details</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
               <div>
-                <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">Property Name</label>
+                <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Property Name</label>
                 {isEditMode ? (
                   <input
                     type="text"
                     value={displayProperty.property_name}
                     onChange={(e) => handleInputChange('property_name', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                   />
                 ) : (
-                  <p className="text-xs sm:text-base text-booking-dark font-medium">{displayProperty.property_name}</p>
+                  <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.property_name}</p>
                 )}
               </div>
               <div>
-                <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">Property Type</label>
+                <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Property Type</label>
                 {isEditMode ? (
                   <select
                     value={displayProperty.property_type}
                     onChange={(e) => handleInputChange('property_type', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                   >
                     <option value="House">House</option>
                     <option value="Apartment">Apartment</option>
@@ -362,7 +362,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                     <option value="Cottage">Cottage</option>
                   </select>
                 ) : (
-                  <p className="text-xs sm:text-base text-booking-dark font-medium">{displayProperty.property_type}</p>
+                  <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.property_type}</p>
                 )}
               </div>
               {/* Full Address - View Mode shows combined, Edit Mode shows individual fields */}
@@ -370,72 +370,72 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                 <>
                   {/* House Address */}
                   <div className="md:col-span-2">
-                    <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">House Address</label>
+                    <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">House Address</label>
                     <textarea
                       value={displayProperty.house_address}
                       onChange={(e) => handleInputChange('house_address', e.target.value)}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                       placeholder="Enter house address"
                     />
                   </div>
 
                   {/* Locality/District */}
                   <div>
-                    <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">Locality/District</label>
+                    <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Locality/District</label>
                     <input
                       type="text"
                       value={displayProperty.locality || ''}
                       onChange={(e) => handleInputChange('locality', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                       placeholder="e.g., Westminster"
                     />
                   </div>
 
                   {/* City */}
                   <div>
-                    <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">City</label>
+                    <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">City</label>
                     <input
                       type="text"
                       value={displayProperty.city}
                       onChange={(e) => handleInputChange('city', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                       placeholder="e.g., London"
                     />
                   </div>
 
                   {/* County */}
                   <div>
-                    <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">County</label>
+                    <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">County</label>
                     <input
                       type="text"
                       value={displayProperty.county || ''}
                       onChange={(e) => handleInputChange('county', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                       placeholder="e.g., Greater London"
                     />
                   </div>
 
                   {/* Country */}
                   <div>
-                    <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">Country</label>
+                    <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Country</label>
                     <input
                       type="text"
                       value={displayProperty.country}
                       onChange={(e) => handleInputChange('country', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                       placeholder="e.g., United Kingdom"
                     />
                   </div>
 
                   {/* Postcode */}
                   <div>
-                    <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">Postcode</label>
+                    <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Postcode</label>
                     <input
                       type="text"
                       value={displayProperty.postcode}
                       onChange={(e) => handleInputChange('postcode', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                       placeholder="e.g., SW1A 1AA"
                     />
                   </div>
@@ -444,29 +444,29 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                 <>
                   {/* Full Address - View Mode */}
                   <div className="md:col-span-2">
-                    <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">Full Address</label>
-                    <p className="text-xs sm:text-base text-booking-dark font-medium">{buildFullAddress(displayProperty)}</p>
+                    <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Full Address</label>
+                    <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{buildFullAddress(displayProperty)}</p>
                   </div>
                   
                   {/* Postcode - View Mode */}
                   <div>
-                    <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">Postcode</label>
-                    <p className="text-xs sm:text-base text-booking-dark font-medium">{displayProperty.postcode}</p>
+                    <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Postcode</label>
+                    <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.postcode}</p>
                   </div>
                 </>
               )}
               <div>
-                <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">Parking Type</label>
+                <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Parking Type</label>
                 {isEditMode ? (
                   <input
                     type="text"
                     value={displayProperty.parking_type || ''}
                     onChange={(e) => handleInputChange('parking_type', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                     placeholder="e.g., Street parking, Garage"
                   />
                 ) : (
-                  <p className="text-xs sm:text-base text-booking-dark font-medium">{displayProperty.parking_type || 'Not specified'}</p>
+                  <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.parking_type || 'Not specified'}</p>
                 )}
               </div>
             </div>
@@ -474,7 +474,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
 
           {/* Property Specifications */}
           <div>
-            <h3 className="text-sm sm:text-lg font-semibold text-booking-dark mb-2 sm:mb-4">Property Specifications</h3>
+            <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">Property Specifications</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
               <div className="text-center p-2 sm:p-4 bg-gray-50 rounded-lg">
                 {isEditMode ? (
@@ -482,13 +482,13 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                     type="number"
                     value={displayProperty.bedrooms}
                     onChange={(e) => handleInputChange('bedrooms', parseInt(e.target.value) || 0)}
-                    className="w-full text-center text-lg sm:text-2xl font-bold text-booking-teal bg-transparent border-b-2 border-booking-teal focus:outline-none"
+                    className="w-full text-center text-lg sm:text-2xl font-avenir-regular font-bold text-booking-teal bg-transparent border-b-2 border-booking-teal focus:outline-none"
                     min="0"
                   />
                 ) : (
-                  <div className="text-lg sm:text-2xl font-bold text-booking-teal">{displayProperty.bedrooms}</div>
+                  <div className="text-lg sm:text-2xl font-avenir-regular font-bold text-booking-teal">{displayProperty.bedrooms}</div>
                 )}
-                <div className="text-xs sm:text-sm text-booking-gray">Bedrooms</div>
+                <div className="text-xs sm:text-sm font-avenir-regular text-booking-gray">Bedrooms</div>
               </div>
               <div className="text-center p-2 sm:p-4 bg-gray-50 rounded-lg">
                 {isEditMode ? (
@@ -496,13 +496,13 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                     type="number"
                     value={displayProperty.beds}
                     onChange={(e) => handleInputChange('beds', parseInt(e.target.value) || 0)}
-                    className="w-full text-center text-lg sm:text-2xl font-bold text-booking-teal bg-transparent border-b-2 border-booking-teal focus:outline-none"
+                    className="w-full text-center text-lg sm:text-2xl font-avenir-regular font-bold text-booking-teal bg-transparent border-b-2 border-booking-teal focus:outline-none"
                     min="0"
                   />
                 ) : (
-                  <div className="text-lg sm:text-2xl font-bold text-booking-teal">{displayProperty.beds}</div>
+                  <div className="text-lg sm:text-2xl font-avenir-regular font-bold text-booking-teal">{displayProperty.beds}</div>
                 )}
-                <div className="text-xs sm:text-sm text-booking-gray">Beds</div>
+                <div className="text-xs sm:text-sm font-avenir-regular text-booking-gray">Beds</div>
               </div>
               <div className="text-center p-2 sm:p-4 bg-gray-50 rounded-lg">
                 {isEditMode ? (
@@ -510,13 +510,13 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                     type="number"
                     value={displayProperty.bathrooms}
                     onChange={(e) => handleInputChange('bathrooms', parseInt(e.target.value) || 0)}
-                    className="w-full text-center text-lg sm:text-2xl font-bold text-booking-teal bg-transparent border-b-2 border-booking-teal focus:outline-none"
+                    className="w-full text-center text-lg sm:text-2xl font-avenir-regular font-bold text-booking-teal bg-transparent border-b-2 border-booking-teal focus:outline-none"
                     min="0"
                   />
                 ) : (
-                  <div className="text-lg sm:text-2xl font-bold text-booking-teal">{displayProperty.bathrooms}</div>
+                  <div className="text-lg sm:text-2xl font-avenir-regular font-bold text-booking-teal">{displayProperty.bathrooms}</div>
                 )}
-                <div className="text-xs sm:text-sm text-booking-gray">Bathrooms</div>
+                <div className="text-xs sm:text-sm font-avenir-regular text-booking-gray">Bathrooms</div>
               </div>
               <div className="text-center p-2 sm:p-4 bg-gray-50 rounded-lg">
                 {isEditMode ? (
@@ -524,28 +524,28 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                     type="number"
                     value={displayProperty.max_occupancy}
                     onChange={(e) => handleInputChange('max_occupancy', parseInt(e.target.value) || 0)}
-                    className="w-full text-center text-lg sm:text-2xl font-bold text-booking-teal bg-transparent border-b-2 border-booking-teal focus:outline-none"
+                    className="w-full text-center text-lg sm:text-2xl font-avenir-regular font-bold text-booking-teal bg-transparent border-b-2 border-booking-teal focus:outline-none"
                     min="0"
                   />
                 ) : (
-                  <div className="text-lg sm:text-2xl font-bold text-booking-teal">{displayProperty.max_occupancy}</div>
+                  <div className="text-lg sm:text-2xl font-avenir-regular font-bold text-booking-teal">{displayProperty.max_occupancy}</div>
                 )}
-                <div className="text-xs sm:text-sm text-booking-gray">Max Occupancy</div>
+                <div className="text-xs sm:text-sm font-avenir-regular text-booking-gray">Max Occupancy</div>
               </div>
             </div>
             {(displayProperty.beds_breakdown || isEditMode) && (
               <div className="mt-2 sm:mt-4">
-                <label className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-gray mb-1">Beds Breakdown</label>
+                <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Beds Breakdown</label>
                 {isEditMode ? (
                   <input
                     type="text"
                     value={displayProperty.beds_breakdown || ''}
                     onChange={(e) => handleInputChange('beds_breakdown', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                     placeholder="e.g., 2 Queen beds, 1 Single bed"
                   />
                 ) : (
-                  <p className="text-xs sm:text-base text-booking-dark font-medium">{displayProperty.beds_breakdown}</p>
+                  <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.beds_breakdown}</p>
                 )}
               </div>
             )}
@@ -553,7 +553,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
 
           {/* Amenities */}
           <div>
-            <h3 className="text-sm sm:text-lg font-semibold text-booking-dark mb-2 sm:mb-4">Amenities</h3>
+            <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">Amenities</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
               {amenities.map(({ key, label }) => (
                 <div key={key} className={`flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg ${isEditMode ? 'cursor-pointer hover:bg-gray-100' : ''}`}
@@ -572,7 +572,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                       </svg>
                     )}
                   </div>
-                  <span className={`text-xs sm:text-sm font-medium ${
+                  <span className={`text-xs sm:text-sm font-avenir-regular font-medium ${
                     displayProperty[key as keyof Property] ? 'text-booking-dark' : 'text-booking-gray'
                   }`}>
                     {label}
@@ -584,7 +584,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
 
           {/* Safety & Compliance */}
           <div>
-            <h3 className="text-sm sm:text-lg font-semibold text-booking-dark mb-2 sm:mb-4">Safety & Compliance</h3>
+            <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">Safety & Compliance</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
               {safetyCompliance.map(({ key, label }) => (
                 <div key={key} className={`flex items-center space-x-2 sm:space-x-3 p-2 sm:p-3 bg-gray-50 rounded-lg ${isEditMode ? 'cursor-pointer hover:bg-gray-100' : ''}`}
@@ -603,7 +603,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                       </svg>
                     )}
                   </div>
-                  <span className={`text-xs sm:text-sm font-medium ${
+                  <span className={`text-xs sm:text-sm font-avenir-regular font-medium ${
                     displayProperty[key as keyof Property] ? 'text-booking-dark' : 'text-booking-gray'
                   }`}>
                     {label}
@@ -617,17 +617,17 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
           {/* Additional Information */}
           {(displayProperty.additional_info || isEditMode) && (
             <div>
-              <h3 className="text-sm sm:text-lg font-semibold text-booking-dark mb-2 sm:mb-4">Additional Information</h3>
+              <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">Additional Information</h3>
               <div className="p-3 sm:p-4 bg-gray-50 rounded-lg">
                 {isEditMode ? (
                   <textarea
                     value={displayProperty.additional_info || ''}
                     onChange={(e) => handleInputChange('additional_info', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal min-h-[100px]"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal min-h-[100px]"
                     placeholder="Enter any additional information about the property..."
                   />
                 ) : (
-                  <p className="text-xs sm:text-base text-booking-dark">{displayProperty.additional_info}</p>
+                  <p className="text-xs sm:text-base font-avenir-regular text-booking-dark">{displayProperty.additional_info}</p>
                 )}
               </div>
             </div>
@@ -635,21 +635,21 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
 
           {/* Status and Metadata */}
           <div>
-            <h3 className="text-sm sm:text-lg font-semibold text-booking-dark mb-2 sm:mb-4">Status & Metadata</h3>
+            <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">Status & Metadata</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-6">
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-booking-gray mb-1">Status</label>
+                <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Status</label>
                 {isEditMode ? (
                   <select
                     value={displayProperty.is_available ? 'available' : 'unavailable'}
                     onChange={(e) => handleInputChange('is_available', e.target.value === 'available')}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                   >
                     <option value="available">Available</option>
                     <option value="unavailable">Unavailable</option>
                   </select>
                 ) : (
-                  <span className={`inline-flex px-3 py-1 rounded-full text-xs sm:text-sm font-medium ${
+                  <span className={`inline-flex px-3 py-1 rounded-full text-xs sm:text-sm font-avenir-regular font-medium ${
                     displayProperty.is_available 
                       ? 'bg-green-100 text-green-800' 
                       : 'bg-red-100 text-red-800'
@@ -659,14 +659,14 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                 )}
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-booking-gray mb-1">Created</label>
-                <p className="text-xs sm:text-base text-booking-dark font-medium">
+                <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Created</label>
+                <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">
                   {new Date(displayProperty.created_at).toLocaleDateString()}
                 </p>
               </div>
               <div>
-                <label className="block text-xs sm:text-sm font-medium text-booking-gray mb-1">Last Updated</label>
-                <p className="text-xs sm:text-base text-booking-dark font-medium">
+                <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Last Updated</label>
+                <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">
                   {new Date(displayProperty.updated_at).toLocaleDateString()}
                 </p>
               </div>
@@ -693,14 +693,14 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                 <button
                   onClick={handleCancel}
                   disabled={isSaving}
-                  className="px-6 py-3 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-3 bg-gray-200 text-gray-700 font-avenir-regular font-medium rounded-lg hover:bg-gray-300 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="px-6 py-3 bg-booking-teal text-white font-medium rounded-lg hover:bg-opacity-90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                  className="px-6 py-3 bg-booking-teal text-white font-avenir-regular font-medium rounded-lg hover:bg-opacity-90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                 >
                   {isSaving ? (
                     <>
@@ -718,7 +718,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
             ) : (
               <button
                 onClick={handleClose}
-                className="px-6 py-3 bg-booking-teal text-white font-medium rounded-lg hover:bg-opacity-90 transition-all duration-200"
+                className="px-6 py-3 bg-booking-teal text-white font-avenir-regular font-medium rounded-lg hover:bg-opacity-90 transition-all duration-200"
               >
                 Close
               </button>

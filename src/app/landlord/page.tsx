@@ -788,13 +788,13 @@ export default function PartnerDashboard() {
             <div className="flex flex-col space-y-4">
             <div className="flex justify-between items-start">
               <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-booking-dark">Analytics</h1>
-                <p className="text-sm sm:text-base text-booking-gray">Property listing overview</p>
+                <h1 className="text-xl sm:text-2xl font-avenir-bold font-bold text-booking-dark">Analytics</h1>
+                <p className="text-sm sm:text-base font-avenir font-medium tracking-wide text-booking-gray">Property listing overview</p>
               </div>
               <div className="p-1">
                 <button
                   onClick={handleShowConfirmedBookings}
-                  className="px-3 py-2 sm:px-6 sm:py-3 text-xs sm:text-base text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                  className="px-3 py-2 sm:px-6 sm:py-3 text-xs sm:text-base font-avenir font-medium tracking-wide text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
                   style={{ 
                     background: 'linear-gradient(135deg, #00BAB5 0%, #0B1D37 100%)',
                     borderRadius: '0.5rem'
@@ -807,7 +807,7 @@ export default function PartnerDashboard() {
               <div className="flex flex-col sm:flex-row gap-4 items-start">
                 <button 
                   onClick={() => setActiveTab('add-property')}
-                  className="w-full sm:w-auto text-white px-6 py-3 rounded-lg transition-all duration-200 font-bold text-base shadow-lg hover:shadow-xl transform hover:scale-105 whitespace-nowrap"
+                  className="w-full sm:w-auto text-white px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-lg transition-all duration-200 font-avenir font-medium tracking-wide font-bold text-base sm:text-lg lg:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 whitespace-nowrap"
                   style={{ background: 'linear-gradient(to right, #00BAB5, rgba(0, 186, 181, 0.54))' }}
                 >
                   Add New Property
@@ -820,7 +820,7 @@ export default function PartnerDashboard() {
               {/* Listed Properties Analytics */}
               <div className="rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 text-white" style={{ background: 'linear-gradient(to top, #00BAB5, rgba(0, 186, 181, 0.54))' }}>
                 <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
-                  <h3 className="text-sm sm:text-base lg:text-lg font-semibold">Listed Properties</h3>
+                  <h3 className="text-sm sm:text-base lg:text-lg font-avenir-bold font-semibold">Listed Properties</h3>
                   <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                     <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -828,8 +828,8 @@ export default function PartnerDashboard() {
                   </div>
                 </div>
                 <div className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 sm:mb-2">{listedProperties.length}</div>
-                <div className="text-xs sm:text-sm opacity-90 mb-2 sm:mb-3 lg:mb-4">Currently available for booking</div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm">
+                <div className="text-xs sm:text-sm font-avenir font-medium tracking-wide opacity-90 mb-2 sm:mb-3 lg:mb-4">Currently available for booking</div>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm font-avenir font-medium tracking-wide">
                   <div className="flex items-center space-x-2">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                     <span>Active: {listedProperties.length}</span>
@@ -844,7 +844,7 @@ export default function PartnerDashboard() {
               {/* Delisted Properties Analytics */}
               <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 shadow-lg border border-gray-100">
                 <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
-                  <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-booking-dark">Delisted Properties</h3>
+                  <h3 className="text-sm sm:text-base lg:text-lg font-avenir-bold font-semibold text-booking-dark">Delisted Properties</h3>
                   <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 bg-yellow-100 rounded-full flex items-center justify-center">
                     <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -852,11 +852,11 @@ export default function PartnerDashboard() {
                   </div>
                 </div>
                 <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-1 sm:mb-2">{delistedProperties.length}</div>
-                <div className="text-xs sm:text-sm text-booking-gray mb-2 sm:mb-3 lg:mb-4">Currently unavailable</div>
+                <div className="text-xs sm:text-sm font-avenir font-medium tracking-wide text-booking-gray mb-2 sm:mb-3 lg:mb-4">Currently unavailable</div>
                 <div className="w-full bg-gray-200 rounded-full h-2 mb-2 sm:mb-3 lg:mb-4">
                   <div className="bg-yellow-500 h-2 rounded-full" style={{width: `${Math.min((delistedProperties.length / 10) * 100, 100)}%`}}></div>
                 </div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0 text-xs sm:text-sm text-booking-gray">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0 text-xs sm:text-sm font-avenir font-medium tracking-wide text-booking-gray">
                   <span>This week: {delistedProperties.length}</span>
                   <span>+{Math.floor(Math.random() * 5)}% from last week</span>
                 </div>
@@ -866,11 +866,11 @@ export default function PartnerDashboard() {
             {/* Activity Lists */}
             <div className="space-y-4">
                 <div className="flex flex-col gap-4">
-                  <h3 className="text-base sm:text-lg font-semibold text-booking-dark">Property Activity</h3>
+                  <h3 className="text-base sm:text-lg font-avenir-bold font-semibold text-booking-dark">Property Activity</h3>
                   <div className="flex space-x-1">
               <button
                       onClick={() => setActivityTab('listed')}
-                      className={`px-3 py-1 text-xs sm:text-sm font-medium rounded-lg transition-all duration-200 ${
+                      className={`px-3 py-1 text-xs sm:text-sm font-avenir font-medium tracking-wide rounded-lg transition-all duration-200 ${
                         activityTab === 'listed'
                           ? 'text-booking-teal border-b-2 border-booking-teal bg-booking-bg'
                           : 'text-booking-gray hover:text-booking-dark'
@@ -880,7 +880,7 @@ export default function PartnerDashboard() {
               </button>
               <button
                       onClick={() => setActivityTab('delisted')}
-                      className={`px-3 py-1 text-xs sm:text-sm font-medium rounded-lg transition-all duration-200 ${
+                      className={`px-3 py-1 text-xs sm:text-sm font-avenir font-medium tracking-wide rounded-lg transition-all duration-200 ${
                         activityTab === 'delisted'
                           ? 'text-booking-teal border-b-2 border-booking-teal bg-booking-bg'
                           : 'text-booking-gray hover:text-booking-dark'
@@ -897,61 +897,57 @@ export default function PartnerDashboard() {
                   {/* Multi-Select Filter Dropdown */}
                   <div className="flex flex-col gap-2 sm:gap-4">
                     {/* Filter Type Multi-Select Dropdown */}
-                    <div className="flex items-center gap-2">
-                      {/* Filter Icon */}
-                      <svg className="w-5 h-5 text-booking-gray flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                      </svg>
+                    <div className="relative filter-dropdown-container">
+                      <button
+                        onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
+                        className="w-full sm:w-28 md:w-32 lg:w-36 px-2 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent bg-white flex items-center justify-between gap-1.5 font-avenir"
+                        style={{ fontSize: '11px' }}
+                      >
+                        <svg className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        </svg>
+                        <span className="flex-1 text-left">
+                          {selectedFilters.size === 1 && selectedFilters.has('search') ? 'Search All' :
+                           selectedFilters.size === 1 && selectedFilters.has('postcode') ? 'Postcode' :
+                           selectedFilters.size === 1 && selectedFilters.has('property_type') ? 'Property Type' :
+                           `${selectedFilters.size} Filters`}
+                        </span>
+                        <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
                       
-                      <div className="relative filter-dropdown-container">
-                        <button
-                          onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
-                          className="w-full sm:w-28 md:w-32 lg:w-36 px-2 py-1.5 text-xs border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent bg-white flex items-center justify-between"
-                          style={{ fontSize: '11px' }}
-                        >
-                          <span>
-                            {selectedFilters.size === 1 && selectedFilters.has('search') ? 'Search All' :
-                             selectedFilters.size === 1 && selectedFilters.has('postcode') ? 'Postcode' :
-                             selectedFilters.size === 1 && selectedFilters.has('property_type') ? 'Property Type' :
-                             `${selectedFilters.size} Filters`}
-                          </span>
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                      
-                        {isFilterDropdownOpen && (
-                          <div className="absolute top-full left-0 z-10 w-full sm:w-48 bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
-                            <div className="p-2 space-y-1">
-                              {[
-                                { value: 'search', label: 'Search All' },
-                                { value: 'postcode', label: 'Filter by Postcode' },
-                                { value: 'property_type', label: 'Filter by Property Type' }
-                              ].map((option) => (
-                                <label key={option.value} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-1 rounded">
-                                  <input
-                                    type="checkbox"
-                                    checked={selectedFilters.has(option.value)}
-                                    onChange={(e) => {
-                                      const newSelectedFilters = new Set(selectedFilters);
-                                      if (e.target.checked) {
-                                        newSelectedFilters.add(option.value);
-                                      } else {
-                                        newSelectedFilters.delete(option.value);
-                                        // Clear the specific filter value when unchecking
-                                        setFilterValues(prev => ({ ...prev, [option.value]: '' }));
-                                      }
-                                      setSelectedFilters(newSelectedFilters);
-                                    }}
-                                    className="w-3 h-3 text-booking-teal focus:ring-booking-teal"
-                                  />
-                                  <span className="text-xs" style={{ fontSize: '11px' }}>{option.label}</span>
-                                </label>
-                              ))}
-                            </div>
+                      {isFilterDropdownOpen && (
+                        <div className="absolute top-full left-0 z-10 w-full sm:w-48 bg-white border border-gray-300 rounded-lg shadow-lg mt-1">
+                          <div className="p-2 space-y-1">
+                            {[
+                              { value: 'search', label: 'Search All' },
+                              { value: 'postcode', label: 'Filter by Postcode' },
+                              { value: 'property_type', label: 'Filter by Property Type' }
+                            ].map((option) => (
+                              <label key={option.value} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedFilters.has(option.value)}
+                                  onChange={(e) => {
+                                    const newSelectedFilters = new Set(selectedFilters);
+                                    if (e.target.checked) {
+                                      newSelectedFilters.add(option.value);
+                                    } else {
+                                      newSelectedFilters.delete(option.value);
+                                      // Clear the specific filter value when unchecking
+                                      setFilterValues(prev => ({ ...prev, [option.value]: '' }));
+                                    }
+                                    setSelectedFilters(newSelectedFilters);
+                                  }}
+                                  className="w-3 h-3 text-booking-teal focus:ring-booking-teal"
+                                />
+                                <span className="text-xs font-avenir" style={{ fontSize: '11px' }}>{option.label}</span>
+                              </label>
+                            ))}
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                 
                     {/* Multiple Filter Inputs */}
@@ -963,7 +959,7 @@ export default function PartnerDashboard() {
                             placeholder="Search properties..."
                             value={filterValues.search}
                             onChange={(e) => setFilterValues(prev => ({ ...prev, search: e.target.value }))}
-                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir"
                           />
                           <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -978,7 +974,7 @@ export default function PartnerDashboard() {
                             placeholder="e.g., SW1A 1AA"
                             value={filterValues.postcode}
                             onChange={(e) => setFilterValues(prev => ({ ...prev, postcode: e.target.value }))}
-                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir"
                           />
                           <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -992,7 +988,7 @@ export default function PartnerDashboard() {
                           <select
                             value={filterValues.property_type}
                             onChange={(e) => setFilterValues(prev => ({ ...prev, property_type: e.target.value }))}
-                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir"
                           >
                             <option value="">Select Property Type</option>
                             <option value="Apartment">Apartment</option>
@@ -1037,19 +1033,19 @@ export default function PartnerDashboard() {
                           )}
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs font-medium rounded flex-shrink-0">
+                              <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-xs font-avenir font-medium rounded flex-shrink-0">
                                 {property.id}
                               </span>
-                              <h4 className="text-sm sm:text-base font-semibold text-booking-dark truncate">{property.property_name || `${property.property_type} Property`}</h4>
+                              <h4 className="text-sm sm:text-base font-avenir font-bold text-booking-dark truncate">{property.property_name || `${property.property_type} Property`}</h4>
                             </div>
-                            <p className="text-xs sm:text-sm text-booking-gray truncate">{buildFullAddress(property)}</p>
-                            <p className="text-xs sm:text-sm text-booking-gray truncate">
+                            <p className="text-xs sm:text-sm font-avenir-regular text-booking-gray truncate">{buildFullAddress(property)}</p>
+                            <p className="text-xs sm:text-sm font-avenir-regular text-booking-gray truncate">
                               {property.property_type}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
-                          <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium ${
+                          <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-avenir font-medium ${
                             property.activity === 'active'
                               ? 'bg-green-100 text-green-800' 
                               : 'bg-red-100 text-red-800'
@@ -1073,7 +1069,7 @@ export default function PartnerDashboard() {
                                       handleTogglePropertyStatus(property.id, property.activity || 'inactive');
                                       setOpenDropdownId(null);
                                     }}
-                                    className="block w-full text-left px-4 py-2 text-xs sm:text-base text-booking-dark hover:bg-gray-100" style={{fontSize: '9px'}}
+                                    className="block w-full text-left px-4 py-2 text-xs sm:text-base font-avenir text-booking-dark hover:bg-gray-100" style={{fontSize: '9px'}}
                                   >
                                     {property.activity === 'active' ? 'Delist' : 'List'}
                           </button>
@@ -1082,7 +1078,7 @@ export default function PartnerDashboard() {
                                       handleDeleteProperty(property.id);
                                       setOpenDropdownId(null);
                                     }}
-                                    className="block w-full text-left px-4 py-2 text-xs sm:text-base text-red-600 hover:bg-gray-100" style={{fontSize: '9px'}}
+                                    className="block w-full text-left px-4 py-2 text-xs sm:text-base font-avenir text-red-600 hover:bg-gray-100" style={{fontSize: '9px'}}
                           >
                             Delete
                           </button>
@@ -1100,10 +1096,10 @@ export default function PartnerDashboard() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
                   </div>
-                  <h3 className="text-base lg:text-lg font-semibold text-booking-dark mb-2 font-sans">
+                  <h3 className="text-base lg:text-lg font-avenir font-semibold text-booking-dark mb-2">
                         No {activityTab === 'listed' ? 'Listed' : 'Delisted'} Properties
                   </h3>
-                  <p className="text-sm lg:text-base text-booking-gray font-sans">
+                  <p className="text-sm lg:text-base font-avenir font-medium tracking-wide text-booking-gray">
                         You don't have any {activityTab === 'listed' ? 'listed' : 'delisted'} properties at the moment.
                   </p>
                 </div>
@@ -1145,12 +1141,12 @@ export default function PartnerDashboard() {
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-booking-dark mb-2">All My Properties</h2>
-              <p className="text-booking-gray">Manage all your property listings</p>
+              <h2 className="text-xl sm:text-2xl font-avenir-bold font-bold text-booking-dark">All My Properties</h2>
+              <p className="text-sm sm:text-base font-avenir font-medium tracking-wide text-booking-gray">Manage all your property listings</p>
             </div>
 
             {properties.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
                 {properties.map((property) => (
                   <div 
                     key={property.id} 
@@ -1158,7 +1154,7 @@ export default function PartnerDashboard() {
                     onClick={() => handlePropertyClick(property)}
                   >
                     {/* Property Image */}
-                    <div className="relative h-20 sm:h-48 w-5/6 sm:w-full p-1 sm:p-3 mx-auto sm:mx-0 mt-2 sm:mt-0">
+                    <div className="relative h-24 sm:h-48 w-11/12 sm:w-full p-1 sm:p-3 mx-auto sm:mx-0 mt-2 sm:mt-0">
                       {property.photos && property.photos.length > 0 ? (
                         <img 
                           src={property.photos[0]} 
@@ -1181,7 +1177,7 @@ export default function PartnerDashboard() {
                       
                       {/* Status Badge */}
                       <div className="absolute top-1 right-1 sm:top-6 sm:right-6">
-                        <span className={`px-2 py-1 rounded-full text-[6px] lg:text-lg font-medium ${
+                        <span className={`px-2 py-1 rounded-full text-[10px] lg:text-lg font-avenir font-medium ${
                           property.activity === 'active'
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-red-100 text-red-800'
@@ -1192,39 +1188,39 @@ export default function PartnerDashboard() {
                     </div>
 
                     {/* Property Details */}
-                    <div className="p-2 sm:p-4">
-                      <div className="flex items-center gap-2 mb-1 sm:mb-2">
-                        <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-[6px] sm:text-xs font-medium rounded flex-shrink-0">
+                    <div className="p-3 sm:p-4">
+                      <div className="flex items-center gap-2 mb-2 sm:mb-2">
+                        <span className="px-2 py-0.5 bg-blue-100 text-blue-800 text-[10px] sm:text-xs font-avenir font-medium rounded flex-shrink-0">
                           {property.id}
                         </span>
-                        <h3 className="text-[8px] sm:text-xl lg:text-lg font-semibold text-booking-dark line-clamp-1">
+                        <h3 className="text-sm sm:text-xl lg:text-lg font-avenir-bold font-bold text-booking-dark line-clamp-1">
                           {property.property_name}
                         </h3>
                       </div>
                       
-                      <p className="text-[7px] sm:text-base lg:text-sm text-booking-gray mb-1 sm:mb-3 line-clamp-2">
+                      <p className="text-xs sm:text-base lg:text-sm font-avenir-regular text-booking-gray mb-2 sm:mb-3 line-clamp-2">
                         {buildFullAddress(property)}
                       </p>
 
-                      <div className="flex items-center justify-between mb-1 sm:mb-3">
-                        <span className="text-[7px] sm:text-base lg:text-sm text-booking-gray capitalize">
+                      <div className="flex items-center justify-between mb-2 sm:mb-3">
+                        <span className="text-xs sm:text-base lg:text-sm font-avenir-regular text-booking-gray capitalize">
                           {property.property_type}
                         </span>
                       </div>
 
                       {/* Property Details - Beds, Bedrooms, Bathrooms */}
-                      <div className="flex items-center justify-between space-x-1 sm:space-x-4 mb-1">
+                      <div className="flex items-center justify-between space-x-1 sm:space-x-4 mb-2">
                         <div className="text-center flex-1">
-                          <div className="text-[8px] sm:text-lg lg:text-xl font-semibold text-booking-dark">{property.beds || 0}</div>
-                          <div className="text-[6px] sm:text-sm lg:text-xs text-booking-gray">Beds</div>
+                          <div className="text-sm sm:text-lg lg:text-xl font-avenir-bold font-bold text-booking-dark">{property.beds || 0}</div>
+                          <div className="text-[10px] sm:text-sm lg:text-xs font-avenir-regular text-booking-gray">Beds</div>
                         </div>
                         <div className="text-center flex-1">
-                          <div className="text-[8px] sm:text-lg lg:text-xl font-semibold text-booking-dark">{property.bedrooms || 0}</div>
-                          <div className="text-[6px] sm:text-sm lg:text-xs text-booking-gray">Bedrooms</div>
+                          <div className="text-sm sm:text-lg lg:text-xl font-avenir-bold font-bold text-booking-dark">{property.bedrooms || 0}</div>
+                          <div className="text-[10px] sm:text-sm lg:text-xs font-avenir-regular text-booking-gray">Bedrooms</div>
                         </div>
                         <div className="text-center flex-1">
-                          <div className="text-[8px] sm:text-lg lg:text-xl font-semibold text-booking-dark">{property.bathrooms || 0}</div>
-                          <div className="text-[6px] sm:text-sm lg:text-xs text-booking-gray">Bathrooms</div>
+                          <div className="text-sm sm:text-lg lg:text-xl font-avenir-bold font-bold text-booking-dark">{property.bathrooms || 0}</div>
+                          <div className="text-[10px] sm:text-sm lg:text-xs font-avenir-regular text-booking-gray">Bathrooms</div>
                         </div>
                       </div>
 
@@ -1252,68 +1248,62 @@ export default function PartnerDashboard() {
         return (
           <div className="space-y-4 sm:space-y-6">
             <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-booking-dark mb-2">Contact Information</h2>
-              <p className="text-sm sm:text-base text-booking-gray">Manage your contact details and preferences</p>
+              <h2 className="text-xl sm:text-2xl font-avenir-bold font-bold text-booking-dark">Contact Information</h2>
+              <p className="text-sm sm:text-base font-avenir font-medium tracking-wide text-booking-gray">Manage your contact details and preferences</p>
             </div>
 
             <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-gray-100">
               <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Full Name</label>
                   <input 
                     type="text" 
                     value={partnerFullName} 
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir-regular border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                     readOnly
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Email</label>
                   <input 
                     type="email" 
                     value={displayUser?.email || ''} 
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir-regular border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                     readOnly
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Phone</label>
                   <input 
                     type="tel" 
                     value={contactInfo.phone}
                     onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
                     placeholder="Enter phone number"
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir-regular border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Company Name</label>
                   <input 
                     type="text" 
                     value={contactInfo.company_name}
                     onChange={(e) => setContactInfo(prev => ({ ...prev, company_name: e.target.value }))}
                     placeholder="Enter company name"
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir-regular border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Company Email</label>
                   <input 
                     type="email" 
                     value={contactInfo.company_email}
                     onChange={(e) => setContactInfo(prev => ({ ...prev, company_email: e.target.value }))}
                     placeholder="Enter company email"
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir-regular border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-booking-dark mb-2">Company Address</label>
                   <textarea 
                     value={contactInfo.company_address}
                     onChange={(e) => setContactInfo(prev => ({ ...prev, company_address: e.target.value }))}
                     placeholder="Enter company address"
                     rows={3}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent resize-none"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir-regular border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent resize-none"
                   />
                 </div>
                 <div>
@@ -1321,14 +1311,14 @@ export default function PartnerDashboard() {
                   <input 
                     type="text" 
                     value="Partner" 
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-avenir-regular border border-gray-300 rounded-lg sm:rounded-xl focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                     readOnly
                   />
                 </div>
                 <div className="pt-3 sm:pt-4">
                   <button 
                     onClick={handleContactInfoUpdate}
-                    className="w-full sm:w-auto bg-booking-teal text-white px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg sm:rounded-xl hover:bg-opacity-90 transition-all duration-200 font-medium"
+                    className="w-full sm:w-auto bg-booking-teal text-white px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base font-avenir-regular rounded-lg sm:rounded-xl hover:bg-opacity-90 transition-all duration-200 font-medium"
                   >
                     Update Information
                   </button>
@@ -1337,7 +1327,7 @@ export default function PartnerDashboard() {
                 {/* Success Message - Bottom */}
                 {updateSuccess && (
                   <div className="mt-4 rounded-xl bg-green-50 border border-green-200 p-3 sm:p-4">
-                    <div className="text-xs sm:text-sm text-green-800">
+                    <div className="text-xs sm:text-sm font-avenir-regular text-green-800">
                       Information updated successfully
                     </div>
                   </div>
@@ -1346,7 +1336,7 @@ export default function PartnerDashboard() {
                 {/* Error Message - Bottom */}
                 {updateError && (
                   <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-3 sm:p-4">
-                    <div className="text-xs sm:text-sm text-red-800">{updateError}</div>
+                    <div className="text-xs sm:text-sm font-avenir-regular text-red-800">{updateError}</div>
                   </div>
                 )}
               </div>
@@ -1372,7 +1362,7 @@ export default function PartnerDashboard() {
             style={{ maxWidth: '100%' }}
           />
           <div>
-            <p className="text-lg font-semibold text-white">Partner Portal</p>
+            <p className="text-xl font-avenir tracking-wide font-bold text-white">Partner Portal</p>
           </div>
         </div>
         <button
@@ -1399,7 +1389,7 @@ export default function PartnerDashboard() {
                     className="h-12 w-auto object-contain"
                     style={{ maxWidth: '100%' }}
                   />
-                  <p className="text-sm font-bold text-white">Partner Portal</p>
+                  <p className="text-lg font-avenir tracking-wide font-bold text-white">Partner Portal</p>
                 </div>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -1413,7 +1403,7 @@ export default function PartnerDashboard() {
             </div>
             
             {/* Mobile Navigation */}
-            <nav className="p-4 space-y-2 font-avenir">
+            <nav className="p-4 space-y-2 font-avenir tracking-wide">
               <button
                 onClick={() => { setActiveTab('dashboard'); setIsMobileMenuOpen(false); }}
                 className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
@@ -1427,7 +1417,7 @@ export default function PartnerDashboard() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
                   </svg>
-                  <span className="text-sm font-avenir font-medium">Dashboard</span>
+                  <span className="text-sm font-avenir font-medium tracking-wide">Dashboard</span>
                   {activeTab === 'dashboard' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
                 </div>
               </button>
@@ -1444,7 +1434,7 @@ export default function PartnerDashboard() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                   </svg>
-                  <span className="text-sm font-avenir font-medium">My Properties</span>
+                  <span className="text-sm font-avenir font-medium tracking-wide">My Properties</span>
                   {activeTab === 'my-properties' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
                 </div>
               </button>
@@ -1461,7 +1451,7 @@ export default function PartnerDashboard() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
-                  <span className="text-sm font-avenir font-medium">Contact Information</span>
+                  <span className="text-sm font-avenir font-medium tracking-wide">Contact Information</span>
                   {activeTab === 'contact-info' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
                 </div>
               </button>
@@ -1476,19 +1466,19 @@ export default function PartnerDashboard() {
                   </span>
                 </div>
                 <div>
-                  <p className="text-sm font-avenir font-medium text-white">{partnerName || 'Partner'}</p>
-                  <p className="text-xs font-avenir text-gray-300">Partner</p>
+                  <p className="text-sm font-avenir font-medium tracking-wide text-white">{partnerName || 'Partner'}</p>
+                  <p className="text-xs font-avenir tracking-wide text-gray-300">Partner</p>
                 </div>
               </div>
               <button
                 onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
-                className="w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200"
+                className="w-full px-4 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 transition-all duration-200"
               >
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center justify-center space-x-3">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
-                  <span className="text-sm font-avenir font-medium">Logout</span>
+                  <span className="text-sm font-avenir font-medium tracking-wide">Logout</span>
                 </div>
               </button>
             </div>
@@ -1507,12 +1497,12 @@ export default function PartnerDashboard() {
               className="h-12 w-auto object-contain"
               style={{ maxWidth: '100%' }}
             />
-            <p className="text-sm font-bold text-white">Partner Portal</p>
+            <p className="text-lg font-avenir tracking-wide font-bold text-white">Partner Portal</p>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2 font-avenir">
+        <nav className="flex-1 p-4 space-y-2 font-avenir tracking-wide">
           <button
             onClick={() => setActiveTab('dashboard')}
             className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
@@ -1576,19 +1566,19 @@ export default function PartnerDashboard() {
               </span>
             </div>
             <div>
-              <p className="text-sm lg:text-base font-avenir font-medium text-white">{partnerName || 'Partner'}</p>
-              <p className="text-xs lg:text-sm font-avenir text-gray-300">Partner</p>
+              <p className="text-sm lg:text-base font-avenir font-medium tracking-wide text-white">{partnerName || 'Partner'}</p>
+              <p className="text-xs lg:text-sm font-avenir tracking-wide text-gray-300">Partner</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className="w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-700 hover:text-white transition-all duration-200"
+            className="w-full px-4 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 transition-all duration-200"
           >
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-center space-x-3">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
-              <span className="text-sm lg:text-base font-avenir font-medium">Logout</span>
+              <span className="text-sm lg:text-base font-avenir font-medium tracking-wide">Logout</span>
             </div>
           </button>
         </div>

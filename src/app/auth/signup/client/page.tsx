@@ -358,6 +358,7 @@ export default function ContractorSignupPage() {
         href="/" 
         className="absolute top-4 left-4 z-20 flex items-center justify-center bg-booking-teal text-white rounded-full sm:rounded-lg w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-lg"
         aria-label="Back to home"
+        style={{ fontFamily: 'var(--font-avenir-regular)' }}
       >
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
@@ -372,7 +373,7 @@ export default function ContractorSignupPage() {
       </Link>
 
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-2 sm:px-4 pb-12 sm:pb-16 -mt-4">
+      <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-2 sm:px-4 pb-12 sm:pb-16 -mt-12 sm:-mt-16">
         {/* Logo on Background */}
         <div className="flex justify-center -mb-12 sm:-mb-16 lg:-mb-20">
           <Image

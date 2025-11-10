@@ -45,98 +45,6 @@ export default function ContractorSignupPage() {
     setIsSigningUp(true);
 
     try {
-      // FIRST: Check if email already exists in contractor table (same role)
-      try {
-        const { data: existingContractor, error: contractorCheckError } = await supabase
-          .from('contractor')
-          .select('id, email')
-          .eq('email', data.email)
-          .maybeSingle();
-
-        if (existingContractor && !contractorCheckError) {
-          setError('Email already in use');
-          setLoading(false);
-          setIsSigningUp(false);
-          return;
-        }
-      } catch (contractorCheckError) {
-        console.log('Contractor table check failed:', contractorCheckError);
-        // Continue with signup even if check fails
-      }
-
-      // Check if email already exists in landlord or admin tables (cross-table validation)
-      try {
-        const { data: existingLandlord, error: landlordCheckError } = await supabase
-          .from('landlord')
-          .select('id, email')
-          .eq('email', data.email)
-          .maybeSingle();
-
-        if (existingLandlord && !landlordCheckError) {
-          setError('This email already exists for a partner account. Please use a different email or sign in as a partner.');
-          setLoading(false);
-          setIsSigningUp(false);
-          return;
-        }
-      } catch (landlordCheckError) {
-        console.log('Landlord table check failed:', landlordCheckError);
-        // Continue with signup even if check fails
-      }
-
-      // Check if email exists in admin table
-      try {
-        const { data: existingAdmin, error: adminCheckError } = await supabase
-          .from('admin')
-          .select('id, email')
-          .eq('email', data.email)
-          .maybeSingle();
-
-        if (existingAdmin && !adminCheckError) {
-          setError('This email is already in use. Try using a different email.');
-          setLoading(false);
-          setIsSigningUp(false);
-          return;
-        }
-      } catch (adminCheckError) {
-        console.log('Admin table check failed:', adminCheckError);
-        // Continue with signup even if check fails
-      }
-
-      // Determine user role based on email lookup
-      let userRole = 'contractor'; // Default role
-      let bookingRequest = null;
-      let landlordProfile = null;
-
-      try {
-        // Check if email exists in booking_requests table (contractor)
-        const { data: bookingData, error: bookingError } = await supabase
-          .from('booking_requests')
-          .select('id')
-          .eq('email', data.email)
-          .single();
-
-        if (bookingData && !bookingError) {
-          userRole = 'contractor';
-          bookingRequest = bookingData;
-        } else {
-          // Check if email exists in landlord_profiles table (landlord)
-          const { data: landlordData, error: landlordError } = await supabase
-            .from('landlord_profiles')
-            .select('id')
-            .eq('email', data.email)
-            .single();
-
-          if (landlordData && !landlordError) {
-            userRole = 'landlord';
-            landlordProfile = landlordData;
-          }
-          // If email doesn't exist in either table, default to 'contractor'
-        }
-      } catch (lookupError) {
-        console.log('Email lookup failed, using default contractor role:', lookupError);
-        // Continue with default contractor role
-      }
-
       // Sign up with Supabase Auth
       console.log('Starting Supabase Auth signup...');
       const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -145,7 +53,8 @@ export default function ContractorSignupPage() {
         options: {
           emailRedirectTo: `${window.location.origin}/contractor`,
           data: {
-            role: 'contractor'
+            role: 'contractor',
+            full_name: data.fullName
           }
         }
       });
@@ -154,189 +63,81 @@ export default function ContractorSignupPage() {
 
       if (authError) {
         console.error('Auth signup error:', authError);
-        console.error('Auth error details:', {
-          message: authError.message,
-          status: authError.status,
-          name: authError.name
-        });
-        
-        // Handle specific error types
         if (authError.message.includes('User already registered')) {
           setError('This email is already registered. Please try logging in instead.');
-        } else if (authError.message.includes('Invalid email')) {
-          setError('Please enter a valid email address.');
-        } else if (authError.message.includes('Password should be at least')) {
-          setError('Password must be at least 6 characters long.');
         } else {
           setError(`Signup failed: ${authError.message}`);
         }
+        setLoading(false);
+        setIsSigningUp(false);
         return;
       }
 
-      if (authData.user) {
-        // Test database connection first
-        console.log('Testing database connection...');
-        const { data: testData, error: testError } = await supabase
-          .from('contractor')
-          .select('count')
-          .limit(1);
-        
-        console.log('Database test result:', { testData, testError });
-        
-        if (testError) {
-          console.error('Database connection test failed:', testError);
-          setError(`Database connection failed: ${testError.message}`);
-          return;
-        }
-
-        // Check if user already exists in contractor table
-        const { data: existingUser, error: checkError } = await supabase
-          .from('contractor')
-          .select('id')
-          .eq('id', authData.user.id)
-          .single();
-
-        if (existingUser) {
-          console.log('User already exists in contractor database, updating profile');
-          // Update existing user profile
-          const { error: updateError } = await supabase
-            .from('contractor')
-            .update({
-              email: data.email,
-              full_name: data.fullName,
-              phone: data.phone,
-              role: userRole, // Use determined role
-              is_active: true,
-              email_verified: false
-            })
-            .eq('id', authData.user.id);
-
-          if (updateError) {
-            console.error('Profile update error:', updateError);
-            setError(`Failed to update user profile: ${updateError.message}`);
-            return;
-          }
-        } else {
-          // Create new user profile in contractor table
-          console.log('Creating new contractor profile with data:', {
-            id: authData.user.id,
-            email: data.email,
-            full_name: data.fullName,
-            role: userRole,
-            is_active: true,
-            email_verified: false
-          });
-
-          const { data: insertData, error: profileError } = await supabase
-            .from('contractor')
-            .insert({
-              id: authData.user.id,
-              email: data.email,
-              full_name: data.fullName,
-              phone: data.phone,
-              role: userRole, // Use determined role
-              is_active: true,
-              email_verified: false
-            })
-            .select(); // Add select to get the inserted data
-
-          console.log('Contractor profile insert result:', { insertData, profileError });
-
-          if (profileError) {
-            console.error('Profile creation error:', profileError);
-            console.error('Error details:', {
-              message: profileError.message,
-              details: profileError.details,
-              hint: profileError.hint,
-              code: profileError.code
-            });
-            
-            // If it's a duplicate key error, try to update instead
-            if (profileError.code === '23505') {
-              console.log('Duplicate key error, attempting to update instead');
-              const { data: updateData, error: updateError } = await supabase
-                .from('contractor')
-                .update({
-                  email: data.email,
-                  full_name: data.fullName,
-                  phone: data.phone,
-                  role: userRole,
-                  is_active: true,
-                  email_verified: false
-                })
-                .eq('id', authData.user.id)
-                .select();
-
-              console.log('Contractor profile update result:', { updateData, updateError });
-
-              if (updateError) {
-                console.error('Update after duplicate key error failed:', updateError);
-                setError(`Failed to create user profile: ${updateError.message}`);
-                return;
-              }
-            } else {
-              setError(`Failed to create user profile: ${profileError.message}`);
-              return;
-            }
-          } else {
-            console.log('Contractor profile created successfully:', insertData);
-          }
-        }
-
-        console.log('Contractor profile created successfully in Supabase');
-
-        // Update the corresponding profile table with user_id (with error handling)
-        try {
-          if (userRole === 'contractor' && bookingRequest) {
-            // Update booking_requests with user_id
-            const { error: updateError } = await supabase
-              .from('booking_requests')
-              .update({ user_id: authData.user.id })
-              .eq('email', data.email);
-
-            if (updateError) {
-              console.error('Failed to update booking_requests:', updateError);
-            } else {
-              console.log('Booking requests updated with user_id');
-            }
-          } else if (userRole === 'landlord' && landlordProfile) {
-            // Update landlord_profiles with user_id
-            const { error: updateError } = await supabase
-              .from('landlord_profiles')
-              .update({ user_id: authData.user.id })
-              .eq('email', data.email);
-
-            if (updateError) {
-              console.error('Failed to update landlord_profiles:', updateError);
-            } else {
-              console.log('Landlord profiles updated with user_id');
-            }
-          }
-        } catch (updateError) {
-          console.error('Error updating profile tables:', updateError);
-          // Don't block the signup process
-        }
-
-
-            // Show success message and redirect
-            console.log('Signup completed successfully, redirecting...');
-            setSuccess(true);
-            setLoading(false);
-            setIsSigningUp(false);
-            
-            // Wait a moment for everything to complete
-            setTimeout(() => {
-              if (userRole === 'contractor') {
-                router.push('/contractor');
-              } else if (userRole === 'landlord') {
-                router.push('/landlord');
-              } else {
-                router.push('/auth/login?message=Account created successfully. Please sign in.');
-              }
-            }, 2000);
+      if (!authData.user) {
+        console.error('No user returned from signup');
+        setError('Signup failed: No user account was created. Please try again.');
+        setLoading(false);
+        setIsSigningUp(false);
+        return;
       }
+
+      // Verify user was actually created in auth.users
+      const userId = authData.user.id;
+      console.log('Auth user created with ID:', userId);
+
+      // Create contractor profile in contractor table
+      console.log('Creating contractor profile with data:', {
+        id: userId,
+        email: data.email,
+        full_name: data.fullName,
+        phone: data.phone,
+        role: 'contractor',
+      });
+
+      const { error: profileError } = await supabase
+        .from('contractor')
+        .insert({
+          id: userId,
+          email: data.email,
+          full_name: data.fullName,
+          phone: data.phone,
+          role: 'contractor',
+          is_active: true,
+          email_verified: false
+        });
+
+      console.log('Contractor profile insert result:', { profileError });
+
+      if (profileError) {
+        console.error('Profile creation error:', profileError);
+        console.error('Error details:', {
+          message: profileError.message,
+          details: profileError.details,
+          hint: profileError.hint,
+          code: profileError.code
+        });
+        
+        // If contractor insert fails, we should ideally delete the auth user
+        // But we can't do that from frontend (need service role key)
+        setError(`Failed to create user profile: ${profileError.message}. Please contact support.`);
+        setLoading(false);
+        setIsSigningUp(false);
+        return;
+      }
+
+      console.log('Contractor profile created successfully!');
+
+      // Show success message and redirect
+      setSuccess(true);
+      setLoading(false);
+      setIsSigningUp(false);
+      
+      setTimeout(() => {
+        router.push('/contractor');
+      }, 2000);
     } catch (err) {
-      setError('An unexpected error occurred');
+      console.error('Signup error:', err);
+      setError('An unexpected error occurred. Please try again.');
       setIsSigningUp(false);
     } finally {
       setLoading(false);

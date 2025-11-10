@@ -80,6 +80,15 @@ function LoginContent() {
             .maybeSingle();
 
           console.log('Contractor check result:', { contractorProfile, contractorError });
+          
+          if (contractorError) {
+            console.error('Contractor query error details:', {
+              message: contractorError.message,
+              details: contractorError.details,
+              hint: contractorError.hint,
+              code: contractorError.code
+            });
+          }
 
           // Check landlord table
           const { data: landlordProfile, error: landlordError } = await supabase

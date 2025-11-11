@@ -25,6 +25,7 @@ interface Booking {
     status: 'unpaid' | 'paid';
     stripe_payment_url: string | null;
   };
+  value?: number | string; // Add value field from booked_properties
 }
 
 export default function ContractorDashboard() {
@@ -354,19 +355,45 @@ export default function ContractorDashboard() {
           if (request.booking_dates && request.booking_dates.length > 0) {
             for (const bookingDate of request.booking_dates) {
               console.log('Booking date status:', bookingDate.status);
+              
+              // Determine the actual status (same logic as displayed status)
+              const actualStatus = (bookingDate.status || request.status);
+              
+              // Fetch value from backend API for confirmed bookings (bypasses RLS)
+              let bookingValue: number | string | undefined = undefined;
+              if (actualStatus === 'confirmed') {
+                try {
+                  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+                  const response = await fetch(`${backendUrl}/api/booking-values/${bookingDate.id}`);
+                  
+                  if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.value) {
+                      bookingValue = result.value;
+                      console.log('Fetched booking value:', bookingValue, 'for booking_date_id:', bookingDate.id);
+                    }
+                  } else {
+                    console.error('Failed to fetch booking value from backend:', response.status);
+                  }
+                } catch (error) {
+                  console.error('Error fetching booking value:', error);
+                }
+              }
+              
               transformedBookings.push({
                 id: bookingDate.id,
                 booking_request_id: request.id, // Add the booking request ID
                 property_id: request.assigned_property_id || '',
                 start_date: bookingDate.start_date,
                 end_date: bookingDate.end_date,
-                status: (bookingDate.status || request.status) as 'pending' | 'confirmed' | 'cancelled' | 'paid',
+                status: actualStatus as 'pending' | 'confirmed' | 'cancelled' | 'paid',
                 created_at: request.created_at,
                 property: {
                   title: `${request.company_name || 'N/A'} | Number of people: ${request.team_size || 'N/A'}`,
                   address: request.project_postcode || 'Location TBD',
                   price: request.budget_per_person_week || 0
-                }
+                },
+                value: bookingValue
               });
             }
           }
@@ -750,6 +777,12 @@ export default function ContractorDashboard() {
                               <div className="text-right">
                                 <div className="text-sm font-avenir font-semibold tracking-wide text-booking-dark">{booking.property.price}</div>
                                 <div className="text-xs font-avenir font-medium tracking-wide text-booking-gray">per night</div>
+                                {booking.status === 'confirmed' && booking.value && (
+                                  <>
+                                    <div className="text-sm font-avenir font-semibold tracking-wide text-green-700 mt-1">{booking.value}</div>
+                                    <div className="text-xs font-avenir font-medium tracking-wide text-green-600">booking value</div>
+                                  </>
+                                )}
                               </div>
                               <span className={`px-3 py-1 rounded-full text-xs font-avenir font-medium tracking-wide ${
                                 booking.status === 'confirmed' 
@@ -823,6 +856,11 @@ export default function ContractorDashboard() {
                             <span className="text-xs lg:text-sm font-avenir font-semibold tracking-wide text-booking-teal">
                               {booking.property.price || 0} per night
                             </span>
+                            {booking.status === 'confirmed' && booking.value && (
+                              <span className="text-xs lg:text-sm font-avenir font-semibold tracking-wide text-green-700 mt-1">
+                                Booking Value: {booking.value}
+                              </span>
+                            )}
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">

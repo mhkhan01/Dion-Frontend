@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -30,20 +29,41 @@ export default function ContactPage() {
     setSubmitStatus('idle');
 
     try {
-      const { data, error } = await supabase
-        .from('contact_details')
-        .insert([
-          {
-            full_name: formData.fullName,
-            email: formData.email,
-            phone: formData.phone,
-            address: formData.address,
-            message: formData.message
-          }
-        ]);
+      // Call backend API instead of directly using Supabase
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+      
+      const payload = {
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        message: formData.message
+      };
+      
+      // Log payload for debugging
+      console.log('Submitting contact form with data:', payload);
+      
+      const response = await fetch(`${backendUrl}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
-      if (error) {
-        throw error;
+      const result = await response.json();
+
+      if (!response.ok) {
+        // Log detailed validation errors for debugging
+        console.error('API Error Response:', result);
+        if (result.details) {
+          console.error('Validation errors:', result.details);
+          // Show detailed validation errors
+          result.details.forEach((err: any) => {
+            console.error(`Field "${err.path?.join('.')}" error: ${err.message}`);
+          });
+        }
+        throw new Error(result.error || 'Failed to submit contact form');
       }
 
       // Reset form and show success message
@@ -383,7 +403,7 @@ export default function ContactPage() {
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    placeholder="Type your Message..."
+                    placeholder="Type your Message... (Should be atleast 10 characters)"
                     rows={4}
                     className="w-full px-4 py-3 border-b-2 border-gray-300 focus:border-[#00BAB5] focus:outline-none text-white placeholder-gray-300 bg-transparent resize-none"
                     required

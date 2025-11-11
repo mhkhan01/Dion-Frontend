@@ -137,7 +137,9 @@ export default function BookingRequestPage() {
       }));
 
     try {
-      const response = await fetch('/api/booking-requests', {
+      // Call backend API endpoint
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+      const response = await fetch(`${backendUrl}/api/booking-requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -158,42 +160,7 @@ export default function BookingRequestPage() {
 
       if (response.ok) {
         const result = await response.json();
-        const createdBookingDates = result.bookingDates || [];
         
-        // Send data to GHL endpoint for each booking date
-        try {
-          for (let i = 0; i < bookingDates.length; i++) {
-            const booking = bookingDates[i];
-            const createdBookingDate = createdBookingDates[i];
-            const ghlPayload = {
-              fullName: formObject.name,
-              companyName: formObject.companyName,
-              email: formObject.email,
-              phone: formObject.phone,
-              projectPostcode: formObject.projectPostcode,
-              city: formObject.city,
-              [`booking_${i + 1}`]: `${booking.startDate} to ${booking.endDate}`,
-              teamSize: formObject.teamSize ? parseInt(formObject.teamSize as string) : null,
-              budgetPerPerson: selectedBudgetOption,
-              role: 'contractor',
-              bookingId: createdBookingDate?.id || `booking_${i + 1}`,
-              bookingStartDate: booking.startDate,
-              bookingEndDate: booking.endDate
-            };
-
-            await fetch('https://services.leadconnectorhq.com/hooks/JxGt5Zz3odpUbS4vgmeC/webhook-trigger/5caf28bd-9145-4b99-b08c-be10afbbec5c', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(ghlPayload),
-            });
-          }
-        } catch (ghlError) {
-          console.error('Error sending to GHL:', ghlError);
-          // Don't show error to user as this is secondary functionality
-        }
-
         // Show success message
         setShowThankYou(true);
         

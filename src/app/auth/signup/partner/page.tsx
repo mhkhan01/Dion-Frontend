@@ -1,10 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { supabase } from '@/lib/supabase';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -29,7 +27,6 @@ export default function LandlordSignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
-  const router = useRouter();
 
   const {
     register,
@@ -46,100 +43,40 @@ export default function LandlordSignupPage() {
     setIsSigningUp(true);
 
     try {
-      // Sign up with Supabase Auth (EXACT SAME AS CONTRACTOR)
-      console.log('Starting Supabase Auth signup...');
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: data.email,
-        password: data.password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/landlord`,
-          data: {
-            role: 'landlord',
-            full_name: data.fullName,
-            phone: data.phone,
-            company_name: data.companyName
-          }
-        }
-      });
-
-      console.log('Supabase Auth signup result:', { authData, authError });
-
-      if (authError) {
-        console.error('Auth signup error:', authError);
-        if (authError.message.includes('User already registered')) {
-          setError('This email is already registered. Please try logging in instead.');
-        } else {
-          setError(`Signup failed: ${authError.message}`);
-        }
-        setLoading(false);
-        setIsSigningUp(false);
-        return;
-      }
-
-      if (!authData.user) {
-        console.error('No user returned from signup');
-        setError('Signup failed: No user account was created. Please try again.');
-        setLoading(false);
-        setIsSigningUp(false);
-        return;
-      }
-
-      // Verify user was actually created in auth.users
-      const userId = authData.user.id;
-      console.log('Auth user created with ID:', userId);
-
-      // Create landlord profile in landlord table (EXACT SAME PATTERN AS CONTRACTOR)
-      console.log('Creating landlord profile with data:', {
-        id: userId,
-        email: data.email,
-        full_name: data.fullName,
-        phone: data.phone,
-        company_name: data.companyName,
-        role: 'landlord',
-      });
-
-      const { error: profileError } = await supabase
-        .from('landlord')
-        .insert({
-          id: userId,
+      // Call backend API for partner signup
+      console.log('Calling backend API for partner signup...');
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+      const response = await fetch(`${backendUrl}/api/partner-signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: data.fullName,
           email: data.email,
-          full_name: data.fullName,
           phone: data.phone,
-          company_name: data.companyName,
-          role: 'landlord',
-          is_active: true,
-          email_verified: false
-        });
+          companyName: data.companyName,
+          password: data.password,
+          confirmPassword: data.confirmPassword
+        }),
+      });
 
-      console.log('Landlord profile insert result:', { profileError });
+      const result = await response.json();
 
-      if (profileError) {
-        console.error('Profile creation error:', profileError);
-        console.error('Error details:', {
-          message: profileError.message,
-          details: profileError.details,
-          hint: profileError.hint,
-          code: profileError.code
-        });
-        
-        // If landlord insert fails, we should ideally delete the auth user
-        // But we can't do that from frontend (need service role key)
-        setError(`Failed to create user profile: ${profileError.message}. Please contact support.`);
+      if (!response.ok) {
+        console.error('Backend signup error:', result);
+        setError(result.error || 'Signup failed. Please try again.');
         setLoading(false);
         setIsSigningUp(false);
         return;
       }
 
-      console.log('Landlord profile created successfully!');
+      console.log('Partner signup successful:', result);
 
-      // Show success message and redirect (EXACT SAME AS CONTRACTOR)
+      // Show success message - user stays on page until they confirm email
       setSuccess(true);
       setLoading(false);
       setIsSigningUp(false);
-      
-      setTimeout(() => {
-        router.push('/landlord');
-      }, 2000);
     } catch (err) {
       console.error('Signup error:', err);
       setError('An unexpected error occurred. Please try again.');

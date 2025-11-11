@@ -35,40 +35,25 @@ export async function POST(request: NextRequest) {
     // Step 1: Create Supabase Auth account
     // Try using admin API if service role key is available
     let authData;
-    let authError;
-    
-    const hasServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY && 
-                              process.env.SUPABASE_SERVICE_ROLE_KEY !== process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    
-    if (hasServiceRoleKey) {
-      // Use admin API with service role
-      const result = await supabaseServer.auth.admin.createUser({
-        email: email,
-        password: password,
-        email_confirm: false,
-        user_metadata: {
-          role: 'contractor',
-          full_name: fullName
-        }
-      });
-      authData = result.data;
-      authError = result.error;
-    } else {
-      // Fallback to regular signup
-      const result = await supabaseServer.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/contractor`,
-          data: {
-            role: 'contractor',
-            full_name: fullName
-          }
-        }
-      });
-      authData = result.data;
-      authError = result.error;
-    }
+let authError;
+
+const result = await supabaseServer.auth.signUp({
+  email,
+  password,
+  options: {
+    emailRedirectTo: `${
+      process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    }/contractor`,
+    data: {
+      role: 'contractor',
+      full_name: fullName,
+    },
+  },
+});
+
+authData = result.data;
+authError = result.error;
+
 
     if (authError) {
       console.error('Auth signup error:', authError);

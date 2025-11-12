@@ -292,7 +292,7 @@ export default function LandlordSignupPage() {
             <div className="text-center">
               <p className="text-xs sm:text-sm text-booking-gray">
                 Already have an account?{' '}
-                <Link href="/auth/login?type=landlord" className="text-booking-teal hover:text-booking-dark font-medium">
+                <Link href="/auth/login?type=partner" className="text-booking-teal hover:text-booking-dark font-medium">
                   Sign in here
                 </Link>
               </p>

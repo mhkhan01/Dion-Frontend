@@ -529,7 +529,7 @@ export default function BookingRequestPage() {
                 <p className="text-xs sm:text-lg text-booking-gray text-center leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                   Already have an account?{' '}
                   <a 
-                    href="/auth/login?type=contractor" 
+                    href="/auth/login?type=client" 
                     className="text-booking-teal hover:text-booking-dark underline font-medium"
                   >
                     Sign in here

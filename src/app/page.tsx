@@ -1294,11 +1294,11 @@ export default function HomePage() {
             {/* App Download Section */}
             <section className="bg-white pt-12 sm:pt-16 md:pt-20 px-4 sm:px-6 lg:px-12">
               <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-[1.2fr_0.8fr] sm:grid-cols-2 gap-1 sm:gap-4 lg:gap-8 items-end justify-items-center">
+                <div className="grid grid-cols-[1.2fr_0.8fr] sm:grid-cols-2 gap-1 sm:gap-4 lg:gap-8 items-start justify-items-center">
                   {/* Left Content */}
-                  <div className="text-left lg:pr-4 justify-self-end pr-2 sm:pr-0">
+                  <div className="text-left lg:pr-4 justify-self-start sm:mt-12">
                     <div className="mb-2">
-                      <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base text-[#00BAB5]">Download the</span>
+                      <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-xl md:text-2xl text-[#00BAB5]">Download the</span>
                     </div>
                     <h2 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xs sm:text-3xl md:text-4xl lg:text-5xl text-[#0B1D37] mb-2 sm:mb-4">
                       <span className="sm:hidden">BOOKING HUB MOBILE APP</span>
@@ -1339,13 +1339,13 @@ export default function HomePage() {
                   </div>
 
                   {/* Right Content - Mobile Mockup Image */}
-                  <div className="flex items-end justify-end sm:justify-start lg:justify-center justify-self-end sm:justify-self-start h-full">
-                    <div className="relative">
+                  <div className="flex items-start justify-end sm:justify-start lg:justify-center justify-self-end sm:justify-self-start h-full sm:mt-0">
+                    <div className="relative ml-2 sm:ml-0 mr-12 sm:mr-0">
                       <img 
                         src="/Mobile-Mockup.webp" 
                         alt="Booking Hub Mobile App Mockup" 
-                        className="w-full max-w-[200px] sm:max-w-md"
-                        style={{ transform: 'scaleY(1.1)', transformOrigin: 'bottom' }}
+                        className="w-full max-w-[650px] sm:max-w-md md:max-w-lg lg:max-w-xl [transform:scaleX(2.7)_scaleY(2.7)] sm:[transform:scaleX(1.3)_scaleY(1.3)]"
+                        style={{ transformOrigin: 'top' }}
                       />
                     </div>
                   </div>

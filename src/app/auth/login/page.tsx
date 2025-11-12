@@ -23,7 +23,9 @@ function LoginContent() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const userType = searchParams.get('type') || 'contractor'; // Default to contractor
+  const typeParam = searchParams.get('type') || 'contractor';
+  // Map 'partner' to 'landlord' and 'client' to 'contractor'
+  const userType = typeParam === 'partner' ? 'landlord' : typeParam === 'client' ? 'contractor' : typeParam;
 
   useEffect(() => {
     const message = searchParams.get('message');

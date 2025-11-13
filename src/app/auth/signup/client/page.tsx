@@ -58,7 +58,7 @@ export default function ContractorSignupPage() {
           confirmPassword: data.confirmPassword
         }),
       });
-
+//new
       const result = await response.json();
 
       if (!response.ok) {

@@ -44,7 +44,7 @@ export default function ContractorSignupPage() {
     try {
       // Call backend API for client signup
       console.log('Calling backend API for client signup...');
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = 'https://Backend-app-env.eba-e7u46uaw.us-east-1.elasticbeanstalk.com';
       const response = await fetch(`${backendUrl}/api/client-signup`, {
         method: 'POST',
         headers: {

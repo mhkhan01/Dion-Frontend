@@ -99,6 +99,7 @@ export default function LandlordSignupPage() {
       {/* Back Button */}
       <Link 
         href="/" 
+        onClick={(e) => { e.preventDefault(); window.location.href = '/'; }}
         className="absolute top-4 left-4 z-20 flex items-center justify-center bg-booking-teal text-white rounded-full sm:rounded-lg w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-lg"
         aria-label="Back to home"
         style={{ fontFamily: 'var(--font-avenir-regular)' }}
@@ -292,7 +293,11 @@ export default function LandlordSignupPage() {
             <div className="text-center">
               <p className="text-xs sm:text-sm text-booking-gray">
                 Already have an account?{' '}
-                <Link href="/auth/login?type=partner" className="text-booking-teal hover:text-booking-dark font-medium">
+                <Link 
+                  href="/auth/login?type=partner" 
+                  onClick={(e) => { e.preventDefault(); window.location.href = '/auth/login?type=partner'; }}
+                  className="text-booking-teal hover:text-booking-dark font-medium"
+                >
                   Sign in here
                 </Link>
               </p>

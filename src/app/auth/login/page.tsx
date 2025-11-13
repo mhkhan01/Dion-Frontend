@@ -178,6 +178,7 @@ function LoginContent() {
       {/* Back Button */}
       <Link 
         href="/" 
+        onClick={(e) => { e.preventDefault(); window.location.href = '/'; }}
         className="absolute top-4 left-4 z-20 flex items-center justify-center bg-booking-teal text-white rounded-full sm:rounded-lg w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-lg"
         aria-label="Back to home"
         style={{ fontFamily: 'var(--font-avenir-regular)' }}
@@ -297,6 +298,7 @@ function LoginContent() {
             <div className="text-right">
               <Link 
                 href="/auth/forgot-password" 
+                onClick={(e) => { e.preventDefault(); window.location.href = '/auth/forgot-password'; }}
                 className="text-xs sm:text-sm text-booking-teal hover:text-booking-dark font-medium"
               >
                 Forgot your password?
@@ -323,7 +325,15 @@ function LoginContent() {
             <div className="text-center">
               <p className="text-xs sm:text-sm text-booking-gray">
                 Don't have an account?{' '}
-                <Link href={`/auth/signup/${userType === 'contractor' ? 'client' : userType === 'landlord' ? 'partner' : userType}`} className="text-booking-teal hover:text-booking-dark font-medium">
+                <Link 
+                  href={`/auth/signup/${userType === 'contractor' ? 'client' : userType === 'landlord' ? 'partner' : userType}`} 
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    const signupPath = `/auth/signup/${userType === 'contractor' ? 'client' : userType === 'landlord' ? 'partner' : userType}`;
+                    window.location.href = signupPath;
+                  }}
+                  className="text-booking-teal hover:text-booking-dark font-medium"
+                >
                   Create one here
                 </Link>
               </p>

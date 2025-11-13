@@ -163,7 +163,11 @@ export default function ResetPasswordPage() {
             <div className="text-center">
               <p className="text-sm text-booking-gray">
                 Remember your password?{' '}
-                <Link href="/auth/login" className="text-booking-teal hover:text-booking-dark font-medium">
+                <Link 
+                  href="/auth/login" 
+                  onClick={(e) => { e.preventDefault(); window.location.href = '/auth/login'; }}
+                  className="text-booking-teal hover:text-booking-dark font-medium"
+                >
                   Sign in here
                 </Link>
               </p>

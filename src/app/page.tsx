@@ -441,16 +441,17 @@ export default function HomePage() {
           <div className="w-full max-w-7xl flex items-center justify-between overflow-visible">
           {/* Logo */}
           <div className="flex items-center overflow-visible">
-            <a href="/" className="block py-2">
+            <a href="/" onClick={(e) => { e.preventDefault(); window.location.href = '/'; }} className="block py-2">
               <img src="/blue-teal.webp" alt="Booking Hub Logo" fetchPriority="high" loading="eager" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain block" style={{ maxWidth: '100%', display: 'block' }} />
             </a>
           </div>
 
           {/* Desktop Navigation - Hidden on mobile, visible on tablet and up */}
           <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-auto mr-4 lg:mr-6">
-            <a href="/contact" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">Contact Us</a>
+            <a href="/contact" onClick={(e) => { e.preventDefault(); window.location.href = '/contact'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">Contact Us</a>
             <a 
               href="/booking-request" 
+              onClick={(e) => { e.preventDefault(); window.location.href = '/booking-request'; }}
               style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
               className="bg-[#00BAB5] text-white hover:bg-[#009a96] transition-colors px-4 py-2 rounded-md text-base lg:text-lg border-2 border-[#0B1D37]"
             >
@@ -458,6 +459,7 @@ export default function HomePage() {
             </a>
             <a 
               href="/auth/signup/partner" 
+              onClick={(e) => { e.preventDefault(); window.location.href = '/auth/signup/partner'; }}
               style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
               className="bg-[#E9ECEF] text-[#0B1D37] hover:bg-[#dee2e6] transition-colors px-4 py-2 rounded-md text-base lg:text-lg border-2 border-[#0B1D37]"
             >
@@ -478,8 +480,8 @@ export default function HomePage() {
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-32 lg:w-36 shadow-lg z-50 rounded-lg bg-white border border-gray-200">
                 <div className="py-1">
-                  <a href="/auth/signup/client" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Client login</a>
-                  <a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Partner login</a>
+                  <a href="/auth/signup/client" onClick={(e) => { e.preventDefault(); window.location.href = '/auth/signup/client'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Client login</a>
+                  <a href="/auth/signup/partner" onClick={(e) => { e.preventDefault(); window.location.href = '/auth/signup/partner'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Partner login</a>
                 </div>
               </div>
             )}
@@ -511,7 +513,7 @@ export default function HomePage() {
               <div className="flex flex-col h-full">
                 {/* Sidebar Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                  <a href="/" className="py-2">
+                  <a href="/" onClick={(e) => { e.preventDefault(); window.location.href = '/'; }} className="py-2">
                     <img src="/blue-teal.webp" alt="Booking Hub Logo" fetchPriority="high" loading="eager" className="h-7 w-auto object-contain" style={{ maxWidth: '100%' }} />
                   </a>
                   <button 
@@ -529,25 +531,25 @@ export default function HomePage() {
                   <nav className="space-y-4">
                     <a 
                       href="/contact" 
+                      onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); window.location.href = '/contact'; }}
                       style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
                       className="block text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base py-2"
-                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Contact Us
                     </a>
                     <a 
                       href="/booking-request" 
+                      onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); window.location.href = '/booking-request'; }}
                       style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
                       className="block bg-[#00BAB5] text-white hover:bg-[#009a96] transition-colors px-4 py-2 rounded-md text-base text-center border-2 border-[#0B1D37]"
-                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Request a Booking
                     </a>
                     <a 
                       href="/auth/signup/partner" 
+                      onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); window.location.href = '/auth/signup/partner'; }}
                       style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
                       className="block bg-[#E9ECEF] text-[#0B1D37] hover:bg-[#dee2e6] transition-colors px-4 py-2 rounded-md text-base text-center border-2 border-[#0B1D37]"
-                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       List Your Property
                     </a>
@@ -573,23 +575,27 @@ export default function HomePage() {
                         <div className="py-1">
                           <a 
                             href="/auth/signup/client" 
-                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
-                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.preventDefault();
                               setIsDropdownOpen(false);
                               setIsMobileMenuOpen(false);
+                              window.location.href = '/auth/signup/client';
                             }}
+                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
                           >
                             Client login
                           </a>
                           <a 
                             href="/auth/signup/partner" 
-                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
-                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.preventDefault();
                               setIsDropdownOpen(false);
                               setIsMobileMenuOpen(false);
+                              window.location.href = '/auth/signup/partner';
                             }}
+                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
                           >
                             Partner login
                           </a>
@@ -939,6 +945,7 @@ export default function HomePage() {
             <div className="text-center">
               <a 
                 href="/booking-request"
+                onClick={(e) => { e.preventDefault(); window.location.href = '/booking-request'; }}
                 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }}
                 className="inline-block bg-[#00BAB5] text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl hover:bg-[#00A5A0] transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
               >
@@ -1406,11 +1413,11 @@ export default function HomePage() {
                   <div className="space-y-4 sm:space-y-6">
                     <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-white text-xs sm:text-lg">Quick Links</h3>
                     <ul className="space-y-0 sm:space-y-3">
-                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Home</a></li>
-                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">How We Help You</a></li>
-                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Book Accommodation</a></li>
-                      <li><a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Become a Partner</a></li>
-                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Contact Us</a></li>
+                      <li><a href="/" onClick={(e) => { e.preventDefault(); window.location.href = '/'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Home</a></li>
+                      <li><a href="/" onClick={(e) => { e.preventDefault(); window.location.href = '/'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">How We Help You</a></li>
+                      <li><a href="/booking-request" onClick={(e) => { e.preventDefault(); window.location.href = '/booking-request'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Book Accommodation</a></li>
+                      <li><a href="/auth/signup/partner" onClick={(e) => { e.preventDefault(); window.location.href = '/auth/signup/partner'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Become a Partner</a></li>
+                      <li><a href="/contact" onClick={(e) => { e.preventDefault(); window.location.href = '/contact'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Contact Us</a></li>
                     </ul>
                   </div>
 
@@ -1451,11 +1458,11 @@ export default function HomePage() {
                   <div className="flex flex-row justify-between items-center">
                     <div className="flex flex-row space-x-6 md:space-x-8">
                       <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm leading-tight sm:leading-normal">
-                        <a href="/privacy-policy" className="hover:text-[#00BAB5] transition-colors">Privacy Policy</a>
+                        <a href="/privacy-policy" onClick={(e) => { e.preventDefault(); window.location.href = '/privacy-policy'; }} className="hover:text-[#00BAB5] transition-colors">Privacy Policy</a>
                         <span className="mx-0.5 sm:mx-2">|</span>
-                        <a href="/terms-and-conditions" className="hover:text-[#00BAB5] transition-colors">Terms & Conditions</a>
+                        <a href="/terms-and-conditions" onClick={(e) => { e.preventDefault(); window.location.href = '/terms-and-conditions'; }} className="hover:text-[#00BAB5] transition-colors">Terms & Conditions</a>
                         <span className="mx-0.5 sm:mx-2">|</span>
-                        <a href="#" className="hover:text-[#00BAB5] transition-colors">Cookie Notice</a>
+                        <a href="/" onClick={(e) => { e.preventDefault(); window.location.href = '/'; }} className="hover:text-[#00BAB5] transition-colors">Cookie Notice</a>
                       </span>
                     </div>
                     <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-400 text-[11px] sm:text-sm text-right">

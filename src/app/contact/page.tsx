@@ -102,16 +102,17 @@ export default function ContactPage() {
           <div className="w-full max-w-7xl flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="py-1">
+            <a href="/" onClick={(e) => { e.preventDefault(); window.location.href = '/'; }} className="py-1">
               <img src="/blue-teal.webp" alt="Booking Hub Logo" className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain" style={{ maxWidth: '100%' }} />
             </a>
           </div>
 
           {/* Desktop Navigation - Hidden on mobile, visible on tablet and up */}
           <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-auto mr-4 lg:mr-6">
-            <a href="/contact" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">Contact Us</a>
+            <a href="/contact" onClick={(e) => { e.preventDefault(); window.location.href = '/contact'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">Contact Us</a>
             <a 
               href="/booking-request" 
+              onClick={(e) => { e.preventDefault(); window.location.href = '/booking-request'; }}
               style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
               className="bg-[#00BAB5] text-white hover:bg-[#009a96] transition-colors px-4 py-2 rounded-md text-base lg:text-lg border-2 border-[#0B1D37]"
             >
@@ -119,6 +120,7 @@ export default function ContactPage() {
             </a>
             <a 
               href="/auth/signup/partner" 
+              onClick={(e) => { e.preventDefault(); window.location.href = '/auth/signup/partner'; }}
               style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
               className="bg-[#E9ECEF] text-[#0B1D37] hover:bg-[#dee2e6] transition-colors px-4 py-2 rounded-md text-base lg:text-lg border-2 border-[#0B1D37]"
             >
@@ -139,8 +141,8 @@ export default function ContactPage() {
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-32 lg:w-36 shadow-lg z-50 rounded-lg bg-white border border-gray-200">
                 <div className="py-1">
-                  <a href="/auth/signup/client" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Client login</a>
-                  <a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Partner login</a>
+                  <a href="/auth/signup/client" onClick={(e) => { e.preventDefault(); window.location.href = '/auth/signup/client'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Client login</a>
+                  <a href="/auth/signup/partner" onClick={(e) => { e.preventDefault(); window.location.href = '/auth/signup/partner'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Partner login</a>
                 </div>
               </div>
             )}
@@ -172,7 +174,7 @@ export default function ContactPage() {
               <div className="flex flex-col h-full">
                 {/* Sidebar Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-200">
-                  <a href="/" className="py-1">
+                  <a href="/" onClick={(e) => { e.preventDefault(); window.location.href = '/'; }} className="py-1">
                     <img src="/blue-teal.webp" alt="Booking Hub Logo" className="h-8 w-auto object-contain" style={{ maxWidth: '100%' }} />
                   </a>
                   <button 
@@ -190,25 +192,25 @@ export default function ContactPage() {
                   <nav className="space-y-4">
                     <a 
                       href="/contact" 
+                      onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); window.location.href = '/contact'; }}
                       style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
                       className="block text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base py-2"
-                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Contact Us
                     </a>
                     <a 
                       href="/booking-request" 
+                      onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); window.location.href = '/booking-request'; }}
                       style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
                       className="block bg-[#00BAB5] text-white hover:bg-[#009a96] transition-colors px-4 py-2 rounded-md text-base text-center border-2 border-[#0B1D37]"
-                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Request a Booking
                     </a>
                     <a 
                       href="/auth/signup/partner" 
+                      onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); window.location.href = '/auth/signup/partner'; }}
                       style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
                       className="block bg-[#E9ECEF] text-[#0B1D37] hover:bg-[#dee2e6] transition-colors px-4 py-2 rounded-md text-base text-center border-2 border-[#0B1D37]"
-                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       List Your Property
                     </a>
@@ -234,23 +236,27 @@ export default function ContactPage() {
                         <div className="py-1">
                           <a 
                             href="/auth/signup/client" 
-                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
-                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.preventDefault();
                               setIsDropdownOpen(false);
                               setIsMobileMenuOpen(false);
+                              window.location.href = '/auth/signup/client';
                             }}
+                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
                           >
                             Client login
                           </a>
                           <a 
                             href="/auth/signup/partner" 
-                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
-                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
-                            onClick={() => {
+                            onClick={(e) => {
+                              e.preventDefault();
                               setIsDropdownOpen(false);
                               setIsMobileMenuOpen(false);
+                              window.location.href = '/auth/signup/partner';
                             }}
+                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
                           >
                             Partner login
                           </a>

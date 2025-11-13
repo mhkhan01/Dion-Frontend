@@ -192,6 +192,7 @@ export default function BookingRequestPage() {
         {/* Back Button */}
         <Link 
           href="/" 
+          onClick={(e) => { e.preventDefault(); window.location.href = '/'; }}
           className="absolute top-4 left-4 z-20 flex items-center justify-center bg-booking-teal text-white rounded-full sm:rounded-lg w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-lg"
           aria-label="Back to home"
           style={{ fontFamily: 'var(--font-avenir-regular)' }}
@@ -505,6 +506,7 @@ export default function BookingRequestPage() {
                   By submitting, you agree to our{' '}
                   <a 
                     href="/terms" 
+                    onClick={(e) => { e.preventDefault(); window.location.href = '/terms'; }}
                     className="text-booking-teal hover:text-booking-dark underline font-medium"
                   >
                     Client Terms & Conditions
@@ -530,6 +532,7 @@ export default function BookingRequestPage() {
                   Already have an account?{' '}
                   <a 
                     href="/auth/login?type=client" 
+                    onClick={(e) => { e.preventDefault(); window.location.href = '/auth/login?type=client'; }}
                     className="text-booking-teal hover:text-booking-dark underline font-medium"
                   >
                     Sign in here

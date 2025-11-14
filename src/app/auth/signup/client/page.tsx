@@ -44,7 +44,7 @@ export default function ContractorSignupPage() {
     try {
       // Call backend API for client signup
       console.log('Calling backend API for client signup...');
-      const backendUrl = 'http://awseb--AWSEB-qAdM7K8GcSzC-929983924.us-east-1.elb.amazonaws.com (A Record)';
+      const backendUrl = 'http://localhost:3001';
       const response = await fetch(`${backendUrl}/api/client-signup`, {
         method: 'POST',
         headers: {

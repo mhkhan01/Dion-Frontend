@@ -45,7 +45,7 @@ export default function ContractorSignupPage() {
       // Call backend API for client signup
       console.log('Calling backend API for client signup...');
       const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
-      const response = await fetch(`${backendUrl}/api/client-signup`, {
+      const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/client-signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

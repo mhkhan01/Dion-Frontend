@@ -102,7 +102,7 @@ export default function BookPropertyClient() {
         throw new Error('No session found');
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/bookings/create`, {
+      const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/bookings/create`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token.data.session.access_token}`,

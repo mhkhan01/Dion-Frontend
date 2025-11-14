@@ -33,4 +33,4 @@ vi.mock('../lib/supabase', () => ({
 // Mock environment variables
 process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://mock.supabase.co';
 process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'mock_anon_key';
-process.env.NEXT_PUBLIC_BACKEND_URL = 'http://localhost:3001';
+process.env.NEXT_PUBLIC_BACKEND_URL = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';

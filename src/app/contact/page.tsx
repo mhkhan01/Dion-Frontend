@@ -30,7 +30,7 @@ export default function ContactPage() {
 
     try {
       // Call backend API instead of directly using Supabase
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+      const backendUrl =  'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
       
       const payload = {
         fullName: formData.fullName,
@@ -43,7 +43,7 @@ export default function ContactPage() {
       // Log payload for debugging
       console.log('Submitting contact form with data:', payload);
       
-      const response = await fetch(`${backendUrl}/api/contact`, {
+      const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

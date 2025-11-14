@@ -363,8 +363,8 @@ export default function ContractorDashboard() {
               let bookingValue: number | string | undefined = undefined;
               if (actualStatus === 'confirmed') {
                 try {
-                  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
-                  const response = await fetch(`${backendUrl}/api/booking-values/${bookingDate.id}`);
+                  const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
+                  const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/booking-values/${bookingDate.id}`);
                   
                   if (response.ok) {
                     const result = await response.json();

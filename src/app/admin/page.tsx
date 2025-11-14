@@ -72,7 +72,7 @@ export default function AdminDashboard() {
       }
 
       // Fetch dashboard stats
-      const statsResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/dashboard`, {
+      const statsResponse = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/admin/dashboard`, {
         headers: {
           'Authorization': `Bearer ${session.data.session.access_token}`,
         },
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
       }
 
       // Fetch recent bookings
-      const bookingsResponse = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/bookings?limit=20`, {
+      const bookingsResponse = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/admin/bookings?limit=20`, {
         headers: {
           'Authorization': `Bearer ${session.data.session.access_token}`,
         },
@@ -110,7 +110,7 @@ export default function AdminDashboard() {
         throw new Error('No session found');
       }
 
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/bookings/${bookingId}/confirm`, {
+      const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/admin/bookings/${bookingId}/confirm`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${session.data.session.access_token}`,

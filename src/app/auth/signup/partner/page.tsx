@@ -46,7 +46,7 @@ export default function LandlordSignupPage() {
       // Call backend API for partner signup
       console.log('Calling backend API for partner signup...');
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
-      const response = await fetch(`${backendUrl}/api/partner-signup`, {
+      const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/partner-signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

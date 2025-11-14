@@ -4,6 +4,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { AuthProvider } from '@/lib/auth-context';
 import StatusBarInit from './statusbar-init';
+import { AppShell } from './AppShell';   // 👈 NEW
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -43,10 +44,10 @@ const avenirRegular = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Property Booking System',
-  description: 'A modern property booking platform for contractors and landlords',
-  keywords: ['property', 'booking', 'rental', 'contractor', 'landlord'],
-  authors: [{ name: 'Property Booking Team' }],
+  title: 'Booking Hub' ,
+  description: 'A modern booking platform for clients and partners',
+  keywords: ['booking', 'rental', 'client', 'partner'],
+  authors: [{ name: 'Booking Team' }],
   manifest: '/manifest.json',
   icons: {
     icon: [
@@ -71,20 +72,20 @@ export const metadata: Metadata = {
   other: {
     'mobile-web-app-capable': 'yes',
   },
-  applicationName: 'Property Booking Hub',
+  applicationName: 'Booking Hub',
   formatDetection: {
     telephone: false,
   },
   openGraph: {
     type: 'website',
-    siteName: 'Property Booking Hub',
-    title: 'Property Booking System',
-    description: 'A modern property booking platform for contractors and landlords',
+    siteName: 'Booking Hub',
+    title: 'Booking Hub',
+    description: 'A modern property booking platform for clients and partners',
   },
   twitter: {
     card: 'summary',
-    title: 'Property Booking System',
-    description: 'A modern property booking platform for contractors and landlords',
+    title: 'Booking Hub',
+    description: 'A modern property booking platform for clients and partners',
   },
 };
 
@@ -155,9 +156,11 @@ export default function RootLayout({
         <StatusBarInit />
 
         <AuthProvider>
-          <div className="min-h-full bg-gray-50 text-gray-900 antialiased">
-            {children}
-          </div>
+          <AppShell>
+            <div className="min-h-full bg-gray-50 text-gray-900 antialiased">
+              {children}
+            </div>
+          </AppShell>
         </AuthProvider>
       </body>
     </html>

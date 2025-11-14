@@ -40,12 +40,12 @@ export default function ContractorSignupPage() {
     setLoading(true);
     setError(null);
     setIsSigningUp(true);
-
+//commit
     try {
       // Call backend API for client signup
       console.log('Calling backend API for client signup...');
-      const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/';
-      const response = await fetch(`${backendUrl}/api/client-signup`, {
+      const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
+      const response = await fetch(`${backendUrl}api/client-signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

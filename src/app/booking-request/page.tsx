@@ -220,20 +220,7 @@ export default function BookingRequestPage() {
               height={300}
               className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 object-contain drop-shadow-2xl"
               priority
-              style={{
-                animation: 'flip 5s ease-in-out infinite'
-              }}
             />
-            <style jsx>{`
-              @keyframes flip {
-                0%, 60% {
-                  transform: rotateY(0deg);
-                }
-                100% {
-                  transform: rotateY(360deg);
-                }
-              }
-            `}</style>
           </div>
 
           <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200">

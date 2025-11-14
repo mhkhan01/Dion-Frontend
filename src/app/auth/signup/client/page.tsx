@@ -44,7 +44,7 @@ export default function ContractorSignupPage() {
     try {
       // Call backend API for client signup
       console.log('Calling backend API for client signup...');
-      const backendUrl = 'http://localhost:3001';
+      const backendUrl = 'http://192.168.1.16:3001';
       const response = await fetch(`${backendUrl}/api/client-signup`, {
         method: 'POST',
         headers: {

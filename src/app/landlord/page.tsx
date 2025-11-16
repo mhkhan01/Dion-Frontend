@@ -98,6 +98,7 @@ interface BookedProperty {
   property_type?: string;
   status: 'active' | 'completed' | 'cancelled';
   created_at: string;
+  value?: number | string;
   properties?: {
     id: string;
     property_name?: string;
@@ -440,6 +441,7 @@ export default function PartnerDashboard() {
         .from('booked_properties')
         .select(`
           *,
+          value,
           properties (
             id,
             property_name,
@@ -731,6 +733,16 @@ export default function PartnerDashboard() {
                               <div className="text-[5px] sm:text-xs font-medium text-gray-600 uppercase mb-0.5 sm:mb-1">Number of Nights</div>
                               <div className="text-[6px] sm:text-lg font-bold text-gray-900">
                                 {Math.round((new Date(bookedProperty.end_date).getTime() - new Date(bookedProperty.start_date).getTime()) / (1000 * 60 * 60 * 24))}
+                              </div>
+                            </div>
+                          )}
+                          {bookedProperty.value !== undefined && bookedProperty.value !== null && (
+                            <div className="mt-0.5 sm:mt-3 text-center">
+                              <div className="text-[5px] sm:text-xs font-medium text-gray-600 uppercase mb-0.5 sm:mb-1">Booking value</div>
+                              <div className="text-[6px] sm:text-lg font-bold text-gray-900">
+                                {typeof bookedProperty.value === 'number' 
+                                  ? `£${bookedProperty.value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                                  : `£${String(bookedProperty.value)}`}
                               </div>
                             </div>
                           )}

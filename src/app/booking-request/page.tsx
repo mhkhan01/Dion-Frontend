@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
 interface Booking {
@@ -12,6 +13,7 @@ interface Booking {
 }
 
 export default function BookingRequestPage() {
+  const router = useRouter();
   const [budgetDropdownOpen, setBudgetDropdownOpen] = useState(false);
   const [selectedBudgetOption, setSelectedBudgetOption] = useState<string>('');
   const [bookings, setBookings] = useState<Booking[]>([
@@ -19,6 +21,7 @@ export default function BookingRequestPage() {
   ]);
   const [showThankYou, setShowThankYou] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
     companyName: '',
@@ -178,6 +181,14 @@ export default function BookingRequestPage() {
     }
   };
 
+  const handleProceed = () => {
+    setShowModal(false);
+  };
+
+  const handleSignIn = () => {
+    router.push('/auth/login?type=client');
+  };
+
   return (
     <>
       <div className="min-h-screen relative overflow-hidden" style={{
@@ -223,7 +234,7 @@ export default function BookingRequestPage() {
             />
           </div>
 
-          <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200">
+          <div className={`bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200 transition-all duration-300 ${showModal ? 'blur-sm' : ''}`}>
             {/* Form Title */}
             <h1 className="text-base sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-1 sm:mb-2 text-center leading-tight" style={{ fontFamily: 'var(--font-avenir-bold)' }}>
               Request Accommodation
@@ -529,6 +540,62 @@ export default function BookingRequestPage() {
             </form>
           </div>
         </div>
+
+        {/* Modal Overlay */}
+        {showModal && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md sm:max-w-3xl p-6 sm:p-8">
+              {/* Header with Logo */}
+              <div className="flex items-center justify-center mb-6">
+                <Image
+                  src="/blue-teal.webp"
+                  alt="Booking Hub Logo"
+                  width={200}
+                  height={50}
+                  className="h-8 sm:h-12 w-auto object-contain"
+                  style={{ maxWidth: '100%' }}
+                />
+              </div>
+
+              {/* Modal Content */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                {/* Option 1: Already a user */}
+                <div className="flex flex-col justify-between">
+                  <p 
+                    className="text-sm sm:text-base text-[#0B1D37] text-center leading-relaxed mb-3"
+                    style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                  >
+                    Already a user? Sign in to your client account below and submit the booking request from your client portal
+                  </p>
+                  <button
+                    onClick={handleSignIn}
+                    className="w-full bg-[#00BAB5] text-white px-6 py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#009a96] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#00BAB5] focus:ring-offset-2"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                  >
+                    Sign in
+                  </button>
+                </div>
+
+                {/* Option 2: New User */}
+                <div className="flex flex-col justify-between">
+                  <p 
+                    className="text-base sm:text-lg text-[#0B1D37] text-center leading-relaxed mb-4"
+                    style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                  >
+                    Requesting a booking as a New User?
+                  </p>
+                  <button
+                    onClick={handleProceed}
+                    className="w-full bg-[#E9ECEF] text-[#0B1D37] px-6 py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#dee2e6] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#0B1D37] focus:ring-offset-2 border-2 border-[#0B1D37]"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                  >
+                    Proceed
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );

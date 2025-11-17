@@ -45,21 +45,17 @@ export default function RoleSelectionPage() {
             Tell us who you are
           </p>
 
-          {/* Role selection buttons - Side by side */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full">
-            {/* Client Button */}
-            <button
-              onClick={() => handleRoleSelect('client')}
-              className={`flex-1 py-4 sm:py-5 px-4 sm:px-6 rounded-2xl text-base sm:text-lg md:text-xl font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
-                selectedRole === 'client'
-                  ? 'bg-[#00BAB5] text-white shadow-lg shadow-[#00BAB5]/30'
-                  : 'bg-white text-[#0B1D37] border-2 border-[#0B1D37] hover:bg-[#0B1D37] hover:text-white shadow-lg hover:shadow-xl'
-              }`}
+          {/* Role selection boxes - Side by side */}
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full">
+            {/* Client Box */}
+            <div 
+              className="flex-1 rounded-2xl p-6 sm:p-8 text-white shadow-lg"
+              style={{ backgroundColor: 'rgba(11, 29, 55, 0.88)' }}
             >
-              <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-3">
-                {/* Client Icon */}
+              {/* Client Icon - Centered at top */}
+              <div className="flex justify-center mb-6">
                 <svg 
-                  className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" 
+                  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -71,23 +67,42 @@ export default function RoleSelectionPage() {
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" 
                   />
                 </svg>
-                <span className="text-sm sm:text-base md:text-lg">Client</span>
               </div>
-            </button>
 
-            {/* Partner Button */}
-            <button
-              onClick={() => handleRoleSelect('partner')}
-              className={`flex-1 py-4 sm:py-5 px-4 sm:px-6 rounded-2xl text-base sm:text-lg md:text-xl font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 ${
-                selectedRole === 'partner'
-                  ? 'bg-[#00BAB5] text-white shadow-lg shadow-[#00BAB5]/30'
-                  : 'bg-white text-[#0B1D37] border-2 border-[#0B1D37] hover:bg-[#0B1D37] hover:text-white shadow-lg hover:shadow-xl'
-              }`}
+              {/* Client Description - Bullet points */}
+              <ul className="text-left mb-6 space-y-2 text-sm sm:text-base md:text-lg">
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Seeking temporary accommodation for teams and projects</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Submit booking requests with requirements</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Manage accommodation needs</span>
+                </li>
+              </ul>
+
+              {/* Sign up button */}
+              <button
+                onClick={() => handleRoleSelect('client')}
+                className="w-full py-3 sm:py-4 px-4 sm:px-6 rounded-xl text-base sm:text-lg font-semibold bg-white text-[#0B1D37] hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg"
+              >
+                Sign up as client
+              </button>
+            </div>
+
+            {/* Partner Box */}
+            <div 
+              className="flex-1 rounded-2xl p-6 sm:p-8 text-white shadow-lg"
+              style={{ backgroundColor: 'rgba(11, 29, 55, 0.88)' }}
             >
-              <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-3">
-                {/* Partner Icon */}
+              {/* Partner Icon - Centered at top */}
+              <div className="flex justify-center mb-6">
                 <svg 
-                  className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" 
+                  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -99,9 +114,36 @@ export default function RoleSelectionPage() {
                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-2 0H3m2 0h5M9 7h1m-1 4h1m2-4h1m-1 4h1m-6 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" 
                   />
                 </svg>
-                <span className="text-sm sm:text-base md:text-lg">Partner</span>
               </div>
-            </button>
+
+              {/* Partner Description - Bullet points */}
+              <ul className="text-left mb-6 space-y-2 text-sm sm:text-base md:text-lg">
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Property owners and managers</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>List properties</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Manage availability</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="mr-2">•</span>
+                  <span>Get paid bookings for your properties</span>
+                </li>
+              </ul>
+
+              {/* Sign up button */}
+              <button
+                onClick={() => handleRoleSelect('partner')}
+                className="w-full py-3 sm:py-4 px-4 sm:px-6 rounded-xl text-base sm:text-lg font-semibold bg-white text-[#0B1D37] hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg"
+              >
+                Sign up as partner
+              </button>
+            </div>
           </div>
 
         </div>

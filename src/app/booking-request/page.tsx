@@ -77,52 +77,82 @@ export default function BookingRequestPage() {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setEmailError(null); // Reset error
+    setShowThankYou(false); // Reset thank you message
     const formData = new FormData(e.currentTarget);
     const formObject = Object.fromEntries(formData.entries());
     
-    // FIRST: Validate email doesn't exist in contractor, landlord or admin tables
+    // Normalize email to lowercase for case-insensitive comparison
+    const enteredEmail = (formObject.email as string) || '';
+    const normalizedEmail = enteredEmail.toLowerCase().trim();
+    
+    if (!normalizedEmail) {
+      setEmailError("Please enter a valid email address.");
+      return;
+    }
+    
+    // FIRST: Validate email doesn't exist in contractor or landlord tables (case-insensitive)
+    let emailExists = false;
+    
     try {
-      // Check if email exists in contractor table (same role)
-      const { data: existingContractor, error: contractorCheckError } = await supabase
+      // Check if email exists in contractor table (case-insensitive)
+      const { data: contractors, error: contractorCheckError } = await supabase
         .from('contractor')
-        .select('id, email')
-        .eq('email', formObject.email)
-        .maybeSingle();
+        .select('id, email');
 
-      if (existingContractor && !contractorCheckError) {
-        setEmailError("Email already in use");
-        setShowThankYou(false);
+      if (contractorCheckError) {
+        console.error('Error checking contractor table:', contractorCheckError);
+        // If we can't check, block submission to be safe
+        setEmailError("This client already exists. Try a different email.");
         return;
       }
 
-      // Check if email exists in landlord table
-      const { data: existingLandlord, error: landlordCheckError } = await supabase
+      if (contractors && Array.isArray(contractors)) {
+        const existingContractor = contractors.find(
+          (c) => {
+            if (!c || !c.email) return false;
+            const dbEmail = String(c.email).toLowerCase().trim();
+            return dbEmail === normalizedEmail;
+          }
+        );
+        if (existingContractor) {
+          emailExists = true;
+        }
+      }
+
+      // Check if email exists in landlord table (case-insensitive)
+      const { data: landlords, error: landlordCheckError } = await supabase
         .from('landlord')
-        .select('id, email')
-        .eq('email', formObject.email)
-        .maybeSingle();
+        .select('id, email');
 
-      if (existingLandlord && !landlordCheckError) {
-        setEmailError("Can't create account, the email is already in use, try using a separate email.");
-        setShowThankYou(false);
+      if (landlordCheckError) {
+        console.error('Error checking landlord table:', landlordCheckError);
+        // If we can't check, block submission to be safe
+        setEmailError("This client already exists. Try a different email.");
         return;
       }
 
-      // Check if email exists in admin table
-      const { data: existingAdmin, error: adminCheckError } = await supabase
-        .from('admin')
-        .select('id, email')
-        .eq('email', formObject.email)
-        .maybeSingle();
+      if (landlords && Array.isArray(landlords)) {
+        const existingLandlord = landlords.find(
+          (l) => {
+            if (!l || !l.email) return false;
+            const dbEmail = String(l.email).toLowerCase().trim();
+            return dbEmail === normalizedEmail;
+          }
+        );
+        if (existingLandlord) {
+          emailExists = true;
+        }
+      }
 
-      if (existingAdmin && !adminCheckError) {
-        setEmailError("Can't create account, the email is already in use, try using a separate email.");
-        setShowThankYou(false);
+      // If email exists in either table, block submission
+      if (emailExists) {
+        setEmailError("This client already exists. Try a different email.");
         return;
       }
     } catch (emailCheckError) {
-      console.log('Email validation check failed:', emailCheckError);
-      // Continue with form submission even if check fails
+      console.error('Email validation check failed:', emailCheckError);
+      setEmailError("This client already exists. Try a different email.");
+      return;
     }
     
     // Validate password confirmation
@@ -150,7 +180,7 @@ export default function BookingRequestPage() {
         body: JSON.stringify({
           fullName: formObject.name,
           companyName: formObject.companyName,
-          email: formObject.email,
+          email: normalizedEmail,
           phone: formObject.phone,
           projectPostcode: formObject.projectPostcode,
           password: formObject.password,
@@ -172,12 +202,31 @@ export default function BookingRequestPage() {
         setBookings([{ id: '1', startDate: '', endDate: '' }]);
         setSelectedBudgetOption('');
       } else {
-        const errorData = await response.json();
-        alert(`Error: ${errorData.error || 'Failed to submit booking request'}`);
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch (parseError) {
+          console.error('Error parsing response:', parseError);
+          setEmailError("This client already exists. Try a different email.");
+          return;
+        }
+        
+        const errorMessage = errorData.error || 'Failed to submit booking request';
+        
+        // Check if error is related to duplicate email (from backend validation or database constraint)
+        if (errorMessage.includes('This client already exists') || 
+            errorMessage.includes('duplicate') || 
+            errorMessage.includes('email') || 
+            errorMessage.includes('unique constraint') ||
+            errorMessage.includes('already exists')) {
+          setEmailError("This client already exists. Try a different email.");
+        } else {
+          setEmailError(errorMessage);
+        }
       }
     } catch (error) {
       console.error('Error submitting booking request:', error);
-      alert('Failed to submit booking request. Please try again.');
+      setEmailError("This client already exists. Try a different email.");
     }
   };
 
@@ -248,13 +297,6 @@ export default function BookingRequestPage() {
             </p>
 
             <form className="space-y-2 sm:space-y-6" onSubmit={handleFormSubmit}>
-              {/* Email validation error message */}
-              {emailError && (
-                <div className="rounded-xl bg-red-50 border border-red-200 p-3 sm:p-4">
-                  <div className="text-xs sm:text-sm text-red-800" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{emailError}</div>
-                </div>
-              )}
-
               {/* Line 1: Where do you need accommodation? + Postcode */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
                 <div>
@@ -516,6 +558,15 @@ export default function BookingRequestPage() {
                   .
                 </p>
               </div>
+
+              {/* Email validation error message - above submit button */}
+              {emailError && (
+                <div className="pt-2 sm:pt-4">
+                  <div className="rounded-xl bg-red-50 border border-red-200 p-3 sm:p-4">
+                    <div className="text-xs sm:text-sm text-red-800 text-center" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{emailError}</div>
+                  </div>
+                </div>
+              )}
 
               {/* Submit Button */}
               <div className="pt-2 sm:pt-4">

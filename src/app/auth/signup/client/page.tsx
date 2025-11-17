@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { supabase } from '@/lib/supabase';
 
 const signupSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters'),
@@ -40,7 +41,66 @@ export default function ContractorSignupPage() {
     setLoading(true);
     setError(null);
     setIsSigningUp(true);
-//commit
+    setSuccess(false);
+    
+    // Normalize email to lowercase for case-insensitive comparison
+    const normalizedEmail = data.email.toLowerCase().trim();
+    
+    // Validate email doesn't exist in contractor or landlord tables (case-insensitive)
+    try {
+      // Check contractor table
+      const { data: contractors, error: contractorCheckError } = await supabase
+        .from('contractor')
+        .select('id, email');
+
+      if (contractorCheckError) {
+        console.error('Error checking contractor table:', contractorCheckError);
+      } else if (contractors && Array.isArray(contractors)) {
+        const existingContractor = contractors.find(
+          (c) => {
+            if (!c || !c.email) return false;
+            const dbEmail = String(c.email).toLowerCase().trim();
+            return dbEmail === normalizedEmail;
+          }
+        );
+        if (existingContractor) {
+          setError("This client already exists. Try a different email.");
+          setLoading(false);
+          setIsSigningUp(false);
+          return;
+        }
+      }
+
+      // Check landlord table
+      const { data: landlords, error: landlordCheckError } = await supabase
+        .from('landlord')
+        .select('id, email');
+
+      if (landlordCheckError) {
+        console.error('Error checking landlord table:', landlordCheckError);
+      } else if (landlords && Array.isArray(landlords)) {
+        const existingLandlord = landlords.find(
+          (l) => {
+            if (!l || !l.email) return false;
+            const dbEmail = String(l.email).toLowerCase().trim();
+            return dbEmail === normalizedEmail;
+          }
+        );
+        if (existingLandlord) {
+          setError("This client already exists. Try a different email.");
+          setLoading(false);
+          setIsSigningUp(false);
+          return;
+        }
+      }
+    } catch (emailCheckError) {
+      console.error('Email validation check failed:', emailCheckError);
+      setError("This client already exists. Try a different email.");
+      setLoading(false);
+      setIsSigningUp(false);
+      return;
+    }
+    
     try {
       // Call backend API for client signup
       console.log('Calling backend API for client signup...');
@@ -52,7 +112,7 @@ export default function ContractorSignupPage() {
         },
         body: JSON.stringify({
           fullName: data.fullName,
-          email: data.email,
+          email: normalizedEmail,
           phone: data.phone,
           password: data.password,
           confirmPassword: data.confirmPassword
@@ -63,7 +123,17 @@ export default function ContractorSignupPage() {
 
       if (!response.ok) {
         console.error('Backend signup error:', result);
-        setError(result.error || 'Signup failed. Please try again.');
+        const errorMessage = result.error || 'Signup failed. Please try again.';
+        // Check if error is related to duplicate email
+        if (errorMessage.includes('This client already exists') ||
+            errorMessage.includes('duplicate') ||
+            errorMessage.includes('email') ||
+            errorMessage.includes('unique constraint') ||
+            errorMessage.includes('already exists')) {
+          setError("This client already exists. Try a different email.");
+        } else {
+          setError(errorMessage);
+        }
         setLoading(false);
         setIsSigningUp(false);
         return;

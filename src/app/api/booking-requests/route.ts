@@ -32,6 +32,69 @@ export async function POST(request: NextRequest) {
       city
     });
 
+    // Step 0: Validate email doesn't exist in contractor or landlord tables (case-insensitive)
+    const normalizedEmail = email.toLowerCase().trim();
+    
+    // Check contractor table
+    const { data: contractorsForValidation, error: contractorCheckError } = await supabaseServer
+      .from('contractor')
+      .select('id, email');
+
+    if (contractorCheckError) {
+      console.error('Error checking contractor table:', contractorCheckError);
+      return NextResponse.json(
+        { error: 'This client already exists. Try a different email.' },
+        { status: 400 }
+      );
+    }
+
+    if (contractorsForValidation && Array.isArray(contractorsForValidation)) {
+      const existingContractor = contractorsForValidation.find(
+        (c) => {
+          if (!c || !c.email) return false;
+          const dbEmail = String(c.email).toLowerCase().trim();
+          return dbEmail === normalizedEmail;
+        }
+      );
+      if (existingContractor) {
+        console.log('Email already exists in contractor table:', normalizedEmail);
+        return NextResponse.json(
+          { error: 'This client already exists. Try a different email.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Check landlord table
+    const { data: existingLandlords, error: landlordCheckError } = await supabaseServer
+      .from('landlord')
+      .select('id, email');
+
+    if (landlordCheckError) {
+      console.error('Error checking landlord table:', landlordCheckError);
+      return NextResponse.json(
+        { error: 'This client already exists. Try a different email.' },
+        { status: 400 }
+      );
+    }
+
+    if (existingLandlords && Array.isArray(existingLandlords)) {
+      const existingLandlord = existingLandlords.find(
+        (l) => {
+          if (!l || !l.email) return false;
+          const dbEmail = String(l.email).toLowerCase().trim();
+          return dbEmail === normalizedEmail;
+        }
+      );
+      if (existingLandlord) {
+        console.log('Email already exists in landlord table:', normalizedEmail);
+        return NextResponse.json(
+          { error: 'This client already exists. Try a different email.' },
+          { status: 400 }
+        );
+      }
+    }
+
     // Step 1: Create Supabase Auth account
     // Try using admin API if service role key is available
     let authData;
@@ -41,9 +104,9 @@ export async function POST(request: NextRequest) {
                               process.env.SUPABASE_SERVICE_ROLE_KEY !== process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     
     if (hasServiceRoleKey) {
-      // Use admin API with service role
+      // Use admin API with service role - use normalized email for consistency
       const result = await supabaseServer.auth.admin.createUser({
-        email: email,
+        email: normalizedEmail,
         password: password,
         email_confirm: false,
         user_metadata: {
@@ -54,9 +117,9 @@ export async function POST(request: NextRequest) {
       authData = result.data;
       authError = result.error;
     } else {
-      // Fallback to regular signup
+      // Fallback to regular signup - use normalized email for consistency
       const result = await supabaseServer.auth.signUp({
-        email: email,
+        email: normalizedEmail,
         password: password,
         options: {
           emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/contractor`,
@@ -72,6 +135,17 @@ export async function POST(request: NextRequest) {
 
     if (authError) {
       console.error('Auth signup error:', authError);
+      // Check if error is related to duplicate email
+      if (authError.message.includes('duplicate') || 
+          authError.message.includes('email') || 
+          authError.message.includes('unique constraint') ||
+          authError.message.includes('already exists') ||
+          authError.message.includes('email address is already registered')) {
+        return NextResponse.json(
+          { error: 'This client already exists. Try a different email.' },
+          { status: 400 }
+        );
+      }
       return NextResponse.json(
         { error: `Authentication failed: ${authError.message}` },
         { status: 400 }
@@ -100,8 +174,10 @@ export async function POST(request: NextRequest) {
     if (existingContractors && existingContractors.length > 0) {
       // Extract numbers from existing codes (e.g., "CT-5" -> 5)
       const existingNumbers = existingContractors
-        .map(c => {
-          const match = c.code?.match(/CT-(\d+)/);
+        .map((c: any) => {
+          const code = c?.code;
+          if (!code) return 0;
+          const match = String(code).match(/CT-(\d+)/);
           return match ? parseInt(match[1], 10) : 0;
         })
         .filter(num => num > 0);
@@ -115,15 +191,15 @@ export async function POST(request: NextRequest) {
     const contractorCode = `CT-${nextNumber}`;
     console.log('Generated contractor code:', contractorCode);
 
-    // Step 3: Create contractor profile in contractor table
+    // Step 3: Create contractor profile in contractor table - use normalized email
     const { data: contractorData, error: contractorError } = await supabaseServer
       .from('contractor')
       .insert({
         id: authData.user.id,
-        email: email,
+        email: normalizedEmail,
         full_name: fullName,
         company_name: companyName,
-        company_email: email,
+        company_email: normalizedEmail,
         phone: phone,
         code: contractorCode,
         role: 'contractor',
@@ -135,6 +211,16 @@ export async function POST(request: NextRequest) {
 
     if (contractorError) {
       console.error('Error creating contractor profile:', contractorError);
+      // Check if error is related to duplicate email
+      if (contractorError.message.includes('duplicate') || 
+          contractorError.message.includes('email') || 
+          contractorError.message.includes('unique constraint') ||
+          contractorError.message.includes('already exists')) {
+        return NextResponse.json(
+          { error: 'This client already exists. Try a different email.' },
+          { status: 400 }
+        );
+      }
       return NextResponse.json(
         { error: `Failed to create contractor profile: ${contractorError.message}` },
         { status: 500 }
@@ -143,14 +229,14 @@ export async function POST(request: NextRequest) {
 
     console.log('Contractor profile created successfully:', contractorData);
 
-    // Step 3: Create booking request
+    // Step 3: Create booking request - use normalized email
     const { data: bookingRequest, error: requestError } = await supabaseServer
       .from('booking_requests')
       .insert({
         user_id: authData.user.id,
         full_name: fullName,
         company_name: companyName,
-        email: email,
+        email: normalizedEmail,
         project_postcode: projectPostcode,
         team_size: teamSize,
         budget_per_person_week: budgetPerPerson,

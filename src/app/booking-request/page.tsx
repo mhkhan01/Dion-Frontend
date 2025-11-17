@@ -181,11 +181,15 @@ export default function BookingRequestPage() {
     }
   };
 
-  const handleProceed = () => {
+  const handleProceed = (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
     setShowModal(false);
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = (e: React.MouseEvent) => {
+    e.stopPropagation();
     router.push('/auth/login?type=client');
   };
 
@@ -543,8 +547,26 @@ export default function BookingRequestPage() {
 
         {/* Modal Overlay */}
         {showModal && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md sm:max-w-3xl p-6 sm:p-8">
+          <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4"
+            onClick={handleProceed}
+          >
+            <div 
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-md sm:max-w-3xl p-6 sm:p-8 relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={handleProceed}
+                type="button"
+                className="absolute top-4 right-4 p-1 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Close"
+              >
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              
               {/* Header with Logo */}
               <div className="flex items-center justify-center mb-6">
                 <Image
@@ -562,13 +584,14 @@ export default function BookingRequestPage() {
                 {/* Option 1: Already a user */}
                 <div className="flex flex-col justify-between">
                   <p 
-                    className="text-sm sm:text-base text-[#0B1D37] text-center leading-relaxed mb-3"
+                    className="text-base sm:text-lg text-[#0B1D37] text-center leading-relaxed mb-3"
                     style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
                   >
-                    Already a user? Sign in to your client account below and submit the booking request from your client portal
+                    Already a user? Sign in to your account to <br />request a booking
                   </p>
                   <button
                     onClick={handleSignIn}
+                    type="button"
                     className="w-full bg-[#00BAB5] text-white px-6 py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#009a96] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#00BAB5] focus:ring-offset-2"
                     style={{ fontFamily: 'var(--font-avenir-regular)' }}
                   >
@@ -586,6 +609,7 @@ export default function BookingRequestPage() {
                   </p>
                   <button
                     onClick={handleProceed}
+                    type="button"
                     className="w-full bg-[#E9ECEF] text-[#0B1D37] px-6 py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#dee2e6] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#0B1D37] focus:ring-offset-2 border-2 border-[#0B1D37]"
                     style={{ fontFamily: 'var(--font-avenir-regular)' }}
                   >

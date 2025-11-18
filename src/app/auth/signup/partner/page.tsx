@@ -65,7 +65,7 @@ export default function LandlordSignupPage() {
           }
         );
         if (existingContractor) {
-          setError("This client already exists. Try a different email.");
+          setError("This email is already in use, Try a different email.");
           setLoading(false);
           setIsSigningUp(false);
           return;
@@ -88,7 +88,7 @@ export default function LandlordSignupPage() {
           }
         );
         if (existingLandlord) {
-          setError("This client already exists. Try a different email.");
+          setError("This email is already in use, Try a different email.");
           setLoading(false);
           setIsSigningUp(false);
           return;
@@ -96,7 +96,7 @@ export default function LandlordSignupPage() {
       }
     } catch (emailCheckError) {
       console.error('Email validation check failed:', emailCheckError);
-      setError("This client already exists. Try a different email.");
+      setError("This email is already in use, Try a different email.");
       setLoading(false);
       setIsSigningUp(false);
       return;
@@ -127,12 +127,12 @@ export default function LandlordSignupPage() {
         console.error('Backend signup error:', result);
         const errorMessage = result.error || 'Signup failed. Please try again.';
         // Check if error is related to duplicate email
-        if (errorMessage.includes('This client already exists') ||
+        if (errorMessage.includes('This email is already in use') ||
             errorMessage.includes('duplicate') ||
             errorMessage.includes('email') ||
             errorMessage.includes('unique constraint') ||
             errorMessage.includes('already exists')) {
-          setError("This client already exists. Try a different email.");
+          setError("This email is already in use, Try a different email.");
         } else {
           setError(errorMessage);
         }

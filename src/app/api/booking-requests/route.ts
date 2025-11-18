@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     if (contractorCheckError) {
       console.error('Error checking contractor table:', contractorCheckError);
       return NextResponse.json(
-        { error: 'This client already exists. Try a different email.' },
+        { error: 'This email is already in use, Try a different email.' },
         { status: 400 }
       );
     }
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
       if (existingContractor) {
         console.log('Email already exists in contractor table:', normalizedEmail);
         return NextResponse.json(
-          { error: 'This client already exists. Try a different email.' },
+          { error: 'This email is already in use, Try a different email.' },
           { status: 400 }
         );
       }
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     if (landlordCheckError) {
       console.error('Error checking landlord table:', landlordCheckError);
       return NextResponse.json(
-        { error: 'This client already exists. Try a different email.' },
+        { error: 'This email is already in use, Try a different email.' },
         { status: 400 }
       );
     }
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
       if (existingLandlord) {
         console.log('Email already exists in landlord table:', normalizedEmail);
         return NextResponse.json(
-          { error: 'This client already exists. Try a different email.' },
+          { error: 'This email is already in use, Try a different email.' },
           { status: 400 }
         );
       }
@@ -142,7 +142,7 @@ export async function POST(request: NextRequest) {
           authError.message.includes('already exists') ||
           authError.message.includes('email address is already registered')) {
         return NextResponse.json(
-          { error: 'This client already exists. Try a different email.' },
+          { error: 'This email is already in use, Try a different email.' },
           { status: 400 }
         );
       }
@@ -217,7 +217,7 @@ export async function POST(request: NextRequest) {
           contractorError.message.includes('unique constraint') ||
           contractorError.message.includes('already exists')) {
         return NextResponse.json(
-          { error: 'This client already exists. Try a different email.' },
+          { error: 'This email is already in use, Try a different email.' },
           { status: 400 }
         );
       }

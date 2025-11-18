@@ -102,7 +102,7 @@ export default function BookingRequestPage() {
       if (contractorCheckError) {
         console.error('Error checking contractor table:', contractorCheckError);
         // If we can't check, block submission to be safe
-        setEmailError("This client already exists. Try a different email.");
+        setEmailError("This email is already in use, Try a different email.");
         return;
       }
 
@@ -127,7 +127,7 @@ export default function BookingRequestPage() {
       if (landlordCheckError) {
         console.error('Error checking landlord table:', landlordCheckError);
         // If we can't check, block submission to be safe
-        setEmailError("This client already exists. Try a different email.");
+        setEmailError("This email is already in use, Try a different email.");
         return;
       }
 
@@ -146,12 +146,12 @@ export default function BookingRequestPage() {
 
       // If email exists in either table, block submission
       if (emailExists) {
-        setEmailError("This client already exists. Try a different email.");
+        setEmailError("This email is already in use, Try a different email.");
         return;
       }
     } catch (emailCheckError) {
       console.error('Email validation check failed:', emailCheckError);
-      setEmailError("This client already exists. Try a different email.");
+      setEmailError("This email is already in use, Try a different email.");
       return;
     }
     
@@ -207,26 +207,26 @@ export default function BookingRequestPage() {
           errorData = await response.json();
         } catch (parseError) {
           console.error('Error parsing response:', parseError);
-          setEmailError("This client already exists. Try a different email.");
+          setEmailError("This email is already in use, Try a different email.");
           return;
         }
         
         const errorMessage = errorData.error || 'Failed to submit booking request';
         
         // Check if error is related to duplicate email (from backend validation or database constraint)
-        if (errorMessage.includes('This client already exists') || 
+        if (errorMessage.includes('This email is already in use') || 
             errorMessage.includes('duplicate') || 
             errorMessage.includes('email') || 
             errorMessage.includes('unique constraint') ||
             errorMessage.includes('already exists')) {
-          setEmailError("This client already exists. Try a different email.");
+          setEmailError("This email is already in use, Try a different email.");
         } else {
           setEmailError(errorMessage);
         }
       }
     } catch (error) {
       console.error('Error submitting booking request:', error);
-      setEmailError("This client already exists. Try a different email.");
+      setEmailError("This email is already in use, Try a different email.");
     }
   };
 

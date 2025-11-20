@@ -24,6 +24,7 @@ export default function BookingRequestPage() {
   const [showModal, setShowModal] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     companyName: '',
@@ -80,6 +81,7 @@ export default function BookingRequestPage() {
     e.preventDefault();
     setEmailError(null); // Reset error
     setShowThankYou(false); // Reset thank you message
+    setIsSubmitting(true); // Start loading
     const formData = new FormData(e.currentTarget);
     const formObject = Object.fromEntries(formData.entries());
     
@@ -89,6 +91,7 @@ export default function BookingRequestPage() {
     
     if (!normalizedEmail) {
       setEmailError("Please enter a valid email address.");
+      setIsSubmitting(false);
       return;
     }
     
@@ -105,6 +108,7 @@ export default function BookingRequestPage() {
         console.error('Error checking contractor table:', contractorCheckError);
         // If we can't check, block submission to be safe
         setEmailError("This email is already in use, Try a different email.");
+        setIsSubmitting(false);
         return;
       }
 
@@ -130,6 +134,7 @@ export default function BookingRequestPage() {
         console.error('Error checking landlord table:', landlordCheckError);
         // If we can't check, block submission to be safe
         setEmailError("This email is already in use, Try a different email.");
+        setIsSubmitting(false);
         return;
       }
 
@@ -149,17 +154,20 @@ export default function BookingRequestPage() {
       // If email exists in either table, block submission
       if (emailExists) {
         setEmailError("This email is already in use, Try a different email.");
+        setIsSubmitting(false);
         return;
       }
     } catch (emailCheckError) {
       console.error('Email validation check failed:', emailCheckError);
       setEmailError("This email is already in use, Try a different email.");
+      setIsSubmitting(false);
       return;
     }
     
     // Validate password confirmation
     if (formObject.password !== formObject.confirmPassword) {
       alert('Passwords do not match. Please try again.');
+      setIsSubmitting(false);
       return;
     }
     
@@ -203,6 +211,7 @@ export default function BookingRequestPage() {
         (e.target as HTMLFormElement).reset();
         setBookings([{ id: '1', startDate: '', endDate: '' }]);
         setSelectedBudgetOption('');
+        setIsSubmitting(false);
       } else {
         let errorData;
         try {
@@ -210,6 +219,7 @@ export default function BookingRequestPage() {
         } catch (parseError) {
           console.error('Error parsing response:', parseError);
           setEmailError("This email is already in use, Try a different email.");
+          setIsSubmitting(false);
           return;
         }
         
@@ -225,10 +235,12 @@ export default function BookingRequestPage() {
         } else {
           setEmailError(errorMessage);
         }
+        setIsSubmitting(false);
       }
     } catch (error) {
       console.error('Error submitting booking request:', error);
       setEmailError("This email is already in use, Try a different email.");
+      setIsSubmitting(false);
     }
   };
 
@@ -612,10 +624,21 @@ export default function BookingRequestPage() {
               <div className="pt-2 sm:pt-4">
                 <button
                   type="submit"
-                  className="w-full bg-booking-teal text-white py-[0.6rem] sm:py-4 px-6 rounded-lg font-semibold text-xs sm:text-base hover:bg-booking-dark transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 flex items-center justify-center"
+                  disabled={isSubmitting}
+                  className="w-full bg-booking-teal text-white py-[0.6rem] sm:py-4 px-6 rounded-lg font-semibold text-xs sm:text-base hover:bg-booking-dark transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
                   style={{ fontFamily: 'var(--font-avenir-regular)' }}
                 >
-                  Submit Booking Request
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Submitting...
+                    </>
+                  ) : (
+                    'Submit Booking Request'
+                  )}
                 </button>
               </div>
 

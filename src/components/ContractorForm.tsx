@@ -63,6 +63,7 @@ export default function ContractorForm() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editingBookingId, setEditingBookingId] = useState<string | null>(null);
   const [showThankYou, setShowThankYou] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,6 +110,7 @@ export default function ContractorForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
     // Note: GHL data will be sent individually for each new booking date below
     // This contractorData variable is not used for GHL anymore, but kept for reference
@@ -138,6 +140,7 @@ export default function ContractorForm() {
         if (updateError) {
           console.error('Error updating booking request:', updateError);
           alert('Failed to update booking request. Please try again.');
+          setIsSubmitting(false);
           return;
         }
 
@@ -187,6 +190,7 @@ export default function ContractorForm() {
         if (bookingRequestError) {
           console.error('Error saving to Supabase:', bookingRequestError);
           alert('Failed to save booking request. Please try again.');
+          setIsSubmitting(false);
           return;
         }
         bookingRequest = newBookingRequest;
@@ -210,6 +214,7 @@ export default function ContractorForm() {
           if (deleteError) {
             console.error('Error deleting existing booking dates:', deleteError);
             alert('Failed to update booking dates. Please try again.');
+            setIsSubmitting(false);
             return;
           }
 
@@ -234,6 +239,7 @@ export default function ContractorForm() {
               if (new Date(booking.start_date) >= new Date(booking.end_date)) {
                 console.error('Invalid date range: start_date must be before end_date');
                 alert('Invalid date range: Start date must be before end date.');
+                setIsSubmitting(false);
                 return;
               }
             }
@@ -249,6 +255,7 @@ export default function ContractorForm() {
               if (bookingDatesError) {
                 console.error('Error saving updated booking dates:', bookingDatesError);
                 alert('Booking request updated but dates failed. Please contact support.');
+                setIsSubmitting(false);
                 return;
               }
 
@@ -257,6 +264,7 @@ export default function ContractorForm() {
             } catch (insertError) {
               console.error('Exception during booking dates insert:', insertError);
               alert('An error occurred while saving booking dates. Please try again.');
+              setIsSubmitting(false);
               return;
             }
           }
@@ -298,8 +306,9 @@ export default function ContractorForm() {
         // Validate dates before sending
         for (const booking of bookingDatesData) {
           if (new Date(booking.start_date) >= new Date(booking.end_date)) {
-            console.error('Invalid date range: start_date must be before end_date');
+            console.error('Invalid date range: start_date must be before end date.');
             alert('Invalid date range: Start date must be before end date.');
+            setIsSubmitting(false);
             return;
           }
         }
@@ -329,6 +338,7 @@ export default function ContractorForm() {
                 code: bookingDatesError.code
               });
               alert('Booking request saved but dates failed. Please contact support.');
+              setIsSubmitting(false);
               return;
             }
 
@@ -358,11 +368,13 @@ export default function ContractorForm() {
             } else {
               console.error('No saved dates returned from Supabase');
               alert('Booking dates were not saved properly. Please try again.');
+              setIsSubmitting(false);
               return;
             }
           } catch (insertError) {
             console.error('Exception during booking dates insert:', insertError);
             alert('An error occurred while saving booking dates. Please try again.');
+            setIsSubmitting(false);
             return;
           }
         } else {
@@ -468,9 +480,11 @@ export default function ContractorForm() {
         console.error('All GHL requests failed');
         setShowThankYou(true);
       }
+      setIsSubmitting(false);
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('An error occurred. Please try again.');
+      setIsSubmitting(false);
     }
   };
 
@@ -978,10 +992,21 @@ export default function ContractorForm() {
             <div className="pt-4">
               <button
                 type="submit"
-                className="w-full bg-booking-teal text-white py-3 sm:py-4 px-6 rounded-lg font-semibold text-sm sm:text-base hover:bg-booking-dark transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-booking-teal focus:ring-offset-2"
+                disabled={isSubmitting}
+                className="w-full bg-booking-teal text-white py-3 sm:py-4 px-6 rounded-lg font-semibold text-sm sm:text-base hover:bg-booking-dark transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                {isEditMode ? 'UPDATE BOOKING REQUEST' : 
-                 existingBookingRequest ? 'ADD NEW BOOKING DATES' : 'SUBMIT BOOKING REQUEST'}
+                {isSubmitting ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Submitting...
+                  </>
+                ) : (
+                  isEditMode ? 'UPDATE BOOKING REQUEST' : 
+                  existingBookingRequest ? 'ADD NEW BOOKING DATES' : 'SUBMIT BOOKING REQUEST'
+                )}
               </button>
             </div>
           </form>

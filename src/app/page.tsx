@@ -468,7 +468,7 @@ export default function HomePage() {
           {/* Desktop User Menu - Hidden on mobile, visible on tablet and up */}
           <div className="hidden md:block relative">
             <button 
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              onClick={() => { window.location.href = '/signup-choice'; }}
               className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors"
             >
               <svg className="w-5 h-5 lg:w-6 lg:h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
@@ -486,14 +486,6 @@ export default function HomePage() {
             >
               Login
             </span>
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-32 lg:w-36 shadow-lg z-50 rounded-lg bg-white border border-gray-200">
-                <div className="py-1">
-                  <a href="/auth/login?type=client" onClick={(e) => { e.preventDefault(); window.location.href = '/auth/login?type=client'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Client login</a>
-                  <a href="/auth/login?type=partner" onClick={(e) => { e.preventDefault(); window.location.href = '/auth/login?type=partner'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center">Partner login</a>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Mobile Menu Button - Visible only on mobile */}
@@ -570,7 +562,10 @@ export default function HomePage() {
                   <div className="relative">
                     <div className="flex items-center">
                       <button 
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          window.location.href = '/signup-choice';
+                        }}
                         className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors"
                       >
                         <svg className="w-5 h-5 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
@@ -578,39 +573,6 @@ export default function HomePage() {
                         </svg>
                       </button>
                     </div>
-                    
-                    {isDropdownOpen && (
-                      <div className="absolute left-12 -top-8 w-36 shadow-lg z-50 rounded-lg bg-white border border-gray-200">
-                        <div className="py-1">
-                          <a 
-                            href="/auth/login?type=client" 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setIsDropdownOpen(false);
-                              setIsMobileMenuOpen(false);
-                              window.location.href = '/auth/login?type=client';
-                            }}
-                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
-                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
-                          >
-                            Client login
-                          </a>
-                          <a 
-                            href="/auth/login?type=partner" 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setIsDropdownOpen(false);
-                              setIsMobileMenuOpen(false);
-                              window.location.href = '/auth/login?type=partner';
-                            }}
-                            style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
-                            className="block px-3 py-2 text-sm text-[#00BAB5] hover:bg-gray-100 text-center"
-                          >
-                            Partner login
-                          </a>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

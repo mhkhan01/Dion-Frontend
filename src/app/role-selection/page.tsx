@@ -17,12 +17,17 @@ export default function RoleSelectionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F6F4] flex flex-col">
-      {/* Safe area handling for iOS devices */}
-      <div className="safe-area-inset-top" />
-      
+    <div className="min-h-screen relative overflow-hidden" style={{
+      backgroundImage: 'url(/Houses%20-%202.webp)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }}>
+      {/* Background Image Opacity Overlay */}
+      <div className="absolute inset-0 bg-[rgba(11,29,52,0.88)] pointer-events-none z-0"></div>
+
       {/* Main content container with safe areas */}
-      <div className="flex-1 flex flex-col justify-center items-center px-6 py-8 safe-area-inset-x safe-area-inset-y">
+      <div className="relative z-10 flex flex-col justify-center items-center min-h-screen px-6 py-8 safe-area-inset-x safe-area-inset-y">
         {/* Logo/Brand section */}
         <div className="mb-12 flex justify-center py-2">
           <img 

@@ -560,7 +560,7 @@ export default function HomePage() {
                 {/* Sidebar Footer with User Menu */}
                 <div className="p-6 border-t border-gray-200">
                   <div className="relative">
-                    <div className="flex items-center">
+                    <div className="flex flex-col items-center">
                       <button 
                         onClick={() => {
                           setIsMobileMenuOpen(false);
@@ -572,6 +572,17 @@ export default function HomePage() {
                           <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                         </svg>
                       </button>
+                      <span 
+                        style={{ 
+                          fontFamily: 'var(--font-avenir)', 
+                          fontWeight: 500,
+                          color: '#00BAB5',
+                          letterSpacing: '0.05em'
+                        }}
+                        className="text-sm mt-1"
+                      >
+                        Login
+                      </span>
                     </div>
                   </div>
                 </div>

@@ -106,9 +106,16 @@ export default function HomePage() {
 
 
   const nextImage = () => {
-    // Both mobile and desktop: max position 19 (shows all 20 images one by one)
-    const maxPosition = 19;
-    setCurrentImageIndex(prev => Math.min(prev + 1, maxPosition));
+    // Calculate max position based on viewport to ensure last tile is fully visible
+    const tileWidth = (typeof window !== 'undefined' && window.innerWidth >= 768) ? 320 : (typeof window !== 'undefined' && window.innerWidth >= 640) ? 240 : 160;
+    const gapWidth = (typeof window !== 'undefined' && window.innerWidth >= 768) ? 24 : (typeof window !== 'undefined' && window.innerWidth >= 640) ? 16 : 8;
+    const viewportWidth = (typeof window !== 'undefined' && window.innerWidth >= 1024) ? 1280 : (typeof window !== 'undefined' && window.innerWidth >= 640) ? 672 : 320;
+    const totalWidth = 10 * tileWidth + 9 * gapWidth; // 10 tiles total
+    const maxScroll = totalWidth - viewportWidth;
+    const slideDistance = tileWidth + gapWidth;
+    // Ensure enough scroll positions for all tiles - add extra buffer for smaller mobile screens
+    const calculatedMax = Math.ceil(maxScroll / slideDistance) + 2;
+    setCurrentImageIndex(prev => Math.min(prev + 1, calculatedMax));
   };
 
   const prevImage = () => {
@@ -620,12 +627,11 @@ export default function HomePage() {
               <span className="inline-block w-full sm:w-auto text-center sm:text-left">Sorted.</span>
             </h1>
           </div>
-          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl mb-3 sm:mb-6 md:mb-8 text-gray-200 max-w-4xl mx-auto leading-relaxed text-center">
+          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-3 sm:mb-6 md:mb-8 text-gray-200 max-w-4xl mx-auto leading-tight text-center">
             One Request, One Invoice. Built for Business.
           </p>
-          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-sm sm:text-base md:text-lg lg:text-xl mb-3 sm:mb-6 md:mb-8 text-gray-200 max-w-4xl mx-auto leading-relaxed text-center">
-            Fully furnished Properties nationwide. Book from one week to one year.<br />
-            Outsource your accommodation problems to us.
+          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg md:text-xl lg:text-2xl mb-3 sm:mb-6 md:mb-8 text-gray-200 max-w-4xl mx-auto leading-tight text-center">
+            Fully furnished Properties nationwide. Book from one week to<br className="sm:hidden" /> one year.<br className="hidden sm:inline" /> Outsource your accommodation problems to us.
           </p>
           <div className="flex justify-center w-full">
             <button 
@@ -1108,7 +1114,7 @@ export default function HomePage() {
           </div>
 
           {/* Property Cards */}
-          <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-6 overflow-hidden w-full">
+          <div className="flex items-center justify-center gap-3 sm:gap-4 md:gap-6 w-full">
             {/* All property data */}
             {(() => {
               const propertyData = [
@@ -1145,8 +1151,8 @@ export default function HomePage() {
                       <div 
                         className="flex gap-2 sm:gap-4 md:gap-6 transition-transform duration-700 ease-out carousel-slide"
                         style={{ 
-                          transform: `translateX(-${currentImageIndex * (isMobile ? 168 : (typeof window !== 'undefined' && window.innerWidth >= 768) ? 344 : 256)}px)`,
-                          width: 'calc(6 * 120px + 5 * 8px)',
+                          transform: `translateX(-${currentImageIndex * ((typeof window !== 'undefined' && window.innerWidth >= 768) ? 344 : (typeof window !== 'undefined' && window.innerWidth >= 640) ? 256 : 168)}px)`,
+                          width: (typeof window !== 'undefined' && window.innerWidth >= 768) ? 'calc(10 * 320px + 9 * 24px)' : (typeof window !== 'undefined' && window.innerWidth >= 640) ? 'calc(10 * 240px + 9 * 16px)' : 'calc(10 * 160px + 9 * 8px)',
                           willChange: 'transform'
                         }}
                       >
@@ -1169,9 +1175,15 @@ export default function HomePage() {
 
                     {/* Right Arrow Button - positioned absolutely */}
                     {(() => {
-                      // Show right arrow until all images are visible one by one
-                      // Both mobile and desktop work the same way
-                      const maxPosition = propertyData.length - 1;
+                      // Calculate max position based on viewport to ensure last tile is fully visible
+                      const tileWidth = (typeof window !== 'undefined' && window.innerWidth >= 768) ? 320 : (typeof window !== 'undefined' && window.innerWidth >= 640) ? 240 : 160;
+                      const gapWidth = (typeof window !== 'undefined' && window.innerWidth >= 768) ? 24 : (typeof window !== 'undefined' && window.innerWidth >= 640) ? 16 : 8;
+                      const viewportWidth = (typeof window !== 'undefined' && window.innerWidth >= 1024) ? 1280 : (typeof window !== 'undefined' && window.innerWidth >= 640) ? 672 : 320;
+                      const totalWidth = propertyData.length * tileWidth + (propertyData.length - 1) * gapWidth;
+                      const maxScroll = totalWidth - viewportWidth;
+                      const slideDistance = tileWidth + gapWidth;
+                      // Ensure enough scroll positions for all tiles - add extra buffer for smaller mobile screens
+                      const maxPosition = Math.ceil(maxScroll / slideDistance) + 2;
                       return currentImageIndex < maxPosition;
                     })() && (
                       <button 

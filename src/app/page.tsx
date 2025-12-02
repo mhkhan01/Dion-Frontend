@@ -767,7 +767,6 @@ export default function HomePage() {
             Who We Serve
           </h2>
           <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-base sm:text-lg md:text-xl text-[#4B4E53] max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8">Solving accommodation problems for organisations across the UK - from emergency placements to long-term projects</p>
-          <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-lg sm:text-2xl md:text-3xl text-[#0B1D37] mb-6 sm:mb-10 underline">Our Core Sectors</h3>
           </div>
 
           {/* Three Core Sectors */}
@@ -777,10 +776,10 @@ export default function HomePage() {
               <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-4">
                 <img src="/helmet.webp" alt="Construction Helmet" className="w-10 h-10 sm:w-16 sm:h-16 object-contain" />
               </div>
-              <h4 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg sm:text-xl text-[#0B1D37] mb-2 sm:mb-3">
+              <h4 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3">
                 Construction & Engineering Companies
               </h4>
-              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-tight sm:leading-relaxed">
+              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed">
                 Housing teams working on major construction, civil, and industrial infrastructure projects.
               </p>
             </div>
@@ -790,10 +789,10 @@ export default function HomePage() {
               <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-4">
                 <img src="/government.webp" alt="Government Building" className="w-10 h-10 sm:w-16 sm:h-16 object-contain" />
               </div>
-              <h4 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg sm:text-xl text-[#0B1D37] mb-2 sm:mb-3">
+              <h4 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3">
                 Councils & Housing Associations
               </h4>
-              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-tight sm:leading-relaxed">
+              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed">
                 Providing compliant, short‑notice accommodation for emergency or planned placements.
               </p>
             </div>
@@ -803,10 +802,10 @@ export default function HomePage() {
               <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center mx-auto mb-2 sm:mb-4">
                 <img src="/insurance.webp" alt="Insurance Shield" className="w-10 h-10 sm:w-16 sm:h-16 object-contain" />
               </div>
-              <h4 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg sm:text-xl text-[#0B1D37] mb-2 sm:mb-3">
+              <h4 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3">
                 Insurance & Loss Adjusters
               </h4>
-              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-tight sm:leading-relaxed">
+              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed">
                 Arranging temporary accommodation for policyholders affected by fire, flood, or property damage.
               </p>
             </div>
@@ -816,8 +815,8 @@ export default function HomePage() {
           <div className="text-center">
             <button 
               onClick={() => { if (typeof window !== 'undefined') window.location.href = '/booking-request'; }}
-              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} 
-              className="group bg-[#00BAB5] sm:bg-gradient-to-r sm:from-[#00BAB5] sm:to-[#00A5A0] text-white px-3 sm:px-8 py-2 sm:py-4 rounded-lg sm:rounded-xl text-xs sm:text-lg hover:bg-[#00A5A0] sm:hover:from-[#00A5A0] sm:hover:to-[#00BAB5] transition-colors sm:transition-all sm:duration-300 sm:shadow-lg sm:hover:shadow-xl sm:transform sm:hover:-translate-y-1"
+              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} 
+              className="group bg-[#00BAB5] sm:bg-gradient-to-r sm:from-[#00BAB5] sm:to-[#00A5A0] text-white px-5 sm:px-10 py-2.5 sm:py-5 rounded-lg sm:rounded-xl text-sm sm:text-xl hover:bg-[#00A5A0] sm:hover:from-[#00A5A0] sm:hover:to-[#00BAB5] transition-colors sm:transition-all sm:duration-300 sm:shadow-lg sm:hover:shadow-xl sm:transform sm:hover:-translate-y-1"
             >
               BOOK ACCOMMODATION
             </button>

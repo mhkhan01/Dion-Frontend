@@ -455,18 +455,18 @@ export default function HomePage() {
 
           {/* Desktop Navigation - Hidden on mobile, visible on tablet and up */}
           <nav className="hidden md:flex items-center space-x-4 lg:space-x-6 ml-auto mr-4 lg:mr-6">
-            <a href="/contact" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base lg:text-lg">Contact Us</a>
+            <a href="/contact" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-[#0B1D37] hover:text-[#00BAB5] transition-colors text-base md:text-lg lg:text-xl">Contact Us</a>
             <a 
               href="/booking-request" 
-              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
-              className="bg-[#00BAB5] text-white hover:bg-[#009a96] transition-colors px-4 py-2 rounded-md text-base lg:text-lg border-2 border-[#0B1D37]"
+              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }}
+              className="bg-[#00BAB5] text-white hover:bg-[#009a96] transition-colors px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 rounded-md text-base md:text-lg lg:text-xl border-2 border-[#0B1D37]"
             >
               Request a Booking
             </a>
             <a 
               href="/auth/signup/partner" 
-              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
-              className="bg-[#E9ECEF] text-[#0B1D37] hover:bg-[#dee2e6] transition-colors px-4 py-2 rounded-md text-base lg:text-lg border-2 border-[#0B1D37]"
+              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }}
+              className="bg-[#E9ECEF] text-[#0B1D37] hover:bg-[#dee2e6] transition-colors px-4 py-2 md:px-6 md:py-3 lg:px-8 lg:py-4 rounded-md text-base md:text-lg lg:text-xl border-2 border-[#0B1D37]"
             >
               List Your Property
             </a>
@@ -476,16 +476,16 @@ export default function HomePage() {
           <div className="hidden md:block relative">
             <button 
               onClick={() => { window.location.href = '/signup-choice'; }}
-              className="w-10 h-10 lg:w-12 lg:h-12 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors"
+              className="w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-gray-300 rounded-full flex items-center justify-center hover:bg-gray-400 transition-colors"
             >
-              <svg className="w-5 h-5 lg:w-6 lg:h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 md:w-7 md:h-7 lg:w-8 lg:h-8 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
               </svg>
             </button>
             <span 
               style={{ 
                 fontFamily: 'var(--font-avenir)', 
-                fontWeight: 500,
+                fontWeight: 700,
                 color: '#00BAB5',
                 letterSpacing: '0.05em'
               }}
@@ -712,7 +712,7 @@ export default function HomePage() {
           <div className="w-full max-w-7xl">
           <div className="text-center mb-6 sm:mb-12 md:mb-16">
             <h2 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl text-[#0B1D37] mb-2 sm:mb-4">How It Works</h2>
-            <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-base sm:text-lg md:text-xl text-[#4B4E53] max-w-3xl mx-auto leading-relaxed">Three simple steps to streamline your corporate accommodation process</p>
+            <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-base sm:text-lg md:text-xl lg:text-2xl text-[#4B4E53] max-w-3xl mx-auto leading-relaxed">Three simple steps to streamline your corporate accommodation process</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
@@ -766,7 +766,7 @@ export default function HomePage() {
           <h2 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl text-[#0B1D37] mb-2 sm:mb-4 leading-tight">
             Who We Serve
           </h2>
-          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-base sm:text-lg md:text-xl text-[#4B4E53] max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8">Solving accommodation problems for organisations across the UK - from emergency placements to long-term projects</p>
+          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-base sm:text-lg md:text-xl lg:text-2xl text-[#4B4E53] max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8">Solving accommodation problems for organisations across the UK - from emergency placements to long-term projects</p>
           </div>
 
           {/* Three Core Sectors */}
@@ -840,46 +840,46 @@ export default function HomePage() {
         
         {/* Content */}
         <div className="relative z-10 w-full flex justify-center">
-          <div className="w-full max-w-7xl">
+          <div className="w-full max-w-7xl md:max-w-full md:px-8 lg:px-16">
           {/* Section Header */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl text-white mb-3 sm:mb-4">The Problem With Tourist Platforms</h2>
           </div>
 
           {/* Feature Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6 md:gap-6 lg:gap-8">
             {/* Card 1: Week-by-Week Chaos */}
-            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 text-center">
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-5 lg:px-10 lg:py-6 text-center flex flex-col">
               <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4">
                 <svg className="w-5 h-5 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-xl text-[#0B1D37] mb-2 sm:mb-3">Week-by-Week Chaos</h3>
-              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base text-[#4B4E53] leading-tight sm:leading-relaxed">You can't block-book Monday to Friday. You waste hours rebooking every week. Seasonal availability and nothing available long-term</p>
+              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4 md:h-16 lg:h-20 flex items-center justify-center">Week-by-Week Chaos</h3>
+              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed flex-grow md:mb-4 lg:mb-6">You can't block-book Monday to Friday. You waste hours rebooking every week. Seasonal availability and nothing available long-term</p>
             </div>
 
             {/* Card 2: No Business Invoicing or Flexibility */}
-            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 text-center">
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-5 lg:px-10 lg:py-6 text-center flex flex-col">
               <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4">
                 <svg className="w-5 h-5 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
                   <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd"/>
                 </svg>
               </div>
-              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-xl text-[#0B1D37] mb-2 sm:mb-3">No Business Invoicing or Flexibility</h3>
-              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base text-[#4B4E53] leading-tight sm:leading-relaxed">You're forced to use credit cards. Your finance team can't get invoices or reclaim VAT. You can't extend or adjust when plans change.</p>
+              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4 md:h-16 lg:h-20 flex items-center justify-center">No Business Invoicing or Flexibility</h3>
+              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed flex-grow md:mb-4 lg:mb-6">You're forced to use credit cards. Your finance team can't get invoices or reclaim VAT. You can't extend or adjust when plans change.</p>
             </div>
 
             {/* Card 3: Unpredictable Quality and Support */}
-            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 text-center">
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-5 lg:px-10 lg:py-6 text-center flex flex-col">
               <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4">
                 <svg className="w-5 h-5 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
                 </svg>
               </div>
-              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-xl text-[#0B1D37] mb-2 sm:mb-3">Unpredictable Quality and Support</h3>
-              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base text-[#4B4E53] leading-tight sm:leading-relaxed">You deal with unprofessional hosts and substandard accommodation. When things go wrong, you're left with no support.</p>
+              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4 md:h-16 lg:h-20 flex items-center justify-center">Unpredictable Quality and Support</h3>
+              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed flex-grow md:mb-4 lg:mb-6">You deal with unprofessional hosts and substandard accommodation. When things go wrong, you're left with no support.</p>
             </div>
           </div>
           </div>
@@ -889,58 +889,58 @@ export default function HomePage() {
       {/* We're Built For Business Section */}
       <section className="bg-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12">
         <div className="w-full flex justify-center">
-          <div className="w-full max-w-7xl">
+          <div className="w-full max-w-7xl md:max-w-full md:px-8 lg:px-16">
             {/* Section Header */}
             <div className="text-center mb-8 sm:mb-12 md:mb-16">
               <h2 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl text-[#0B1D37] mb-2 sm:mb-4">We're Built For Business</h2>
             </div>
 
             {/* Feature Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6 md:gap-6 lg:gap-8 mb-8 sm:mb-12">
               {/* Card 1: A Complete System */}
-              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-6 sm:p-8">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-5 lg:px-10 lg:py-6 text-center flex flex-col">
+                <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4">
+                  <svg className="w-5 h-5 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
                     <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
                   </svg>
                 </div>
-                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-xl text-[#0B1D37] mb-2 sm:mb-3 text-center">A Complete System</h3>
-                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base text-[#4B4E53] leading-tight sm:leading-relaxed text-center">You benefit from flexible payment terms, purchase orders, and VAT invoicing. Block-book Monday to Friday, book long-term, manage multiple locations. Extend or amend easily when plans change. One dashboard manages everything.</p>
+                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4 text-center md:h-16 lg:h-20 flex items-center justify-center">A Complete System</h3>
+                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed text-center flex-grow md:mb-4 lg:mb-6">You benefit from flexible payment terms, purchase orders, and VAT invoicing. Block-book Monday to Friday, book long-term, manage multiple locations. Extend or amend easily when plans change. One dashboard manages everything.</p>
               </div>
 
               {/* Card 2: Not Just a Platform */}
-              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-6 sm:p-8">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-5 lg:px-10 lg:py-6 text-center flex flex-col">
+                <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4">
+                  <svg className="w-5 h-5 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
                   </svg>
                 </div>
-                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-xl text-[#0B1D37] mb-2 sm:mb-3 text-center">Not Just a Platform</h3>
-                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base text-[#4B4E53] leading-tight sm:leading-relaxed text-center">Book on the platform or hand your accommodation problems to us. Our team sources properties not listed anywhere else, handles everything, and provides dedicated support. We become your outsourced accommodation service.</p>
+                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4 text-center md:h-16 lg:h-20 flex items-center justify-center">Not Just a Platform</h3>
+                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed text-center flex-grow md:mb-4 lg:mb-6">Book on the platform or hand your accommodation problems to us. Our team sources properties not listed anywhere else, handles everything, and provides dedicated support. We become your outsourced accommodation service.</p>
               </div>
 
               {/* Card 3: Professional Partners */}
-              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-6 sm:p-8">
-                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                  <svg className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-5 lg:px-10 lg:py-6 text-center flex flex-col">
+                <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4">
+                  <svg className="w-5 h-5 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-xl text-[#0B1D37] mb-2 sm:mb-3 text-center">Professional Partners</h3>
-                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base text-[#4B4E53] leading-tight sm:leading-relaxed text-center">You get compliant serviced accommodation from professional partners across the UK. Pre-vetted properties managed by professionals who understand your business requirements, not leisure bookings.</p>
+                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4 text-center md:h-16 lg:h-20 flex items-center justify-center">Professional Partners</h3>
+                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed text-center flex-grow md:mb-4 lg:mb-6">You get compliant serviced accommodation from professional partners across the UK. Pre-vetted properties managed by professionals who understand your business requirements, not leisure bookings.</p>
               </div>
             </div>
 
             {/* CTA Button */}
             <div className="text-center">
-              <a 
-                href="/booking-request"
-                style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }}
-                className="inline-block bg-[#00BAB5] text-white px-6 sm:px-8 md:px-10 py-3 sm:py-4 rounded-lg text-base sm:text-lg md:text-xl hover:bg-[#00A5A0] transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+              <button 
+                onClick={() => { if (typeof window !== 'undefined') window.location.href = '/booking-request'; }}
+                style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} 
+                className="group bg-[#00BAB5] sm:bg-gradient-to-r sm:from-[#00BAB5] sm:to-[#00A5A0] text-white px-5 sm:px-10 py-2.5 sm:py-5 rounded-lg sm:rounded-xl text-sm sm:text-xl hover:bg-[#00A5A0] sm:hover:from-[#00A5A0] sm:hover:to-[#00BAB5] transition-colors sm:transition-all sm:duration-300 sm:shadow-lg sm:hover:shadow-xl sm:transform sm:hover:-translate-y-1"
               >
-                Book Accommodation
-              </a>
+                BOOK ACCOMMODATION
+              </button>
             </div>
           </div>
         </div>
@@ -970,13 +970,13 @@ export default function HomePage() {
             </div>
             <div className="flex items-center justify-center space-x-2">
               <div className="flex items-center space-x-1">
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
+                <svg className="w-4 h-4 md:w-6 md:h-6 lg:w-8 lg:h-8" viewBox="0 0 24 24" fill="none">
                   <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                   <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
-                <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-base sm:text-sm text-[#4B4E53]">Google Reviews</span>
+                <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-base sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53]">Google Reviews</span>
               </div>
             </div>
           </div>
@@ -1038,13 +1038,13 @@ export default function HomePage() {
                       </div>
                       
                       {/* Time Posted */}
-                      <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-xs text-[#4B4E53] mb-1 sm:mb-3">{review.timePosted}</div>
+                      <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-xs md:text-xl lg:text-2xl text-[#4B4E53] mb-1 sm:mb-3">{review.timePosted}</div>
                       
                       {/* Review Text */}
-                      <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-sm text-[#0B1D37] mb-2 sm:mb-4 leading-tight sm:leading-relaxed flex-grow">{review.text}</p>
+                      <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#0B1D37] mb-2 sm:mb-4 leading-tight sm:leading-relaxed flex-grow">{review.text}</p>
                       
                       {/* Reviewer Name */}
-                      <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-sm text-[#0B1D37]">{review.reviewerName}</div>
+                      <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-sm md:text-xl lg:text-2xl text-[#0B1D37]">{review.reviewerName}</div>
                     </div>
                   </div>
                 ))}
@@ -1073,13 +1073,13 @@ export default function HomePage() {
                       </div>
                       
                       {/* Time Posted */}
-                      <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-xs text-[#4B4E53] mb-1 sm:mb-3">{review.timePosted}</div>
+                      <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-xs md:text-xl lg:text-2xl text-[#4B4E53] mb-1 sm:mb-3">{review.timePosted}</div>
                       
                       {/* Review Text */}
-                      <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-sm text-[#0B1D37] mb-2 sm:mb-4 leading-tight sm:leading-relaxed flex-grow">{review.text}</p>
+                      <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#0B1D37] mb-2 sm:mb-4 leading-tight sm:leading-relaxed flex-grow">{review.text}</p>
                       
                       {/* Reviewer Name */}
-                      <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-sm text-[#0B1D37]">{review.reviewerName}</div>
+                      <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-sm md:text-xl lg:text-2xl text-[#0B1D37]">{review.reviewerName}</div>
                     </div>
                   </div>
                 ))}
@@ -1164,7 +1164,7 @@ export default function HomePage() {
                                 loading="eager" className="w-full h-36 sm:h-56 md:h-80 object-cover rounded-t-lg"
                               />
                               <div className="p-2 sm:p-3 md:p-4 text-center">
-                                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-xs sm:text-lg md:text-xl text-[#0B1D37]">{property.title}</h3>
+                                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#0B1D37]">{property.title}</h3>
                               </div>
                             </div>
                           </div>
@@ -1223,14 +1223,14 @@ export default function HomePage() {
                   Our Property Partners
                 </h2>
                 
-                <div className="space-y-4 sm:space-y-6 mb-8 sm:mb-10">
-                  <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base md:text-lg text-white leading-relaxed">
+                <div className="space-y-3 md:space-y-6 mb-8 sm:mb-10">
+                  <p style={{ fontFamily: 'var(--font-avenir)' }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-white leading-relaxed tracking-normal md:tracking-wide lg:tracking-wide font-medium md:font-normal">
                     We work with a trusted network of professional property partners across the UK to provide quality, compliant accommodation for our clients.
                   </p>
-                  <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base md:text-lg text-white leading-relaxed">
+                  <p style={{ fontFamily: 'var(--font-avenir)' }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-white leading-relaxed tracking-normal md:tracking-wide lg:tracking-wide font-medium md:font-normal">
                     Our partners benefit from steady professional bookings, reliable income, and full support from our team.
                   </p>
-                  <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base md:text-lg text-white leading-relaxed">
+                  <p style={{ fontFamily: 'var(--font-avenir)' }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-white leading-relaxed tracking-normal md:tracking-wide lg:tracking-wide font-medium md:font-normal">
                     If you own or manage suitable properties, we'd like to hear from you.
                   </p>
                 </div>
@@ -1238,12 +1238,12 @@ export default function HomePage() {
                 <div className="space-y-4">
                   <button 
                     onClick={() => { if (typeof window !== 'undefined') window.location.href = '/auth/signup/partner'; }}
-                    style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }}
-                    className="bg-[#00BAB5] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-xs sm:text-lg hover:bg-[#00A5A0] transition-colors"
+                    style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }}
+                    className="bg-[#00BAB5] text-white px-6 sm:px-8 md:px-10 lg:px-12 py-3 sm:py-4 md:py-5 lg:py-6 rounded-lg text-base sm:text-lg md:text-xl lg:text-2xl hover:bg-[#00A5A0] transition-colors"
                   >
-                    Become a Partner
+                    BECOME A PARTNER
                   </button>
-                  <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-sm text-white">
+                  <p style={{ fontFamily: 'var(--font-avenir)' }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-white font-medium md:font-normal">
                     Join our network of trusted accommodation providers
                   </p>
                 </div>
@@ -1263,12 +1263,12 @@ export default function HomePage() {
                 {/* FAQ Accordion - One Column on Mobile, Two Columns on Desktop */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {generateFAQData().map((faq) => (
-                    <div key={faq.id} className="bg-white rounded-lg shadow-lg overflow-hidden self-start">
+                    <div key={faq.id} className="bg-white rounded-lg shadow-lg overflow-hidden self-start md:self-stretch">
                       <button
                         onClick={() => handleFAQClick(faq.id)}
-                        className="w-full px-4 sm:px-6 py-3 sm:py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+                        className="w-full px-6 sm:px-8 py-4 sm:py-6 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
                       >
-                        <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-lg text-[#0B1D37] pr-2 sm:pr-4 flex-1">
+                        <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] pr-2 sm:pr-4 flex-1">
                           {faq.question}
                         </span>
                         <svg 
@@ -1280,9 +1280,9 @@ export default function HomePage() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                         </svg>
                       </button>
-                      <div className={`transition-all duration-300 ease-in-out ${openFAQs.has(faq.id) ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-                        <div className="px-4 sm:px-6 pb-3 sm:pb-4 border-t border-gray-100">
-                          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-xs sm:text-base text-[#00BAB5] leading-relaxed pt-3 sm:pt-4">
+                      <div className={`transition-all duration-300 ease-in-out ${openFAQs.has(faq.id) ? 'max-h-[600px] opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                        <div className="px-6 sm:px-8 pb-4 sm:pb-6 border-t border-gray-100">
+                          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#00BAB5] leading-relaxed pt-4 sm:pt-6">
                             {faq.answer}
                           </p>
                         </div>
@@ -1300,30 +1300,30 @@ export default function HomePage() {
                 <div className="grid grid-cols-[1.2fr_0.8fr] sm:grid-cols-2 gap-1 sm:gap-4 lg:gap-8 items-start justify-items-center">
                   {/* Left Content */}
                   <div className="text-left lg:pr-4 justify-self-start sm:mt-12">
-                    <div className="mb-2">
-                      <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-xl md:text-2xl text-[#00BAB5]">Download the</span>
+                    <div className="mb-1 md:mb-2">
+                      <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-sm sm:text-2xl md:text-3xl text-[#00BAB5] leading-tight">Download the</span>
                     </div>
-                    <h2 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xs sm:text-3xl md:text-4xl lg:text-5xl text-[#0B1D37] mb-2 sm:mb-4">
+                    <h2 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl text-[#0B1D37] mb-1 md:mb-3 leading-tight">
                       <span className="sm:hidden">BOOKING HUB MOBILE APP</span>
                       <span className="hidden sm:inline">Booking Hub Mobile App</span>
                     </h2>
-                    <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-xl md:text-2xl text-[#00BAB5] mb-4 sm:mb-6">
-                      List your Properties and Manage<br className="sm:hidden" /> Your Bookings on the Go
+                    <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-sm sm:text-2xl md:text-3xl text-[#00BAB5] mb-2 md:mb-4 leading-tight">
+                      List your Properties and Manage<br className="sm:hidden" /> Your Bookings <span className="md:whitespace-nowrap">on the Go</span>
                     </p>
                     
                     {/* Download Buttons */}
-                    <div className="flex flex-col gap-2 sm:gap-4 sm:flex-row justify-start">
+                    <div className="flex flex-col gap-2 sm:gap-4 sm:flex-row justify-start md:mt-6 lg:mt-8">
                       {/* App Store Button */}
                       <a 
                         href="#" 
-                        className="inline-flex items-center justify-center bg-black text-white px-2 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-gray-800 transition-colors"
+                        className="inline-flex items-center justify-center bg-black text-white px-1 sm:px-8 md:px-12 lg:px-14 py-2 sm:py-4 md:py-4 lg:py-5 rounded-lg hover:bg-gray-800 transition-colors max-w-[140px] sm:max-w-none"
                       >
-                        <svg className="w-6 h-6 mr-2 sm:mr-3" viewBox="0 0 24 24" fill="currentColor">
+                        <svg className="w-6 h-6 mr-2 sm:mr-3 md:w-8 md:h-8 md:mr-4" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
                         </svg>
                         <div className="text-left">
-                          <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-[8px] sm:text-xs">Download on the</div>
-                          <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-lg">App Store</div>
+                          <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-[9px] sm:text-sm md:text-base lg:text-lg md:tracking-wide lg:tracking-wider">Download on the</div>
+                          <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-sm sm:text-xl md:text-2xl lg:text-3xl">App Store</div>
                         </div>
                       </a>
                     </div>
@@ -1345,7 +1345,7 @@ export default function HomePage() {
             </section>
 
             {/* UK Government Funded Logo Section */}
-            <section className="bg-white pt-4 sm:pt-6 pb-6 sm:pb-8 px-4 sm:px-6 lg:px-12">
+            <section className="bg-white pt-4 sm:pt-6 md:pt-0 lg:pt-0 pb-6 sm:pb-8 px-4 sm:px-6 lg:px-12">
               <div className="w-full flex justify-center">
                 <div className="w-full max-w-7xl">
                   <div className="flex justify-start">
@@ -1373,7 +1373,7 @@ export default function HomePage() {
                     </div>
                     
                     {/* Description */}
-                    <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-base leading-relaxed">
+                    <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-lg lg:text-xl leading-relaxed">
                       A trading name of Dion Wright Property Ltd.<br />
                       Registered in England & Wales No. 15312220.
                     </p>
@@ -1395,19 +1395,19 @@ export default function HomePage() {
 
                   {/* Quick Links Section */}
                   <div className="space-y-4 sm:space-y-6">
-                    <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-white text-xs sm:text-lg">Quick Links</h3>
+                    <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-white text-xs sm:text-lg md:text-xl lg:text-2xl">Quick Links</h3>
                     <ul className="space-y-0 sm:space-y-3">
-                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Home</a></li>
-                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">How We Help You</a></li>
-                      <li><a href="/booking-request" onClick={(e) => { e.preventDefault(); window.location.href = '/booking-request'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Book Accommodation</a></li>
-                      <li><a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Become a Partner</a></li>
-                      <li><a href="/contact" onClick={(e) => { e.preventDefault(); window.location.href = '/contact'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base leading-tight sm:leading-normal">Contact Us</a></li>
+                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal">Home</a></li>
+                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal">How We Help You</a></li>
+                      <li><a href="/booking-request" onClick={(e) => { e.preventDefault(); window.location.href = '/booking-request'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal">Book Accommodation</a></li>
+                      <li><a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal">Become a Partner</a></li>
+                      <li><a href="/contact" onClick={(e) => { e.preventDefault(); window.location.href = '/contact'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal">Contact Us</a></li>
                     </ul>
                   </div>
 
                   {/* Contact Info Section */}
                   <div className="space-y-4 sm:space-y-6 -ml-8 sm:ml-0">
-                    <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-white text-xs sm:text-lg">Contact Info</h3>
+                    <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-white text-xs sm:text-lg md:text-xl lg:text-2xl">Contact Info</h3>
                     <div className="space-y-3 sm:space-y-4">
                       {/* Email */}
                       <div className="flex items-center space-x-2 sm:space-x-3">
@@ -1415,7 +1415,7 @@ export default function HomePage() {
                           <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
                           <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
                         </svg>
-                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm">info@booking-hub.co.uk</div>
+                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-lg lg:text-xl">info@booking-hub.co.uk</div>
                       </div>
 
                       {/* Phone */}
@@ -1423,7 +1423,7 @@ export default function HomePage() {
                         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#00BAB5] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
                         </svg>
-                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm">0330 043 7522</div>
+                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-lg lg:text-xl">0330 043 7522</div>
                       </div>
 
                       {/* Address */}
@@ -1431,7 +1431,7 @@ export default function HomePage() {
                         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#00BAB5] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
                         </svg>
-                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm">SA12 Business Centre, Seaway Parade, Baglan Energy Park, Port Talbot SA12 7BR</div>
+                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-lg lg:text-xl">SA12 Business Centre, Seaway Parade, Baglan Energy Park, Port Talbot SA12 7BR</div>
                       </div>
                     </div>
                   </div>
@@ -1441,7 +1441,7 @@ export default function HomePage() {
                 <div className="border-t border-gray-700 pt-4 sm:pt-6 md:pt-8">
                   <div className="flex flex-row justify-between items-center">
                     <div className="flex flex-row space-x-6 md:space-x-8">
-                      <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm leading-tight sm:leading-normal">
+                      <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-lg lg:text-xl leading-tight sm:leading-normal">
                         <a href="/privacy-policy" className="hover:text-[#00BAB5] transition-colors">Privacy Policy</a>
                         <span className="mx-0.5 sm:mx-2">|</span>
                         <a href="/terms-and-conditions" className="hover:text-[#00BAB5] transition-colors">Terms & Conditions</a>
@@ -1449,7 +1449,7 @@ export default function HomePage() {
                         <a href="#" className="hover:text-[#00BAB5] transition-colors">Cookie Notice</a>
                       </span>
                     </div>
-                    <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-400 text-[11px] sm:text-sm text-right">
+                    <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-400 text-[11px] sm:text-sm md:text-lg lg:text-xl text-right">
                       © 2025 Booking Hub. All rights reserved.
                     </div>
                   </div>

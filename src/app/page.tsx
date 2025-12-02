@@ -631,13 +631,13 @@ export default function HomePage() {
             One Request, One Invoice. Built for Business.
           </p>
           <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg md:text-xl lg:text-2xl mb-3 sm:mb-6 md:mb-8 text-gray-200 max-w-4xl mx-auto leading-tight text-center">
-            Fully furnished Properties nationwide. Book from one week to<br className="sm:hidden" /> one year.<br className="hidden sm:inline" /> Outsource your accommodation problems to us.
+            Fully furnished properties nationwide. Book from one week to<br className="sm:hidden" /> one year.<br className="hidden sm:inline" /> Outsource your accommodation problems to us.
           </p>
           <div className="flex justify-center w-full">
             <button 
               onClick={() => { if (typeof window !== 'undefined') window.location.href = '/booking-request'; }}
-              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
-              className="bg-[#00BAB5] text-white px-3 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 rounded-lg text-xs sm:text-base md:text-lg hover:bg-[#00A5A0] transition-colors mt-1 sm:mt-4"
+              style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }}
+              className="bg-[#00BAB5] text-white px-6 sm:px-8 md:px-10 lg:px-12 py-3 sm:py-4 md:py-5 lg:py-6 rounded-lg text-base sm:text-lg md:text-xl lg:text-2xl hover:bg-[#00A5A0] transition-colors mt-1 sm:mt-4"
             >
               Book Accommodation
             </button>

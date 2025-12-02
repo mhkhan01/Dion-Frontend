@@ -602,7 +602,7 @@ export default function HomePage() {
       <div className="min-h-screen overflow-x-hidden">
       {/* Hero Section */}
       <section 
-        className="relative h-[50vh] sm:h-[60vh] md:h-[65vh] lg:h-[85vh] xl:h-[90vh] flex items-center justify-center"
+        className="relative h-[50vh] sm:h-[60vh] md:h-[65vh] lg:h-[60vh] xl:h-[65vh] flex items-center justify-center"
         style={{
           backgroundImage: 'url(/Port%20talbot-1.webp)',
           backgroundSize: 'cover',
@@ -614,9 +614,9 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[rgba(11,29,52,0.88)]"></div>
         
         {/* Content */}
-        <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 lg:py-12 xl:py-16 max-w-6xl mx-auto">
-          <div className="flex justify-center w-full mb-2 sm:mb-4 md:mb-6">
-            <h1 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 justify-center leading-none sm:leading-normal">
+        <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 lg:py-2 xl:py-3 max-w-6xl mx-auto">
+          <div className="flex justify-center w-full mb-2 sm:mb-4 md:mb-3">
+            <h1 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 justify-center leading-none sm:leading-normal md:leading-loose">
               <span className="inline-block">Your</span>
               <span className="text-[#00BAB5] rotating-word items-center justify-center relative" style={{ overflowX: 'clip', overflowY: 'visible', width: 'auto', minWidth: 'fit-content' }}>
                 <span className={isInitialLoad ? '' : (isAnimating ? 'word-slide-out' : 'word-slide-in')} style={{ display: 'inline-block' }} key={currentWordIndex}>
@@ -627,17 +627,17 @@ export default function HomePage() {
               <span className="inline-block w-full sm:w-auto text-center sm:text-left">Sorted.</span>
             </h1>
           </div>
-          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-3 sm:mb-6 md:mb-8 text-gray-200 max-w-4xl mx-auto leading-tight text-center">
+          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-3 sm:mb-6 md:mb-3 md:mt-8 text-gray-200 max-w-4xl mx-auto leading-tight md:leading-loose text-center">
             One Request, One Invoice. Built for Business.
           </p>
-          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg md:text-xl lg:text-2xl mb-3 sm:mb-6 md:mb-8 text-gray-200 max-w-4xl mx-auto leading-tight text-center">
+          <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl mb-3 sm:mb-6 md:mb-3 text-gray-200 max-w-4xl mx-auto leading-tight md:leading-loose text-center tracking-normal md:tracking-wide lg:tracking-wide">
             Fully furnished properties nationwide. Book from one week to<br className="sm:hidden" /> one year.<br className="hidden sm:inline" /> Outsource your accommodation problems to us.
           </p>
           <div className="flex justify-center w-full">
             <button 
               onClick={() => { if (typeof window !== 'undefined') window.location.href = '/booking-request'; }}
               style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }}
-              className="bg-[#00BAB5] text-white px-6 sm:px-8 md:px-10 lg:px-12 py-3 sm:py-4 md:py-5 lg:py-6 rounded-lg text-base sm:text-lg md:text-xl lg:text-2xl hover:bg-[#00A5A0] transition-colors mt-1 sm:mt-4"
+              className="bg-[#00BAB5] text-white px-6 sm:px-8 md:px-10 lg:px-12 py-3 sm:py-4 md:py-5 lg:py-6 rounded-lg text-base sm:text-lg md:text-xl lg:text-2xl hover:bg-[#00A5A0] transition-colors mt-1 sm:mt-4 md:mt-6"
             >
               Book Accommodation
             </button>
@@ -724,8 +724,8 @@ export default function HomePage() {
                   <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg md:text-xl lg:text-xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4">Tell Us What You Need</h3>
-              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-tight sm:leading-relaxed flex-grow">Location, dates, number of people, budget. It takes 2 minutes.</p>
+              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4">Tell Us What You Need</h3>
+              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed flex-grow">Location, dates, number of people, budget. It takes 2 minutes.</p>
             </div>
 
             {/* Step 2 */}
@@ -736,8 +736,8 @@ export default function HomePage() {
                   <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg md:text-xl lg:text-xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4">We Find Properties</h3>
-              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-tight sm:leading-relaxed flex-grow">Our partner network responds. We shortlist suitable options.</p>
+              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4">We Find Properties</h3>
+              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed flex-grow">Our partner network responds. We shortlist suitable options.</p>
             </div>
 
             {/* Step 3 */}
@@ -748,8 +748,8 @@ export default function HomePage() {
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
               </div>
-              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg md:text-xl lg:text-xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4">Book & Confirm</h3>
-              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-base lg:text-base text-[#4B4E53] leading-tight sm:leading-relaxed flex-grow">Select your fully serviced property. Pay by invoice.</p>
+              <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4">Book & Confirm</h3>
+              <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed flex-grow">Select your fully serviced property. Pay by invoice.</p>
             </div>
           </div>
           </div>

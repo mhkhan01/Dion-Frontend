@@ -47,65 +47,119 @@ function LoginContent() {
     setError(null);
 
     try {
-      // Call backend API for login
-      console.log('Calling backend API for login...');
-      const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
-      const response = await fetch(`${backendUrl}/api/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          userType: userType, // 'contractor' or 'landlord'
-        }),
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        console.error('Backend login error:', result);
-        const errorMessage = result.error || 'Login failed. Please try again.';
-        setError(errorMessage);
-        setLoading(false);
+      if (error) {
+        // Handle email not confirmed error
+        if (error.message.includes('email not confirmed') || error.message.includes('Email not confirmed')) {
+          setError('Your email is not confirmed. Please contact support or try signing up again.');
+        } else if (error.message.includes('Invalid login credentials')) {
+          setError('Invalid email or password. Please check your credentials.');
+        } else {
+          setError(error.message);
+        }
         return;
       }
 
-      console.log('Login successful:', result);
+      // Wait a moment for auth state to update
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Get user profile to determine role and redirect appropriately
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      
+      console.log('Auth user after login:', authUser);
+      
+      if (authUser) {
+        try {
+          // Check contractor table first
+          const { data: contractorProfile, error: contractorError } = await supabase
+            .from('contractor')
+            .select('role, email')
+            .eq('id', authUser.id)
+            .maybeSingle();
 
-      // Set the session in Supabase client
-      if (result.session) {
-        const { error: sessionError } = await supabase.auth.setSession({
-          access_token: result.session.access_token,
-          refresh_token: result.session.refresh_token,
-        });
+          console.log('Contractor check result:', { contractorProfile, contractorError });
+          
+          if (contractorError) {
+            console.error('Contractor query error details:', {
+              message: contractorError.message,
+              details: contractorError.details,
+              hint: contractorError.hint,
+              code: contractorError.code
+            });
+          }
 
-        if (sessionError) {
-          console.error('Error setting session:', sessionError);
-          setError('Failed to establish session. Please try again.');
-          setLoading(false);
-          return;
+          // Check landlord table
+          const { data: landlordProfile, error: landlordError } = await supabase
+            .from('landlord')
+            .select('role, email')
+            .eq('id', authUser.id)
+            .maybeSingle();
+
+          console.log('Landlord check result:', { landlordProfile, landlordError });
+
+          // Determine expected user type based on URL parameter
+          const expectedUserType = userType; // 'contractor' or 'landlord'
+
+          // If user is trying to login as contractor
+          if (expectedUserType === 'contractor') {
+            if (!contractorProfile) {
+              // User doesn't exist in contractor table
+              await supabase.auth.signOut(); // Sign them out
+              setError('This email does not have a client account. Please sign up as a client or try logging in as a partner.');
+              return;
+            }
+            // User exists in contractor table, redirect to contractor dashboard
+            console.log('Redirecting to contractor dashboard');
+            router.push('/contractor');
+            return;
+          }
+
+          // If user is trying to login as landlord
+          if (expectedUserType === 'landlord') {
+            if (!landlordProfile) {
+              // User doesn't exist in landlord table
+              await supabase.auth.signOut(); // Sign them out
+              setError('This email does not have a partner account. Please sign up as a partner or try logging in as a client.');
+              return;
+            }
+            // User exists in landlord table, redirect to landlord dashboard
+            console.log('Redirecting to landlord dashboard');
+            router.push('/landlord');
+            return;
+          }
+
+          // Fallback: If no userType specified, check both tables and redirect appropriately
+          if (contractorProfile && !contractorError) {
+            console.log('Redirecting to contractor dashboard');
+            router.push('/contractor');
+            return;
+          }
+
+          if (landlordProfile && !landlordError) {
+            console.log('Redirecting to landlord dashboard');
+            router.push('/landlord');
+            return;
+          }
+
+          // If no profile found in either table, sign them out and show error
+          await supabase.auth.signOut();
+          setError('No account profile found. Please contact support or create a new account.');
+        } catch (error) {
+          console.error('Error checking user profile:', error);
+          // Sign out on error
+          await supabase.auth.signOut();
+          setError('An error occurred while checking your account. Please try again.');
         }
-
-        console.log('Session set successfully');
-      }
-
-      // Wait a moment for session to be established
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Redirect to appropriate dashboard
-      if (result.redirectTo) {
-        console.log('Redirecting to:', result.redirectTo);
-        router.push(result.redirectTo);
       } else {
-        console.log('No redirect URL provided');
-        setError('Login successful but redirect failed. Please try again.');
+        console.log('No auth user found, redirecting to home');
+        router.push('/');
       }
-
     } catch (err) {
-      console.error('Login error:', err);
-      setError('An unexpected error occurred. Please try again.');
+      setError('An unexpected error occurred');
     } finally {
       setLoading(false);
     }

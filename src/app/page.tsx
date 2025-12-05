@@ -614,8 +614,8 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[rgba(11,29,52,0.88)]"></div>
         
         {/* Content */}
-        <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 lg:py-2 xl:py-3 max-w-6xl mx-auto">
-          <div className="flex justify-center w-full mb-2 sm:mb-4 md:mb-3">
+        <div className="relative z-10 text-center text-white px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-24 lg:py-32 xl:py-40 max-w-6xl mx-auto">
+          <div className="flex justify-center w-full mb-2 sm:mb-4 md:mb-3 mt-4 sm:mt-6 md:mt-8 lg:mt-10 xl:mt-12">
             <h1 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3 justify-center leading-none sm:leading-normal md:leading-loose">
               <span className="inline-block">Your</span>
               <span className="text-[#00BAB5] rotating-word items-center justify-center relative" style={{ overflowX: 'clip', overflowY: 'visible', width: 'auto', minWidth: 'fit-content' }}>
@@ -633,7 +633,7 @@ export default function HomePage() {
           <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl mb-3 sm:mb-6 md:mb-3 text-gray-200 max-w-4xl mx-auto leading-tight md:leading-loose text-center tracking-normal md:tracking-wide lg:tracking-wide">
             Fully furnished properties nationwide. Book from one week to<br className="sm:hidden" /> one year.<br className="hidden sm:inline" /> Outsource your accommodation problems to us.
           </p>
-          <div className="flex justify-center w-full">
+          <div className="flex justify-center w-full mb-4 sm:mb-6 md:mb-8 lg:mb-10 xl:mb-12">
             <button 
               onClick={() => { if (typeof window !== 'undefined') window.location.href = '/booking-request'; }}
               style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }}
@@ -840,7 +840,7 @@ export default function HomePage() {
         
         {/* Content */}
         <div className="relative z-10 w-full flex justify-center">
-          <div className="w-full max-w-7xl md:max-w-full md:px-8 lg:px-16">
+          <div className="w-full max-w-7xl">
           {/* Section Header */}
           <div className="text-center mb-8 sm:mb-12 md:mb-16">
             <h2 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl text-white mb-3 sm:mb-4">The Problem With Tourist Platforms</h2>
@@ -889,7 +889,7 @@ export default function HomePage() {
       {/* We're Built For Business Section */}
       <section className="bg-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-12">
         <div className="w-full flex justify-center">
-          <div className="w-full max-w-7xl md:max-w-full md:px-8 lg:px-16">
+          <div className="w-full max-w-7xl lg:max-w-screen-2xl">
             {/* Section Header */}
             <div className="text-center mb-8 sm:mb-12 md:mb-16">
               <h2 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-xl sm:text-3xl md:text-4xl lg:text-5xl text-[#0B1D37] mb-2 sm:mb-4">We're Built For Business</h2>
@@ -898,37 +898,37 @@ export default function HomePage() {
             {/* Feature Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-6 md:gap-6 lg:gap-8 mb-8 sm:mb-12">
               {/* Card 1: A Complete System */}
-              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-5 lg:px-10 lg:py-6 text-center flex flex-col">
-                <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4">
+              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-3 lg:px-10 lg:py-3 text-center flex flex-col">
+                <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4 md:mb-2">
                   <svg className="w-5 h-5 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clipRule="evenodd" />
                     <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
                   </svg>
                 </div>
-                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4 text-center md:h-16 lg:h-20 flex items-center justify-center">A Complete System</h3>
-                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed text-center flex-grow md:mb-4 lg:mb-6">You benefit from flexible payment terms, purchase orders, and VAT invoicing. Block-book Monday to Friday, book long-term, manage multiple locations. Extend or amend easily when plans change. One dashboard manages everything.</p>
+                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-1 text-center flex items-center justify-center">A Complete System</h3>
+                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight md:leading-tight text-center flex-grow md:mb-2 lg:mb-2">You benefit from flexible payment terms, purchase orders, and VAT invoicing. Block-book Monday to Friday, book long-term, manage multiple locations. Extend or amend easily when plans change. One dashboard manages everything.</p>
               </div>
 
               {/* Card 2: Not Just a Platform */}
-              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-5 lg:px-10 lg:py-6 text-center flex flex-col">
-                <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4">
+              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-3 lg:px-10 lg:py-3 text-center flex flex-col">
+                <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4 md:mb-2">
                   <svg className="w-5 h-5 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
                   </svg>
                 </div>
-                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4 text-center md:h-16 lg:h-20 flex items-center justify-center">Not Just a Platform</h3>
-                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed text-center flex-grow md:mb-4 lg:mb-6">Book on the platform or hand your accommodation problems to us. Our team sources properties not listed anywhere else, handles everything, and provides dedicated support. We become your outsourced accommodation service.</p>
+                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-1 text-center flex items-center justify-center">Not Just a Platform</h3>
+                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight md:leading-tight text-center flex-grow md:mb-2 lg:mb-2">Book on the platform or hand your accommodation problems to us. Our team sources properties not listed anywhere else, handles everything, and provides dedicated support. We become your outsourced accommodation service.</p>
               </div>
 
               {/* Card 3: Professional Partners */}
-              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-5 lg:px-10 lg:py-6 text-center flex flex-col">
-                <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4">
+              <div className="bg-white border border-gray-200 rounded-lg shadow-lg p-4 sm:p-6 md:px-8 md:py-3 lg:px-10 lg:py-3 text-center flex flex-col">
+                <div className="w-8 h-8 sm:w-16 sm:h-16 bg-[#00BAB5] rounded-lg flex items-center justify-center mx-auto mb-2 sm:mb-4 md:mb-2">
                   <svg className="w-5 h-5 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                 </div>
-                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-4 text-center md:h-16 lg:h-20 flex items-center justify-center">Professional Partners</h3>
-                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight sm:leading-relaxed text-center flex-grow md:mb-4 lg:mb-6">You get compliant serviced accommodation from professional partners across the UK. Pre-vetted properties managed by professionals who understand your business requirements, not leisure bookings.</p>
+                <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-base sm:text-lg md:text-2xl lg:text-3xl text-[#0B1D37] mb-2 sm:mb-3 md:mb-1 text-center flex items-center justify-center">Professional Partners</h3>
+                <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-sm sm:text-sm md:text-xl lg:text-2xl text-[#4B4E53] leading-tight md:leading-tight text-center flex-grow md:mb-2 lg:mb-2">You get compliant serviced accommodation from professional partners across the UK. Pre-vetted properties managed by professionals who understand your business requirements, not leisure bookings.</p>
               </div>
             </div>
 

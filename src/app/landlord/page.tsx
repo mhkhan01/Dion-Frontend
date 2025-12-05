@@ -1363,7 +1363,7 @@ export default function PartnerDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+    <div className="h-screen bg-gray-50 flex flex-col lg:flex-row overflow-hidden">
       {/* Mobile Header */}
       <div className="lg:hidden bg-booking-dark text-white p-4 flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -1499,7 +1499,7 @@ export default function PartnerDashboard() {
       )}
 
       {/* Desktop Sidebar */}
-      <div className="hidden lg:flex w-64 bg-booking-dark text-white flex-col min-h-screen">
+      <div className="hidden lg:flex w-64 bg-booking-dark text-white flex-col h-screen flex-shrink-0 overflow-y-auto">
         {/* Logo/Header */}
         <div className="p-6 bg-booking-dark">
           <div className="flex flex-col items-center space-y-2 py-2">
@@ -1597,7 +1597,7 @@ export default function PartnerDashboard() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-4 lg:p-8 overflow-x-hidden">
+      <div className="flex-1 p-4 lg:p-8 overflow-y-auto overflow-x-hidden">
         {renderMainContent()}
       </div>
 

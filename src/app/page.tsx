@@ -1364,7 +1364,7 @@ export default function HomePage() {
             <footer className="bg-[#0B1D37] py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 lg:px-12 overflow-visible">
               <div className="w-full flex justify-center overflow-visible">
                 <div className="w-full max-w-7xl overflow-visible">
-                <div className="grid gap-2 sm:gap-8 md:gap-12 mb-6 sm:mb-8 overflow-visible" style={{gridTemplateColumns: isMobile ? '1fr 1.2fr 0.8fr' : '1fr 1fr 1fr'}}>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 md:gap-12 mb-6 sm:mb-8 overflow-visible">
                   {/* Branding Section */}
                   <div className="space-y-4 sm:space-y-6 overflow-visible">
                     {/* Logo */}
@@ -1373,13 +1373,13 @@ export default function HomePage() {
                     </div>
                     
                     {/* Description */}
-                    <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-lg lg:text-xl leading-relaxed">
+                    <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-sm sm:text-sm md:text-lg lg:text-xl leading-snug sm:leading-relaxed">
                       A trading name of Dion Wright Property Ltd.<br />
                       Registered in England & Wales No. 15312220.
                     </p>
                     
-                    {/* Social Media Icons */}
-                    <div className="flex space-x-3 sm:space-x-4">
+                    {/* Social Media Icons - Hidden on mobile, visible on larger screens */}
+                    <div className="hidden sm:flex space-x-3 sm:space-x-4">
                       <a href="#" className="w-7 h-7 sm:w-8 sm:h-8 bg-[#00BAB5] rounded-full flex items-center justify-center hover:bg-[#00A5A0] transition-colors">
                         <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -1394,20 +1394,20 @@ export default function HomePage() {
                   </div>
 
                   {/* Quick Links Section */}
-                  <div className="space-y-4 sm:space-y-6">
-                    <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-white text-xs sm:text-lg md:text-xl lg:text-2xl">Quick Links</h3>
+                  <div className="space-y-2 sm:space-y-6">
+                    <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-white text-base sm:text-lg md:text-xl lg:text-2xl">Quick Links</h3>
                     <ul className="space-y-0 sm:space-y-3">
-                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal">Home</a></li>
-                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal">How We Help You</a></li>
-                      <li><a href="/booking-request" onClick={(e) => { e.preventDefault(); window.location.href = '/booking-request'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal">Book Accommodation</a></li>
-                      <li><a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal">Become a Partner</a></li>
-                      <li><a href="/contact" onClick={(e) => { e.preventDefault(); window.location.href = '/contact'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-[11px] sm:text-base md:text-lg lg:text-xl leading-tight sm:leading-normal">Contact Us</a></li>
+                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-sm sm:text-base md:text-lg lg:text-xl leading-none sm:leading-normal">Home</a></li>
+                      <li><a href="#" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-sm sm:text-base md:text-lg lg:text-xl leading-none sm:leading-normal">How We Help You</a></li>
+                      <li><a href="/booking-request" onClick={(e) => { e.preventDefault(); window.location.href = '/booking-request'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-sm sm:text-base md:text-lg lg:text-xl leading-none sm:leading-normal">Book Accommodation</a></li>
+                      <li><a href="/auth/signup/partner" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-sm sm:text-base md:text-lg lg:text-xl leading-none sm:leading-normal">Become a Partner</a></li>
+                      <li><a href="/contact" onClick={(e) => { e.preventDefault(); window.location.href = '/contact'; }} style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 hover:text-[#00BAB5] transition-colors text-sm sm:text-base md:text-lg lg:text-xl leading-none sm:leading-normal">Contact Us</a></li>
                     </ul>
                   </div>
 
                   {/* Contact Info Section */}
-                  <div className="space-y-4 sm:space-y-6 -ml-8 sm:ml-0">
-                    <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-white text-xs sm:text-lg md:text-xl lg:text-2xl">Contact Info</h3>
+                  <div className="space-y-2 sm:space-y-6">
+                    <h3 style={{ fontFamily: 'var(--font-avenir)', fontWeight: 700 }} className="text-white text-base sm:text-lg md:text-xl lg:text-2xl">Contact Info</h3>
                     <div className="space-y-3 sm:space-y-4">
                       {/* Email */}
                       <div className="flex items-center space-x-2 sm:space-x-3">
@@ -1415,7 +1415,7 @@ export default function HomePage() {
                           <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
                           <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
                         </svg>
-                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-lg lg:text-xl">info@booking-hub.co.uk</div>
+                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-sm sm:text-sm md:text-lg lg:text-xl leading-none sm:leading-normal">info@booking-hub.co.uk</div>
                       </div>
 
                       {/* Phone */}
@@ -1423,7 +1423,7 @@ export default function HomePage() {
                         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#00BAB5] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
                         </svg>
-                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-lg lg:text-xl">0330 043 7522</div>
+                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-sm sm:text-sm md:text-lg lg:text-xl leading-none sm:leading-normal">0330 043 7522</div>
                       </div>
 
                       {/* Address */}
@@ -1431,8 +1431,22 @@ export default function HomePage() {
                         <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#00BAB5] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
                         </svg>
-                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-lg lg:text-xl">SA12 Business Centre, Seaway Parade, Baglan Energy Park, Port Talbot SA12 7BR</div>
+                        <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-sm sm:text-sm md:text-lg lg:text-xl leading-snug sm:leading-normal">SA12 Business Centre, Seaway Parade, Baglan Energy Park, Port Talbot SA12 7BR</div>
                       </div>
+                    </div>
+
+                    {/* Social Media Icons - Visible on mobile only, hidden on larger screens */}
+                    <div className="flex sm:hidden space-x-3 mt-4">
+                      <a href="#" className="w-7 h-7 bg-[#00BAB5] rounded-full flex items-center justify-center hover:bg-[#00A5A0] transition-colors">
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                      </a>
+                      <a href="#" className="w-7 h-7 bg-[#00BAB5] rounded-full flex items-center justify-center hover:bg-[#00A5A0] transition-colors">
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -1441,7 +1455,7 @@ export default function HomePage() {
                 <div className="border-t border-gray-700 pt-4 sm:pt-6 md:pt-8">
                   <div className="flex flex-row justify-between items-center">
                     <div className="flex flex-row space-x-6 md:space-x-8">
-                      <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-[11px] sm:text-sm md:text-lg lg:text-xl leading-tight sm:leading-normal">
+                      <span style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-300 text-sm sm:text-sm md:text-lg lg:text-xl leading-none sm:leading-normal">
                         <a href="/privacy-policy" className="hover:text-[#00BAB5] transition-colors">Privacy Policy</a>
                         <span className="mx-0.5 sm:mx-2">|</span>
                         <a href="/terms-and-conditions" className="hover:text-[#00BAB5] transition-colors">Terms & Conditions</a>
@@ -1449,7 +1463,7 @@ export default function HomePage() {
                         <a href="#" className="hover:text-[#00BAB5] transition-colors">Cookie Notice</a>
                       </span>
                     </div>
-                    <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-400 text-[11px] sm:text-sm md:text-lg lg:text-xl text-right">
+                    <div style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-gray-400 text-sm sm:text-sm md:text-lg lg:text-xl text-right leading-none sm:leading-normal">
                       © 2025 Booking Hub. All rights reserved.
                     </div>
                   </div>

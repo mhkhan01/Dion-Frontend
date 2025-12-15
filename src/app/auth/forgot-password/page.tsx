@@ -1,0 +1,133 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
+import { supabase } from '@/lib/supabase';
+
+export default function ForgotPasswordPage() {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setMessage('');
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/reset-password`,
+      });
+
+      if (error) {
+        setError(error.message);
+      } else {
+        setMessage('Password reset email sent! Please check your inbox.');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen relative overflow-hidden" style={{
+      backgroundImage: 'url(/360_F_281897358_3rj9ZBSZHo5s0L1ug7uuIHadSxh9Cc75.webp)',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }}>
+      {/* Background Image Opacity Overlay */}
+      <div className="absolute inset-0 bg-white/30 pointer-events-none"></div>
+
+      {/* Main content */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen py-4 px-2 sm:py-8 sm:px-4 pb-12 sm:pb-16">
+        {/* Logo */}
+        <div className="mb-4 sm:mb-8 w-full max-w-xs sm:max-w-2xl py-2">
+          <Image
+            src="/blue-teal.webp"
+            alt="Booking Hub Logo"
+            width={800}
+            height={200}
+            className="w-full h-auto object-contain"
+            style={{ maxWidth: '100%' }}
+            priority
+          />
+        </div>
+
+        {/* Form Container */}
+        <div className="bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-4 sm:p-6 lg:p-8 w-full max-w-sm sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200">
+          {/* Form Title */}
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-6 sm:mb-8 text-center leading-tight">
+            Reset Your Password
+          </h1>
+
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+            {error && (
+              <div className="rounded-xl bg-red-50 border border-red-200 p-4">
+                <div className="text-sm text-red-800">{error}</div>
+              </div>
+            )}
+
+            {message && (
+              <div className="rounded-xl bg-green-50 border border-green-200 p-4">
+                <div className="text-sm text-green-800">{message}</div>
+              </div>
+            )}
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-booking-dark mb-2">
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email address"
+                required
+                className="w-full px-4 py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+              />
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-booking-teal text-white font-bold py-4 px-6 rounded hover:bg-opacity-90 transition-all duration-200 text-lg"
+              >
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Sending Reset Email...
+                  </div>
+                ) : (
+                  'Send Reset Email'
+                )}
+              </button>
+            </div>
+
+            <div className="text-center">
+              <p className="text-sm text-booking-gray">
+                Remember your password?{' '}
+                <Link 
+                  href="/auth/login" 
+                  onClick={(e) => { e.preventDefault(); window.location.href = '/auth/login'; }}
+                  className="text-booking-teal hover:text-booking-dark font-medium"
+                >
+                  Sign in here
+                </Link>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}

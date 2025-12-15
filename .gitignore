@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# build outputs
+.next/
+dist/
+build/
+
+# env files
+.env
+.env.local
+env.example
+# misc
+.DS_Store
+
+# PWA files
+**/public/sw.js
+**/public/workbox-*.js
+**/public/worker-*.js
+**/public/sw.js.map
+**/public/workbox-*.js.map
+**/public/worker-*.js.map

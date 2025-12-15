@@ -1,0 +1,740 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabase';
+
+interface Booking {
+  id: string;
+  startDate: string;
+  endDate: string;
+}
+
+export default function BookingRequestPage() {
+  const router = useRouter();
+  const [budgetDropdownOpen, setBudgetDropdownOpen] = useState(false);
+  const [selectedBudgetOption, setSelectedBudgetOption] = useState<string>('');
+  const [bookings, setBookings] = useState<Booking[]>([
+    { id: '1', startDate: '', endDate: '' }
+  ]);
+  const [showThankYou, setShowThankYou] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    companyName: '',
+    email: '',
+    phone: ''
+  });
+
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear email error when user changes email
+    if (name === 'email' && emailError) {
+      setEmailError(null);
+    }
+  };
+
+  const addBooking = () => {
+    console.log('Adding new booking...');
+    const newBooking: Booking = {
+      id: `new-${Date.now()}`,
+      startDate: '',
+      endDate: ''
+    };
+    setBookings(prev => {
+      console.log('Current bookings:', prev);
+      const updated = [...prev, newBooking];
+      console.log('Updated bookings:', updated);
+      return updated;
+    });
+  };
+
+  const removeBooking = (id: string) => {
+    if (bookings.length > 1) {
+      setBookings(prev => prev.filter(booking => booking.id !== id));
+    }
+  };
+
+  const updateBooking = (id: string, field: 'startDate' | 'endDate', value: string) => {
+    setBookings(prev => prev.map(booking => 
+      booking.id === id ? { ...booking, [field]: value } : booking
+    ));
+  };
+
+  const selectBudgetOption = (label: string) => {
+    setSelectedBudgetOption(label);
+    setBudgetDropdownOpen(false);
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setEmailError(null); // Reset error
+    setShowThankYou(false); // Reset thank you message
+    setIsSubmitting(true); // Start loading
+    const formData = new FormData(e.currentTarget);
+    const formObject = Object.fromEntries(formData.entries());
+    
+    // Normalize email to lowercase for case-insensitive comparison
+    const enteredEmail = (formObject.email as string) || '';
+    const normalizedEmail = enteredEmail.toLowerCase().trim();
+    
+    if (!normalizedEmail) {
+      setEmailError("Please enter a valid email address.");
+      setIsSubmitting(false);
+      return;
+    }
+    
+    // FIRST: Validate email doesn't exist in contractor or landlord tables (case-insensitive)
+    let emailExists = false;
+    
+    try {
+      // Check if email exists in contractor table (case-insensitive)
+      const { data: contractors, error: contractorCheckError } = await supabase
+        .from('contractor')
+        .select('id, email');
+
+      if (contractorCheckError) {
+        console.error('Error checking contractor table:', contractorCheckError);
+        // If we can't check, block submission to be safe
+        setEmailError("This email is already in use, Try a different email.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (contractors && Array.isArray(contractors)) {
+        const existingContractor = contractors.find(
+          (c) => {
+            if (!c || !c.email) return false;
+            const dbEmail = String(c.email).toLowerCase().trim();
+            return dbEmail === normalizedEmail;
+          }
+        );
+        if (existingContractor) {
+          emailExists = true;
+        }
+      }
+
+      // Check if email exists in landlord table (case-insensitive)
+      const { data: landlords, error: landlordCheckError } = await supabase
+        .from('landlord')
+        .select('id, email');
+
+      if (landlordCheckError) {
+        console.error('Error checking landlord table:', landlordCheckError);
+        // If we can't check, block submission to be safe
+        setEmailError("This email is already in use, Try a different email.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (landlords && Array.isArray(landlords)) {
+        const existingLandlord = landlords.find(
+          (l) => {
+            if (!l || !l.email) return false;
+            const dbEmail = String(l.email).toLowerCase().trim();
+            return dbEmail === normalizedEmail;
+          }
+        );
+        if (existingLandlord) {
+          emailExists = true;
+        }
+      }
+
+      // If email exists in either table, block submission
+      if (emailExists) {
+        setEmailError("This email is already in use, Try a different email.");
+        setIsSubmitting(false);
+        return;
+      }
+    } catch (emailCheckError) {
+      console.error('Email validation check failed:', emailCheckError);
+      setEmailError("This email is already in use, Try a different email.");
+      setIsSubmitting(false);
+      return;
+    }
+    
+    // Validate password confirmation
+    if (formObject.password !== formObject.confirmPassword) {
+      alert('Passwords do not match. Please try again.');
+      setIsSubmitting(false);
+      return;
+    }
+    
+    // Prepare booking dates from the bookings state
+    const bookingDates = bookings
+      .filter(booking => booking.startDate && booking.endDate)
+      .map(booking => ({
+        startDate: booking.startDate,
+        endDate: booking.endDate
+      }));
+
+    try {
+      // Call backend API endpoint
+      const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
+      const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/booking-requests`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: formObject.name,
+          companyName: formObject.companyName,
+          email: normalizedEmail,
+          phone: formObject.phone,
+          projectPostcode: formObject.projectPostcode,
+          password: formObject.password,
+          bookings: bookingDates,
+          teamSize: formObject.teamSize ? parseInt(formObject.teamSize as string) : null,
+          budgetPerPerson: selectedBudgetOption,
+          city: formObject.city
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        
+        // Show success message
+        setShowThankYou(true);
+        
+        // Reset form
+        (e.target as HTMLFormElement).reset();
+        setBookings([{ id: '1', startDate: '', endDate: '' }]);
+        setSelectedBudgetOption('');
+        setIsSubmitting(false);
+      } else {
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch (parseError) {
+          console.error('Error parsing response:', parseError);
+          setEmailError("This email is already in use, Try a different email.");
+          setIsSubmitting(false);
+          return;
+        }
+        
+        const errorMessage = errorData.error || 'Failed to submit booking request';
+        
+        // Check if error is related to duplicate email (from backend validation or database constraint)
+        if (errorMessage.includes('This email is already in use') || 
+            errorMessage.includes('duplicate') || 
+            errorMessage.includes('email') || 
+            errorMessage.includes('unique constraint') ||
+            errorMessage.includes('already exists')) {
+          setEmailError("This email is already in use, Try a different email.");
+        } else {
+          setEmailError(errorMessage);
+        }
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      console.error('Error submitting booking request:', error);
+      setEmailError("This email is already in use, Try a different email.");
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleProceed = (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    setShowModal(false);
+  };
+
+  const handleSignIn = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    router.push('/auth/login?type=client');
+  };
+
+  return (
+    <>
+      <div className="min-h-screen relative overflow-hidden" style={{
+        backgroundImage: 'url(/Swansea%20-%201.webp)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}>
+        {/* Background Image Opacity Overlay */}
+        <div className="absolute inset-0 bg-[rgba(11,29,52,0.88)] pointer-events-none"></div>
+
+        {/* Back Button */}
+        <Link 
+          href="/" 
+          onClick={(e) => { e.preventDefault(); window.location.href = '/'; }}
+          className="absolute top-4 left-4 z-20 flex items-center justify-center bg-booking-teal text-white rounded-full sm:rounded-lg w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-lg"
+          aria-label="Back to home"
+          style={{ fontFamily: 'var(--font-avenir-regular)' }}
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            className="h-5 w-5" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span className="hidden sm:inline text-sm sm:text-base">Back to Home</span>
+        </Link>
+
+        {/* Main Content */}
+        <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-2 sm:px-4 pb-12 sm:pb-16 -mt-12 sm:-mt-16">
+          {/* Logo on Background */}
+          <div className="flex justify-center -mb-12 sm:-mb-16 lg:-mb-20">
+            <Image
+              src="/white-teal.webp"
+              alt="Logo"
+              width={300}
+              height={300}
+              className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 object-contain drop-shadow-2xl"
+              priority
+            />
+          </div>
+
+          <div className={`bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200 transition-all duration-300 ${showModal ? 'blur-sm' : ''}`}>
+            {/* Form Title */}
+            <h1 className="text-base sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-1 sm:mb-2 text-center leading-tight" style={{ fontFamily: 'var(--font-avenir-bold)' }}>
+              Request Accommodation
+            </h1>
+            <p className="text-xs sm:text-xl text-booking-gray mb-2 sm:mb-6 text-center leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+              Submit your requirements and we'll handle the rest
+            </p>
+
+            <form className="space-y-2 sm:space-y-6" onSubmit={handleFormSubmit}>
+              {/* Line 1: Where do you need accommodation? + Postcode */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                <div>
+                  <label htmlFor="city" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    Where do you need accommodation?
+                  </label>
+                  <input
+                    type="text"
+                    id="city"
+                    name="city"
+                    placeholder="e.g. London"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="projectPostcode" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    Accommodation Postcode
+                  </label>
+                  <input
+                    type="text"
+                    id="projectPostcode"
+                    name="projectPostcode"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                    placeholder="Enter postcode"
+                  />
+                </div>
+              </div>
+
+              {/* Line 2: Booking dates */}
+              <div>
+                <div className="mb-0.5 sm:mb-2">
+                  <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    Booking Dates
+                  </label>
+                </div>
+                {bookings.map((booking, index) => (
+                  <div key={booking.id} className="mb-1 sm:mb-2">
+                    <div className="flex justify-end items-center mb-0.5 sm:mb-1">
+                      {bookings.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeBooking(booking.id)}
+                          className="text-red-500 hover:text-red-700 text-xs sm:text-sm"
+                          style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                      <div>
+                        <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                          Start Date
+                        </label>
+                        <input
+                          type="date"
+                          value={booking.startDate}
+                          onChange={(e) => updateBooking(booking.id, 'startDate', e.target.value)}
+                          className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                          End Date
+                        </label>
+                        <input
+                          type="date"
+                          value={booking.endDate}
+                          onChange={(e) => updateBooking(booking.id, 'endDate', e.target.value)}
+                          className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <div className="mt-3">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      console.log('Button clicked!');
+                      addBooking();
+                    }}
+                    className="w-full sm:w-auto bg-booking-teal text-white px-4 py-2 rounded-md hover:bg-booking-dark transition-colors duration-200 text-xs sm:text-sm font-medium"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                  >
+                    + Add Booking
+                  </button>
+                </div>
+              </div>
+
+              {/* Line 3: How many people + Nightly Budget */}
+              <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                <div>
+                  <label htmlFor="teamSize" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    How many people?
+                  </label>
+                  <input
+                    type="number"
+                    id="teamSize"
+                    name="teamSize"
+                    min="1"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Number of people"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="budgetPerPerson" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    Nightly budget
+                  </label>
+                  <input
+                    type="number"
+                    id="budgetPerPerson"
+                    name="budgetPerPerson"
+                    value={selectedBudgetOption}
+                    onChange={(e) => setSelectedBudgetOption(e.target.value)}
+                    min="0"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Enter budget"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                  />
+                </div>
+              </div>
+
+              {/* Line 4: Name + Company Name */}
+              <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                <div>
+                  <label htmlFor="name" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Full name"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="companyName" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    Company Name *
+                  </label>
+                  <input
+                    type="text"
+                    id="companyName"
+                    name="companyName"
+                    value={formData.companyName}
+                    onChange={handleInputChange}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Company name"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Line 5: Company Email + Phone */}
+              <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                <div>
+                  <label htmlFor="email" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    Company Email *
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="email@company.com"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    Phone *
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="Phone number"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Line 6: Password + Confirm Password */}
+              <div className="grid grid-cols-2 gap-2 sm:gap-4">
+                <div>
+                  <label htmlFor="password" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    Password *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      name="password"
+                      className="w-full px-3 pr-10 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                      placeholder="Create a password"
+                      style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="confirmPassword" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                    Confirm Password *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      className="w-full px-3 pr-10 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                      placeholder="Confirm password"
+                      style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                      aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                    >
+                      {showConfirmPassword ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thank You Message */}
+              {showThankYou && (
+                <div className="pt-2 sm:pt-4">
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+                    <p className="text-green-800 text-xs sm:text-base font-medium" style={{ fontFamily: 'var(--font-avenir-regular)' }}>
+                      Thanks — your request has been received. And your client account has been created.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Terms and Conditions */}
+              <div className="pt-1 sm:pt-2">
+                <p className="text-xs sm:text-lg text-booking-gray text-center leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                  By submitting, you agree to our{' '}
+                  <a 
+                    href="/terms" 
+                    onClick={(e) => { e.preventDefault(); window.location.href = '/terms'; }}
+                    className="text-booking-teal hover:text-booking-dark underline font-medium"
+                  >
+                    Client Terms & Conditions
+                  </a>
+                  .
+                </p>
+              </div>
+
+              {/* Email validation error message - above submit button */}
+              {emailError && (
+                <div className="pt-2 sm:pt-4">
+                  <div className="rounded-xl bg-red-50 border border-red-200 p-3 sm:p-4">
+                    <div className="text-xs sm:text-sm text-red-800 text-center" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{emailError}</div>
+                  </div>
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <div className="pt-2 sm:pt-4">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-booking-teal text-white py-[0.6rem] sm:py-4 px-6 rounded-lg font-semibold text-xs sm:text-base hover:bg-booking-dark transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
+                  style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Submitting...
+                    </>
+                  ) : (
+                    'Submit Booking Request'
+                  )}
+                </button>
+              </div>
+
+              {/* Sign In Link */}
+              <div className="pt-2 sm:pt-4">
+                <p className="text-xs sm:text-lg text-booking-gray text-center leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                  Already have an account?{' '}
+                  <a 
+                    href="/auth/login?type=client" 
+                    onClick={(e) => { e.preventDefault(); window.location.href = '/auth/login?type=client'; }}
+                    className="text-booking-teal hover:text-booking-dark underline font-medium"
+                  >
+                    Sign in here
+                  </a>
+                </p>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Modal Overlay */}
+        {showModal && (
+          <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4"
+            onClick={handleProceed}
+          >
+            <div 
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-md sm:max-w-3xl p-6 sm:p-8 relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close Button */}
+              <button
+                onClick={handleProceed}
+                type="button"
+                className="absolute top-4 right-4 p-1 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Close"
+              >
+                <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              
+              {/* Header with Logo */}
+              <div className="flex items-center justify-center mb-6">
+                <Image
+                  src="/blue-teal.webp"
+                  alt="Booking Hub Logo"
+                  width={200}
+                  height={50}
+                  className="h-8 sm:h-12 w-auto object-contain"
+                  style={{ maxWidth: '100%' }}
+                />
+              </div>
+
+              {/* Modal Content */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                {/* Option 1: Already a user */}
+                <div className="flex flex-col justify-between">
+                  <p 
+                    className="text-base sm:text-lg text-[#0B1D37] text-center leading-relaxed mb-3"
+                    style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                  >
+                    Already a user? Sign in to your account to <br />request a booking
+                  </p>
+                  <button
+                    onClick={handleSignIn}
+                    type="button"
+                    className="w-full bg-[#00BAB5] text-white px-6 py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#009a96] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#00BAB5] focus:ring-offset-2"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                  >
+                    Sign in
+                  </button>
+                </div>
+
+                {/* Option 2: New User */}
+                <div className="flex flex-col justify-between">
+                  <p 
+                    className="text-base sm:text-lg text-[#0B1D37] text-center leading-relaxed mb-4"
+                    style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}
+                  >
+                    Requesting a booking as a New User?
+                  </p>
+                  <button
+                    onClick={handleProceed}
+                    type="button"
+                    className="w-full bg-[#E9ECEF] text-[#0B1D37] px-6 py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-[#dee2e6] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#0B1D37] focus:ring-offset-2 border-2 border-[#0B1D37]"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                  >
+                    Proceed
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
+}

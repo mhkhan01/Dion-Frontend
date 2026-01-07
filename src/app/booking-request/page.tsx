@@ -25,6 +25,7 @@ export default function BookingRequestPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [passwordValue, setPasswordValue] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     companyName: '',
@@ -164,6 +165,21 @@ export default function BookingRequestPage() {
       return;
     }
     
+    // Validate password strength
+    const password = formObject.password as string;
+    const passwordErrors: string[] = [];
+    if (password.length < 8) passwordErrors.push('at least 8 characters');
+    if (!/[A-Z]/.test(password)) passwordErrors.push('an uppercase letter');
+    if (!/[a-z]/.test(password)) passwordErrors.push('a lowercase letter');
+    if (!/[0-9]/.test(password)) passwordErrors.push('a number');
+    if (!/[^A-Za-z0-9]/.test(password)) passwordErrors.push('a special character');
+    
+    if (passwordErrors.length > 0) {
+      alert(`Password must contain ${passwordErrors.join(', ')}.`);
+      setIsSubmitting(false);
+      return;
+    }
+    
     // Validate password confirmation
     if (formObject.password !== formObject.confirmPassword) {
       alert('Passwords do not match. Please try again.');
@@ -211,6 +227,7 @@ export default function BookingRequestPage() {
         (e.target as HTMLFormElement).reset();
         setBookings([{ id: '1', startDate: '', endDate: '' }]);
         setSelectedBudgetOption('');
+        setPasswordValue('');
         setIsSubmitting(false);
       } else {
         let errorData;
@@ -526,6 +543,8 @@ export default function BookingRequestPage() {
                       type={showPassword ? "text" : "password"}
                       id="password"
                       name="password"
+                      value={passwordValue}
+                      onChange={(e) => setPasswordValue(e.target.value)}
                       className="w-full px-3 pr-10 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                       placeholder="Create a password"
                       style={{ fontFamily: 'var(--font-avenir-regular)' }}
@@ -581,6 +600,92 @@ export default function BookingRequestPage() {
                         </svg>
                       )}
                     </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Password Criteria Checklist */}
+              <div className="mt-2 p-2.5 sm:p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <p className="text-[10px] sm:text-xs text-gray-600 mb-1.5 sm:mb-2 font-medium" style={{ fontFamily: 'var(--font-avenir-regular)' }}>Password must contain:</p>
+                <div className="grid grid-cols-2 gap-x-2 gap-y-1 sm:gap-y-1.5">
+                  {/* 8+ characters */}
+                  <div className="flex items-center gap-1.5">
+                    <span className={`flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center transition-colors duration-200 ${passwordValue.length >= 8 ? 'bg-green-500' : 'bg-gray-300'}`}>
+                      {passwordValue.length >= 8 ? (
+                        <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></span>
+                      )}
+                    </span>
+                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${passwordValue.length >= 8 ? 'text-green-700 font-medium' : 'text-gray-500'}`} style={{ fontFamily: 'var(--font-avenir-regular)' }}>
+                      8+ characters
+                    </span>
+                  </div>
+                  
+                  {/* Uppercase letter */}
+                  <div className="flex items-center gap-1.5">
+                    <span className={`flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center transition-colors duration-200 ${/[A-Z]/.test(passwordValue) ? 'bg-green-500' : 'bg-gray-300'}`}>
+                      {/[A-Z]/.test(passwordValue) ? (
+                        <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></span>
+                      )}
+                    </span>
+                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[A-Z]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`} style={{ fontFamily: 'var(--font-avenir-regular)' }}>
+                      Uppercase letter
+                    </span>
+                  </div>
+                  
+                  {/* Lowercase letter */}
+                  <div className="flex items-center gap-1.5">
+                    <span className={`flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center transition-colors duration-200 ${/[a-z]/.test(passwordValue) ? 'bg-green-500' : 'bg-gray-300'}`}>
+                      {/[a-z]/.test(passwordValue) ? (
+                        <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></span>
+                      )}
+                    </span>
+                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[a-z]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`} style={{ fontFamily: 'var(--font-avenir-regular)' }}>
+                      Lowercase letter
+                    </span>
+                  </div>
+                  
+                  {/* Number */}
+                  <div className="flex items-center gap-1.5">
+                    <span className={`flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center transition-colors duration-200 ${/[0-9]/.test(passwordValue) ? 'bg-green-500' : 'bg-gray-300'}`}>
+                      {/[0-9]/.test(passwordValue) ? (
+                        <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></span>
+                      )}
+                    </span>
+                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[0-9]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`} style={{ fontFamily: 'var(--font-avenir-regular)' }}>
+                      Number
+                    </span>
+                  </div>
+                  
+                  {/* Special character */}
+                  <div className="flex items-center gap-1.5 col-span-2">
+                    <span className={`flex-shrink-0 w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full flex items-center justify-center transition-colors duration-200 ${/[^A-Za-z0-9]/.test(passwordValue) ? 'bg-green-500' : 'bg-gray-300'}`}>
+                      {/[^A-Za-z0-9]/.test(passwordValue) ? (
+                        <svg className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></span>
+                      )}
+                    </span>
+                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[^A-Za-z0-9]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`} style={{ fontFamily: 'var(--font-avenir-regular)' }}>
+                      Special character (!@#$%^&*)
+                    </span>
                   </div>
                 </div>
               </div>

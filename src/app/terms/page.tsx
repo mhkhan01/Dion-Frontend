@@ -218,7 +218,7 @@ export default function TermsPage() {
             </div>
             <div className="text-[#4B4E53] leading-tight sm:leading-relaxed">
               <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="mb-2 sm:mb-4 text-xs sm:text-base">
-                Booking Hub is a trading name of Dion Wright Property Ltd, a company incorporated and registered in England and Wales with Company Number 15312220, whose registered office is at SA12 Business Centre, Seaway Parade, Baglan Energy Park, Port Talbot SA12 7BR (We, Us or Our). We operate the website www.booking-hub.co.uk (the Website). To contact Us, telephone our customer service team on 0330 043 7522 or email Us at info@booking-hub.co.uk.
+                Booking Hub is a trading name of Dion Wright Property Ltd, a company incorporated and registered in England and Wales with Company Number 15312220, whose registered office is at SA12 Business Centre, Seaway Parade, Baglan Energy Park, Port Talbot SA12 7BR (We, Us or Our). We operate the website app.booking-hub.co.uk (the Website). To contact Us, telephone our customer service team on 0330 043 7522 or email Us at info@booking-hub.co.uk.
               </p>
               <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base">
                 You, the Client (as set out in Your booking), wish to make a booking with an accommodation provider introduced by Us (Property Partner) for the provision of temporary serviced accommodation. In making this booking for You, We are acting as a disclosed agent on behalf of the Property Partner.
@@ -495,7 +495,7 @@ export default function TermsPage() {
                 Refund Terms: Where a refund is applicable under the Property Partner's cancellation policy, You must have paid upfront in full. The refund amount will be determined by the Property Partner's cancellation terms. Funds are held securely by our payment processor and released to the Property Partner 24 hours after check-in when everything is confirmed as satisfactory.
               </p>
               <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="mb-2 sm:mb-4 text-xs sm:text-base">
-                All cancellations will need to be requested by You to us on email/phone and/or then confirmed on our Website (www.booking-hub.co.uk and any other domain name used by Us for the promotion of Our business, including any mobile application or alternative owned listing formats made available by Us). No other cancellation requests shall be accepted by Us.
+                All cancellations will need to be requested by You to us on email/phone and/or then confirmed on our Website (app.booking-hub.co.uk and any other domain name used by Us for the promotion of Our business, including any mobile application or alternative owned listing formats made available by Us). No other cancellation requests shall be accepted by Us.
               </p>
               <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="mb-2 sm:mb-4 text-xs sm:text-base">
                 Once We receive a cancellation request from You, We will email relevant details of the cancellation to You such as any cancellation fees due. The cancellation will only be effective once You confirm acceptance of this email and eSign through our portal.
@@ -589,7 +589,7 @@ export default function TermsPage() {
             </div>
             <div className="text-[#4B4E53] leading-tight sm:leading-relaxed">
               <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="mb-2 sm:mb-4 text-xs sm:text-base">
-                We take no responsibility for false or misleading advertising by the Property Partner and other third party content on our Website (www.booking-hub.co.uk, and any other domain name used by Us for the promotion of Our business, including any mobile application or alternative owned listing formats made available by Us). In instances relating to bookings, all information held on the accommodation is visible to You in advance of booking and as such sold with visibility.
+                We take no responsibility for false or misleading advertising by the Property Partner and other third party content on our Website (app.booking-hub.co.uk, and any other domain name used by Us for the promotion of Our business, including any mobile application or alternative owned listing formats made available by Us). In instances relating to bookings, all information held on the accommodation is visible to You in advance of booking and as such sold with visibility.
               </p>
               <p style={{ fontFamily: 'var(--font-avenir)', fontWeight: 400 }} className="text-xs sm:text-base">
                 We will use all reasonable endeavours to ensure that We will not host any unlawful information and We will act expeditiously to remove or disable any such information upon becoming aware of the same. We take no responsibility for false or misleading third party data regarding the geographical location and the distances to and from the accommodation. It is Your responsibility to conduct Your own due diligence in relation to the location of the accommodation and the safety and security of its surrounding area, and the available travel routes and travel links.

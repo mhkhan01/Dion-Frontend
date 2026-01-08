@@ -106,7 +106,36 @@ function LoginContent() {
               setError('This email does not have a client account. Please sign up as a client or try logging in as a partner.');
               return;
             }
-            // User exists in contractor table, redirect to contractor dashboard
+            
+            // Check if contractor is active via backend API
+            try {
+              const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000/api';
+              const activeCheckResponse = await fetch(`${backendUrl}/client-login-check`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: authUser.id }),
+              });
+              
+              const activeCheckData = await activeCheckResponse.json();
+              
+              if (activeCheckData.success && activeCheckData.isActive === false) {
+                // Contractor is inactive, sign them out and show error
+                await supabase.auth.signOut();
+                setError('Your account is inactive. Ask the admin to activate it.');
+                return;
+              }
+            } catch (activeCheckError) {
+              console.error('Error checking contractor active status:', activeCheckError);
+              // If backend check fails, continue with login (fail-open for better UX)
+              // You can change this to fail-closed by uncommenting below:
+              // await supabase.auth.signOut();
+              // setError('Unable to verify account status. Please try again.');
+              // return;
+            }
+            
+            // User exists in contractor table and is active, redirect to contractor dashboard
             router.push('/contractor');
             return;
           }
@@ -119,7 +148,36 @@ function LoginContent() {
               setError('This email does not have a partner account. Please sign up as a partner or try logging in as a client.');
               return;
             }
-            // User exists in landlord table, redirect to landlord dashboard
+            
+            // Check if landlord is active via backend API
+            try {
+              const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000/api';
+              const activeCheckResponse = await fetch(`${backendUrl}/partner-login-check`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: authUser.id }),
+              });
+              
+              const activeCheckData = await activeCheckResponse.json();
+              
+              if (activeCheckData.success && activeCheckData.isActive === false) {
+                // Landlord is inactive, sign them out and show error
+                await supabase.auth.signOut();
+                setError('Your account is inactive. Ask the admin to activate it.');
+                return;
+              }
+            } catch (activeCheckError) {
+              console.error('Error checking landlord active status:', activeCheckError);
+              // If backend check fails, continue with login (fail-open for better UX)
+              // You can change this to fail-closed by uncommenting below:
+              // await supabase.auth.signOut();
+              // setError('Unable to verify account status. Please try again.');
+              // return;
+            }
+            
+            // User exists in landlord table and is active, redirect to landlord dashboard
             router.push('/landlord');
             return;
           }

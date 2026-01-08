@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'out', // ignored when server.url is set
   server: {
     // url: 'http://localhost:3000',  // For local development
-    url: 'https://www.booking-hub.co.uk',  // For production testing
+    url: 'https://app.booking-hub.co.uk',  // For production testing
     cleartext: false  // must be https for iOS (you have https ✅)
   },
   // REMOVED ios.contentInset - this was causing the issue!

@@ -109,7 +109,7 @@ function LoginContent() {
             
             // Check if contractor is active via backend API
             try {
-              const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000/api';
+              const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
               const activeCheckResponse = await fetch(`${backendUrl}/client-login-check`, {
                 method: 'POST',
                 headers: {

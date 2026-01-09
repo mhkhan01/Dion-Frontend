@@ -178,7 +178,7 @@ export default function LandlordSignupPage() {
         href="/" 
         onClick={(e) => { e.preventDefault(); window.location.href = '/'; }}
         className="absolute top-4 left-4 z-20 flex items-center justify-center bg-booking-teal text-white rounded-full sm:rounded-lg w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-lg"
-        aria-label="Back to home"
+        aria-label="Go Back"
         style={{ fontFamily: 'var(--font-avenir-regular)' }}
       >
         <svg 
@@ -190,7 +190,7 @@ export default function LandlordSignupPage() {
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
-        <span className="hidden sm:inline text-sm sm:text-base">Back to Home</span>
+        <span className="hidden sm:inline text-sm sm:text-base">Go Back</span>
       </Link>
 
       {/* Main content */}

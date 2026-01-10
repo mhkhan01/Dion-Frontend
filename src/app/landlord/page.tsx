@@ -137,6 +137,7 @@ export default function PartnerDashboard() {
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [contactInfo, setContactInfo] = useState({
     company_name: '',
     company_email: '',
@@ -1472,7 +1473,7 @@ export default function PartnerDashboard() {
                 </div>
               </div>
               <button
-                onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
+                onClick={() => { setIsLogoutModalOpen(true); setIsMobileMenuOpen(false); }}
                 className="w-full px-4 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 transition-all duration-200"
               >
                 <div className="flex items-center justify-center space-x-3">
@@ -1572,7 +1573,7 @@ export default function PartnerDashboard() {
             </div>
           </div>
           <button
-            onClick={handleLogout}
+            onClick={() => setIsLogoutModalOpen(true)}
             className="w-full px-4 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 transition-all duration-200"
           >
             <div className="flex items-center justify-center space-x-3">
@@ -1607,6 +1608,97 @@ export default function PartnerDashboard() {
         property={selectedProperty}
         onPropertyUpdate={fetchData}
       />
+
+      {/* Logout Confirmation Modal */}
+      {isLogoutModalOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ 
+            background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.7) 100%)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)'
+          }}
+        >
+          <div 
+            className="relative bg-white rounded-3xl max-w-[520px] w-full overflow-hidden"
+            style={{
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+              animation: 'modalSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+            }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsLogoutModalOpen(false)}
+              className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-all duration-200 group"
+            >
+              <svg className="w-4 h-4 text-gray-500 group-hover:text-gray-700 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Modal Content - Centered Vertical Layout */}
+            <div className="px-8 pt-6 pb-6 flex flex-col items-center">
+              {/* Icon Container */}
+              <div 
+                className="relative w-14 h-14 rounded-full flex items-center justify-center mb-4"
+                style={{
+                  background: 'linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)',
+                  boxShadow: '0 8px 24px -4px rgba(239, 68, 68, 0.3)'
+                }}
+              >
+                <div 
+                  className="absolute inset-1.5 rounded-full flex items-center justify-center"
+                  style={{
+                    background: 'linear-gradient(135deg, #FCA5A5 0%, #F87171 100%)'
+                  }}
+                >
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Text Content */}
+              <p className="text-gray-900 font-avenir-bold font-bold text-lg leading-relaxed text-center mb-5">
+                Are you sure you want to logout from your account?
+              </p>
+
+              {/* Action Buttons - Side by Side */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setIsLogoutModalOpen(false)}
+                  className="px-6 py-2.5 rounded-xl font-avenir font-semibold text-gray-700 text-sm tracking-wide bg-gray-100 hover:bg-gray-200 transition-all duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="px-6 py-2.5 rounded-xl font-avenir font-semibold text-white text-sm tracking-wide transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+                  style={{
+                    background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
+                    boxShadow: '0 4px 14px -2px rgba(239, 68, 68, 0.4)'
+                  }}
+                >
+                  Yes, Logout
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <style jsx>{`
+            @keyframes modalSlideIn {
+              from {
+                opacity: 0;
+                transform: scale(0.95) translateY(10px);
+              }
+              to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+              }
+            }
+          `}</style>
+        </div>
+      )}
     </div>
   );
 }

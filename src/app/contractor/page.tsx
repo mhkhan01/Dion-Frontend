@@ -346,20 +346,30 @@ export default function ContractorDashboard() {
               // Determine the actual status (same logic as displayed status)
               const actualStatus = (bookingDate.status || request.status);
               
-              // Fetch value from backend API for confirmed bookings (bypasses RLS)
+              // Fetch value from backend API for confirmed bookings (requires auth)
               let bookingValue: number | string | undefined = undefined;
               if (actualStatus === 'confirmed') {
                 try {
-                  const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
-                  const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/booking-values/${bookingDate.id}`);
+                  // Get auth session for authorization
+                  const { data: sessionData } = await supabase.auth.getSession();
                   
-                  if (response.ok) {
-                    const result = await response.json();
-                    if (result.success && result.value) {
-                      bookingValue = result.value;
+                  if (sessionData.session) {
+                    const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/booking-values/${bookingDate.id}`, {
+                      method: 'GET',
+                      headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${sessionData.session.access_token}`,
+                      },
+                    });
+                    
+                    if (response.ok) {
+                      const result = await response.json();
+                      if (result.success && result.value) {
+                        bookingValue = result.value;
+                      }
+                    } else {
+                      console.error('Failed to fetch booking value from backend:', response.status);
                     }
-                  } else {
-                    console.error('Failed to fetch booking value from backend:', response.status);
                   }
                 } catch (error) {
                   console.error('Error fetching booking value:', error);

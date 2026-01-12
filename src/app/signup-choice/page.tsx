@@ -1,208 +1,137 @@
 'use client';
 
-import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 
 export default function SignupChoicePage() {
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
-
-  const handleRoleSelect = (role: 'client' | 'partner') => {
-    setSelectedRole(role);
-    
-    // Navigate to appropriate signup page
-    if (role === 'client') {
-      window.location.href = '/auth/signup/client';
-    } else if (role === 'partner') {
-      window.location.href = '/auth/signup/partner';
-    }
-  };
-
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
-      backgroundImage: 'url(/Houses%20-%202.webp)',
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }}>
-      {/* Background Image Opacity Overlay */}
-      <div className="absolute inset-0 bg-[rgba(11,29,52,0.88)] pointer-events-none z-0"></div>
+    <div className="min-h-screen relative overflow-hidden flex flex-col items-center justify-start px-4 sm:px-6 pt-8 sm:pt-12 pb-8 sm:pb-12">
+      {/* Animated Background Image with Ken Burns effect */}
+      <div 
+        className="absolute inset-0 animate-ken-burns"
+        style={{
+          backgroundImage: 'url(/Houses%20-%202.webp)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+      
+      {/* Background Image Opacity Overlay with fade animation */}
+      <div className="absolute inset-0 bg-[rgba(11,29,55,0.88)] pointer-events-none animate-overlay-fade"></div>
 
-      {/* Main content container with safe areas */}
-      <div className="relative z-10 flex flex-col justify-center items-center min-h-screen px-6 py-8 safe-area-inset-x safe-area-inset-y">
-        {/* Logo/Brand section */}
-        <div className="mb-12 flex justify-center py-2">
-          <img 
-            src="/blue-teal.webp" 
-            alt="Booking Hub Logo" 
-            className="h-16 w-auto sm:h-20 md:h-24 object-contain"
-            style={{ maxWidth: '100%' }}
-          />
+      {/* Back to Home Button */}
+      <Link
+        href="/"
+        aria-label="Back to home"
+        style={{ fontFamily: 'var(--font-avenir-regular)' }}
+        className="absolute top-4 left-4 z-20 flex items-center justify-center bg-booking-teal text-white rounded-full sm:rounded-lg w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-lg"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        <span className="hidden sm:inline text-sm sm:text-base">Back to Home</span>
+      </Link>
+      
+      {/* Main Container */}
+      <div className="relative z-10 w-full max-w-4xl mx-auto -mt-4 sm:-mt-6">
+        {/* Logo on Background with entrance animation */}
+        <div className="flex justify-center -mb-10 sm:-mb-14 lg:-mb-16">
+          <div className="animate-logo-entrance">
+            <Image
+              src="/white-teal.webp"
+              alt="Logo"
+              width={300}
+              height={300}
+              className="w-40 h-40 sm:w-52 sm:h-52 lg:w-64 lg:h-64 object-contain drop-shadow-2xl"
+              priority
+            />
+          </div>
         </div>
-
-        {/* Content section */}
-        <div className="w-full max-w-md mx-auto text-center">
-          {/* Heading */}
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#0B1D37] mb-4 sm:mb-6 leading-tight">
-            Let's get started!
-          </h1>
-
-          {/* Subheading */}
-          <p className="text-lg sm:text-xl md:text-2xl text-[#4B4E53] mb-8 sm:mb-12 leading-relaxed">
-            Tell us who you are
-          </p>
-
-          {/* Role selection boxes - Side by side */}
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 w-full">
-            {/* Client Box */}
-            <div 
-              className="flex-1 rounded-2xl p-6 sm:p-8 text-white shadow-lg"
-              style={{ backgroundColor: 'rgba(11, 29, 55, 0.88)' }}
+        
+        {/* Main Heading with entrance animation */}
+        <h1 
+          style={{ fontFamily: 'var(--font-avenir-bold), sans-serif' }}
+          className="text-xl sm:text-2xl md:text-3xl lg:text-4xl text-[#F6F6F4] mb-3 sm:mb-4 text-center animate-heading-entrance"
+        >
+          What is your role?
+        </h1>
+        
+        {/* Two Boxes Side by Side */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          {/* Client Box with entrance animation */}
+          <div className="signup-card bg-white rounded-xl shadow-lg p-4 sm:p-6 flex flex-col items-center text-center border border-gray-200 animate-card-entrance-1">
+            {/* Heading */}
+            <h2 
+              style={{ fontFamily: 'var(--font-avenir), sans-serif', fontWeight: 700, letterSpacing: '0.05em' }}
+              className="text-xl sm:text-2xl md:text-3xl text-[#0B1D37] mb-3 sm:mb-4"
             >
-              {/* Client Icon - Centered at top */}
-              <div className="flex justify-center mb-6">
-                <svg 
-                  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" 
-                  />
-                </svg>
-              </div>
-
-              {/* Client Description - Bullet points */}
-              <ul className="text-left mb-6 space-y-2 text-sm sm:text-base md:text-lg">
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  <span>Seeking temporary accommodation for teams and projects</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  <span>Submit booking requests with requirements</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  <span>Manage accommodation needs</span>
-                </li>
-              </ul>
-
-              {/* Sign up button */}
-              <button
-                onClick={() => handleRoleSelect('client')}
-                className="w-full py-3 sm:py-4 px-4 sm:px-6 rounded-xl text-base sm:text-lg font-semibold bg-white text-[#0B1D37] hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg"
+              Client
+            </h2>
+            
+            {/* Description with staggered list animation */}
+            <ul className="w-full text-sm sm:text-base md:text-lg text-[#4B4E53] mb-4 sm:mb-6 space-y-1 text-left list-disc list-inside">
+              <li 
+                style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
+                className="animate-list-item animate-list-item-1"
               >
-                Sign up as client
-              </button>
-            </div>
-
-            {/* Partner Box */}
-            <div 
-              className="flex-1 rounded-2xl p-6 sm:p-8 text-white shadow-lg"
-              style={{ backgroundColor: 'rgba(11, 29, 55, 0.88)' }}
+                Request a booking
+              </li>
+              <li 
+                style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
+                className="animate-list-item animate-list-item-2"
+              >
+                Book properties for multiple dates
+              </li>
+            </ul>
+            
+            {/* Sign up button with enhanced hover */}
+            <Link
+              href="/auth/signup/client"
+              style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
+              className="signup-btn w-full bg-[#00BAB5] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-base sm:text-lg md:text-xl hover:bg-[#00A5A0] animate-btn-entrance-1"
             >
-              {/* Partner Icon - Centered at top */}
-              <div className="flex justify-center mb-6">
-                <svg 
-                  className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    strokeWidth={2} 
-                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-2 0H3m2 0h5M9 7h1m-1 4h1m2-4h1m-1 4h1m-6 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" 
-                  />
-                </svg>
-              </div>
-
-              {/* Partner Description - Bullet points */}
-              <ul className="text-left mb-6 space-y-2 text-sm sm:text-base md:text-lg">
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  <span>Property owners and managers</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  <span>List properties</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  <span>Manage availability</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="mr-2">•</span>
-                  <span>Get paid bookings for your properties</span>
-                </li>
-              </ul>
-
-              {/* Sign up button */}
-              <button
-                onClick={() => handleRoleSelect('partner')}
-                className="w-full py-3 sm:py-4 px-4 sm:px-6 rounded-xl text-base sm:text-lg font-semibold bg-white text-[#0B1D37] hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg"
-              >
-                Sign up as partner
-              </button>
-            </div>
+              Sign up
+            </Link>
           </div>
 
+          {/* Partner Box with entrance animation (slightly delayed) */}
+          <div className="signup-card bg-white rounded-xl shadow-lg p-4 sm:p-6 flex flex-col items-center text-center border border-gray-200 animate-card-entrance-2">
+            {/* Heading */}
+            <h2 
+              style={{ fontFamily: 'var(--font-avenir), sans-serif', fontWeight: 700, letterSpacing: '0.05em' }}
+              className="text-xl sm:text-2xl md:text-3xl text-[#0B1D37] mb-3 sm:mb-4"
+            >
+              Partner
+            </h2>
+            
+            {/* Description with staggered list animation */}
+            <ul className="w-full text-sm sm:text-base md:text-lg text-[#4B4E53] mb-4 sm:mb-6 space-y-1 text-left list-disc list-inside">
+              <li 
+                style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
+                className="animate-list-item animate-list-item-3"
+              >
+                List your properties
+              </li>
+              <li 
+                style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
+                className="animate-list-item animate-list-item-4"
+              >
+                View bookings for your properties.
+              </li>
+            </ul>
+            
+            {/* Sign up button with enhanced hover */}
+            <Link
+              href="/auth/signup/partner"
+              style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
+              className="signup-btn w-full bg-[#00BAB5] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-base sm:text-lg md:text-xl hover:bg-[#00A5A0] animate-btn-entrance-2"
+            >
+              Sign up
+            </Link>
+          </div>
         </div>
       </div>
-
-      {/* Bottom safe area */}
-      <div className="safe-area-inset-bottom" />
-
-      {/* Custom CSS for iOS safe areas */}
-      <style jsx>{`
-        .safe-area-inset-top {
-          padding-top: env(safe-area-inset-top);
-        }
-        
-        .safe-area-inset-bottom {
-          padding-bottom: env(safe-area-inset-bottom);
-        }
-        
-        .safe-area-inset-x {
-          padding-left: env(safe-area-inset-left);
-          padding-right: env(safe-area-inset-right);
-        }
-        
-        .safe-area-inset-y {
-          padding-top: env(safe-area-inset-top);
-          padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        /* iOS-specific optimizations */
-        @supports (-webkit-touch-callout: none) {
-          .min-h-screen {
-            min-height: -webkit-fill-available;
-          }
-          
-          /* Prevent zoom on input focus for iOS */
-          input, textarea, select {
-            font-size: 16px;
-          }
-        }
-
-        /* Enhanced button interactions for iOS */
-        button {
-          -webkit-tap-highlight-color: transparent;
-          -webkit-touch-callout: none;
-          -webkit-user-select: none;
-          user-select: none;
-        }
-
-        /* Smooth transitions for iOS */
-        * {
-          -webkit-transition: all 0.3s ease;
-          transition: all 0.3s ease;
-        }
-      `}</style>
     </div>
   );
 }

@@ -21,6 +21,9 @@ const signupSchema = z.object({
     .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
   confirmPassword: z.string(),
   role: z.string(),
+  termsAccepted: z.boolean().refine((val) => val === true, {
+    message: 'You must agree to the partner terms and conditions',
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -126,7 +129,8 @@ export default function LandlordSignupPage() {
           phone: data.phone,
           companyName: data.companyName,
           password: data.password,
-          confirmPassword: data.confirmPassword
+          confirmPassword: data.confirmPassword,
+          termsAccepted: data.termsAccepted
         }),
       });
 
@@ -467,6 +471,60 @@ export default function LandlordSignupPage() {
                 <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.confirmPassword.message}</p>
               )}
             </div>
+
+            {/* Terms and Conditions Checkbox */}
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              <input
+                {...register('termsAccepted')}
+                type="checkbox"
+                id="termsAccepted"
+                className={`w-4 h-4 sm:w-5 sm:h-5 rounded border-2 cursor-pointer transition-colors duration-200 focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 focus:outline-none ${
+                  errors.termsAccepted
+                    ? 'border-red-500 text-red-600 focus:ring-red-500'
+                    : 'border-gray-300 text-booking-teal focus:border-booking-teal'
+                }`}
+              />
+              <label
+                htmlFor="termsAccepted"
+                className={`flex-1 text-xs sm:text-sm leading-relaxed cursor-pointer select-none ${
+                  errors.termsAccepted 
+                    ? 'text-red-700' 
+                    : 'text-gray-700'
+                }`}
+              >
+                I agree to{' '}
+                <Link
+                  href="/partner-terms"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`font-medium underline hover:no-underline transition-colors duration-200 ${
+                    errors.termsAccepted
+                      ? 'text-red-600 hover:text-red-700'
+                      : 'text-booking-teal hover:text-booking-dark'
+                  }`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  partner terms and conditions
+                </Link>
+              </label>
+            </div>
+            {errors.termsAccepted && (
+              <p className="mt-1 text-xs sm:text-sm text-red-600 flex items-start gap-1.5">
+                <svg
+                  className="w-4 h-4 flex-shrink-0 mt-0.5"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>{errors.termsAccepted.message}</span>
+              </p>
+            )}
 
             {/* Submit Button */}
             <div>

@@ -26,6 +26,8 @@ export default function BookingRequestPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [passwordValue, setPasswordValue] = useState('');
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [termsError, setTermsError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     companyName: '',
@@ -81,7 +83,15 @@ export default function BookingRequestPage() {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setEmailError(null); // Reset error
+    setTermsError(null); // Reset terms error
     setShowThankYou(false); // Reset thank you message
+    
+    // Validate terms acceptance
+    if (!termsAccepted) {
+      setTermsError('You must agree to the client terms and conditions');
+      return;
+    }
+    
     setIsSubmitting(true); // Start loading
     const formData = new FormData(e.currentTarget);
     const formObject = Object.fromEntries(formData.entries());
@@ -198,7 +208,7 @@ export default function BookingRequestPage() {
     try {
       // Call backend API endpoint
       const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
-      const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/booking-requests`, {
+      const response = await fetch(`http://jfgm6v6pkw.us-east-1.awsapprunner.com/api/booking-requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -213,7 +223,8 @@ export default function BookingRequestPage() {
           bookings: bookingDates,
           teamSize: formObject.teamSize ? parseInt(formObject.teamSize as string) : null,
           budgetPerPerson: selectedBudgetOption,
-          city: formObject.city
+          city: formObject.city,
+          termsAccepted: termsAccepted
         }),
       });
 
@@ -228,6 +239,8 @@ export default function BookingRequestPage() {
         setBookings([{ id: '1', startDate: '', endDate: '' }]);
         setSelectedBudgetOption('');
         setPasswordValue('');
+        setTermsAccepted(false);
+        setTermsError(null);
         setIsSubmitting(false);
       } else {
         let errorData;
@@ -701,20 +714,68 @@ export default function BookingRequestPage() {
                 </div>
               )}
 
-              {/* Terms and Conditions */}
-              <div className="pt-1 sm:pt-2">
-                <p className="text-xs sm:text-lg text-booking-gray text-center leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
-                  By submitting, you agree to our{' '}
-                  <a 
-                    href="/terms" 
-                    onClick={(e) => { e.preventDefault(); window.location.href = '/terms'; }}
-                    className="text-booking-teal hover:text-booking-dark underline font-medium"
+              {/* Terms and Conditions Checkbox */}
+              <div className="flex items-center gap-2.5 sm:gap-3 pt-1 sm:pt-2">
+              <input
+                type="checkbox"
+                id="termsAccepted"
+                name="termsAccepted"
+                checked={termsAccepted}
+                required
+                onChange={(e) => {
+                  setTermsAccepted(e.target.checked);
+                  if (e.target.checked && termsError) {
+                    setTermsError(null);
+                  }
+                }}
+                className={`w-4 h-4 sm:w-5 sm:h-5 rounded border-2 cursor-pointer transition-colors duration-200 focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 focus:outline-none ${
+                  termsError
+                    ? 'border-red-500 text-red-600 focus:ring-red-500'
+                    : 'border-gray-300 text-booking-teal focus:border-booking-teal'
+                }`}
+              />
+                <label
+                  htmlFor="termsAccepted"
+                  className={`flex-1 text-xs sm:text-sm leading-relaxed cursor-pointer select-none ${
+                    termsError 
+                      ? 'text-red-700' 
+                      : 'text-gray-700'
+                  }`}
+                  style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                >
+                  I agree to{' '}
+                  <Link
+                    href="/terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`font-medium underline hover:no-underline transition-colors duration-200 ${
+                      termsError
+                        ? 'text-red-600 hover:text-red-700'
+                        : 'text-booking-teal hover:text-booking-dark'
+                    }`}
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    Client Terms & Conditions
-                  </a>
-                  .
-                </p>
+                    client terms and conditions
+                  </Link>
+                </label>
               </div>
+              {termsError && (
+                <p className="mt-1 text-xs sm:text-sm text-red-600 flex items-start gap-1.5" style={{ fontFamily: 'var(--font-avenir-regular)' }}>
+                  <svg
+                    className="w-4 h-4 flex-shrink-0 mt-0.5"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>{termsError}</span>
+                </p>
+              )}
 
               {/* Email validation error message - above submit button */}
               {emailError && (

@@ -56,30 +56,22 @@ export default function SignupChoicePage() {
               Client
             </h2>
             
-            {/* Description with staggered list animation */}
-            <ul className="w-full text-sm sm:text-base md:text-lg text-[#4B4E53] mb-4 sm:mb-6 space-y-1 text-left list-disc list-inside">
-              <li 
-                style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
-                className="animate-list-item animate-list-item-1"
-              >
-                Request a booking
-              </li>
-              <li 
-                style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
-                className="animate-list-item animate-list-item-2"
-              >
-                Book properties for multiple dates
-              </li>
-            </ul>
+            {/* Description */}
+            <p 
+              style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
+              className="w-full text-sm sm:text-base md:text-lg text-[#4B4E53] mb-4 sm:mb-6 text-center"
+            >
+              I'm a client booking accomodation
+            </p>
             
             {/* Sign up button with enhanced hover */}
             <Link
-              href="/auth/signup/client"
-              onClick={(e) => { e.preventDefault(); window.location.href = '/auth/signup/client'; }}
+              href="/booking-request"
+              onClick={(e) => { e.preventDefault(); window.location.href = '/booking-request'; }}
               style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
               className="signup-btn w-full bg-[#00BAB5] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-base sm:text-lg md:text-xl hover:bg-[#00A5A0] animate-btn-entrance-1"
             >
-              Sign up
+              Book Accomodation <span style={{ fontSize: '1.3em' }}>→</span>
             </Link>
           </div>
 
@@ -93,21 +85,13 @@ export default function SignupChoicePage() {
               Partner
             </h2>
             
-            {/* Description with staggered list animation */}
-            <ul className="w-full text-sm sm:text-base md:text-lg text-[#4B4E53] mb-4 sm:mb-6 space-y-1 text-left list-disc list-inside">
-              <li 
-                style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
-                className="animate-list-item animate-list-item-3"
-              >
-                List your properties
-              </li>
-              <li 
-                style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
-                className="animate-list-item animate-list-item-4"
-              >
-                View bookings for your properties.
-              </li>
-            </ul>
+            {/* Description */}
+            <p 
+              style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
+              className="w-full text-sm sm:text-base md:text-lg text-[#4B4E53] mb-4 sm:mb-6 text-center"
+            >
+              I'm a partner listing properties.
+            </p>
             
             {/* Sign up button with enhanced hover */}
             <Link
@@ -116,7 +100,7 @@ export default function SignupChoicePage() {
               style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
               className="signup-btn w-full bg-[#00BAB5] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg text-base sm:text-lg md:text-xl hover:bg-[#00A5A0] animate-btn-entrance-2"
             >
-              Sign up
+              List Properties <span style={{ fontSize: '1.3em' }}>→</span>
             </Link>
           </div>
         </div>

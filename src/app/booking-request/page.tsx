@@ -288,50 +288,59 @@ export default function BookingRequestPage() {
 
   return (
     <>
-      <div className="min-h-screen relative overflow-hidden" style={{
-        backgroundImage: 'url(/Swansea%20-%201.webp)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
-      }}>
-        {/* Background Image Opacity Overlay */}
-        <div className="absolute inset-0 bg-[rgba(11,29,52,0.88)] pointer-events-none"></div>
+      <div className="min-h-screen relative overflow-hidden">
+        {/* Animated Background Image with Ken Burns effect */}
+        <div 
+          className="absolute inset-0 animate-ken-burns"
+          style={{
+            backgroundImage: 'url(/Swansea%20-%201.webp)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+        
+        {/* Background Image Opacity Overlay with fade animation */}
+        <div className="absolute inset-0 bg-[rgba(11,29,52,0.88)] pointer-events-none animate-overlay-fade"></div>
 
         {/* Back Button */}
         <Link 
           href="/" 
           onClick={(e) => { e.preventDefault(); window.location.href = '/'; }}
-          className="absolute top-4 left-4 z-20 flex items-center justify-center bg-booking-teal text-white rounded-full sm:rounded-lg w-12 h-12 sm:w-auto sm:h-auto sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:bg-opacity-90 transition-all duration-200 shadow-lg"
+          className="absolute top-4 left-4 z-20 flex items-center justify-center text-white sm:px-4 sm:py-2 sm:gap-2 font-semibold hover:text-booking-teal transition-all duration-200"
           aria-label="Back to home"
           style={{ fontFamily: 'var(--font-avenir-regular)' }}
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
-            className="h-5 w-5" 
+            className="h-7 w-7" 
             fill="none" 
             viewBox="0 0 24 24" 
             stroke="currentColor"
           >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          <span className="hidden sm:inline text-sm sm:text-base">Back to Home</span>
+          <span className="hidden sm:inline text-xl sm:text-2xl">Go Back</span>
         </Link>
 
         {/* Main Content */}
         <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-2 sm:px-4 pb-12 sm:pb-16 -mt-12 sm:-mt-16">
-          {/* Logo on Background */}
+          {/* Logo on Background with entrance animation */}
           <div className="flex justify-center -mb-12 sm:-mb-16 lg:-mb-20">
-            <Image
-              src="/white-teal.webp"
-              alt="Logo"
-              width={300}
-              height={300}
-              className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 object-contain drop-shadow-2xl"
-              priority
-            />
+            <div className="animate-logo-entrance">
+              <Image
+                src="/white-teal.webp"
+                alt="Logo"
+                width={300}
+                height={300}
+                className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 object-contain drop-shadow-2xl"
+                priority
+              />
+            </div>
           </div>
 
-          <div className={`bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200 transition-all duration-300 ${showModal ? 'blur-sm' : ''}`}>
+          {/* Form Container with entrance animation */}
+          <div className={`signup-card bg-white/95 backdrop-blur-sm rounded-xl sm:rounded shadow-xl sm:shadow-lg p-6 sm:p-6 lg:p-8 w-full max-w-xs sm:max-w-lg lg:max-w-2xl border border-gray-200/50 sm:border-gray-200 animate-card-entrance-1 transition-all duration-300 ${showModal ? 'blur-sm' : ''}`}>
             {/* Form Title */}
             <h1 className="text-base sm:text-2xl lg:text-3xl font-bold text-booking-dark mb-1 sm:mb-2 text-center leading-tight" style={{ fontFamily: 'var(--font-avenir-bold)' }}>
               Request Accommodation
@@ -828,11 +837,12 @@ export default function BookingRequestPage() {
         {/* Modal Overlay */}
         {showModal && (
           <div 
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 animate-overlay-fade"
             onClick={handleProceed}
           >
             <div 
-              className="bg-white rounded-2xl shadow-2xl w-full max-w-md sm:max-w-3xl p-6 sm:p-8 relative"
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-md sm:max-w-3xl p-6 sm:p-8 relative animate-card-entrance-1"
+              style={{ animationDelay: '0.1s' }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Close Button */}

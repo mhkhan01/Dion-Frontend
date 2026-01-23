@@ -23,7 +23,7 @@ export default function Navbar() {
     if (!user) return '/';
     switch (user.role) {
       case 'contractor': return '/contractor';
-      case 'landlord':   return '/landlord';
+      case 'landlord':   return '/partner';
       case 'admin':      return '/admin';
       default:           return '/';
     }
@@ -52,7 +52,7 @@ export default function Navbar() {
                 <Link href="/contractor/properties" className="nav-link">Browse Properties</Link>
               )}
               {user.role === 'landlord' && (
-                <Link href="/landlord/properties" className="nav-link">My Properties</Link>
+                <Link href="/partner/properties" className="nav-link">My Properties</Link>
               )}
               {user.role === 'admin' && (
                 <Link href="/admin/bookings" className="nav-link">All Bookings</Link>

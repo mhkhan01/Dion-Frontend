@@ -178,7 +178,7 @@ function LoginContent() {
             }
             
             // User exists in landlord table and is active, redirect to landlord dashboard
-            router.push('/landlord');
+            router.push('/partner');
             return;
           }
 
@@ -189,7 +189,7 @@ function LoginContent() {
           }
 
           if (landlordProfile && !landlordError) {
-            router.push('/landlord');
+            router.push('/partner');
             return;
           }
 

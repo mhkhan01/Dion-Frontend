@@ -725,7 +725,7 @@ export default function ContractorForm() {
 
       {/* Back Button */}
       <Link 
-        href="/contractor" 
+        href="/client" 
         className="absolute top-4 left-4 z-20 flex items-center gap-3 text-[#F6F6F4] transition-colors duration-200 group hover:text-[#00BAB5]"
         aria-label="Back to dashboard"
       >

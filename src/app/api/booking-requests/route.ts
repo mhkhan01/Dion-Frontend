@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
         email: normalizedEmail,
         password: password,
         options: {
-          emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/contractor`,
+          emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/client`,
           data: {
             role: 'contractor',
             full_name: fullName

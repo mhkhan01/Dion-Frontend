@@ -22,7 +22,7 @@ export default function Navbar() {
   const getDashboardLink = () => {
     if (!user) return '/';
     switch (user.role) {
-      case 'contractor': return '/contractor';
+      case 'contractor': return '/client';
       case 'landlord':   return '/partner';
       case 'admin':      return '/admin';
       default:           return '/';
@@ -49,7 +49,7 @@ export default function Navbar() {
             <div className="hidden md:flex items-center space-x-8">
               <Link href={getDashboardLink()} className="nav-link">Dashboard</Link>
               {user.role === 'contractor' && (
-                <Link href="/contractor/properties" className="nav-link">Browse Properties</Link>
+                <Link href="/client/properties" className="nav-link">Browse Properties</Link>
               )}
               {user.role === 'landlord' && (
                 <Link href="/partner/properties" className="nav-link">My Properties</Link>

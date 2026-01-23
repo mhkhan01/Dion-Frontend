@@ -136,7 +136,7 @@ function LoginContent() {
             }
             
             // User exists in contractor table and is active, redirect to contractor dashboard
-            router.push('/contractor');
+            router.push('/client');
             return;
           }
 
@@ -184,7 +184,7 @@ function LoginContent() {
 
           // Fallback: If no userType specified, check both tables and redirect appropriately
           if (contractorProfile && !contractorError) {
-            router.push('/contractor');
+            router.push('/client');
             return;
           }
 

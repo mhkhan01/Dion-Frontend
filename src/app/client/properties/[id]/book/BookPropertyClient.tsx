@@ -77,14 +77,14 @@ export default function BookPropertyClient() {
 
       if (error) {
         console.error('Error fetching property:', error);
-        router.push('/contractor/properties');
+        router.push('/client/properties');
         return;
       }
 
       setProperty(data);
     } catch (error) {
       console.error('Error fetching property:', error);
-      router.push('/contractor/properties');
+      router.push('/client/properties');
     } finally {
       setLoadingProperty(false);
     }
@@ -117,7 +117,7 @@ export default function BookPropertyClient() {
 
       if (response.ok) {
         const result = await response.json();
-        router.push(`/contractor?booking=${result.booking.id}`);
+        router.push(`/client?booking=${result.booking.id}`);
       } else {
         const error = await response.json();
         alert(error.error || 'Failed to create booking');

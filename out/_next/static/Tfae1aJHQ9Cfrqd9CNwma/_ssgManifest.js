@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fclient\u002Fproperties\u002F[id]\u002Fbook"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

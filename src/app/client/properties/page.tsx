@@ -118,7 +118,7 @@ export default function PropertiesPage() {
                     View Details
                   </Link>
                   <Link 
-                    href={`/contractor/properties/${property.id}/book`}
+                    href={`/client/properties/${property.id}/book`}
                     className="btn btn-primary flex-1"
                   >
                     Book Now

@@ -34,6 +34,7 @@ export default function BookingRequestPage() {
     email: '',
     phone: ''
   });
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +46,14 @@ export default function BookingRequestPage() {
     // Clear email error when user changes email
     if (name === 'email' && emailError) {
       setEmailError(null);
+    }
+    // Clear field error when user starts typing
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
   };
 
@@ -85,19 +94,71 @@ export default function BookingRequestPage() {
     setEmailError(null); // Reset error
     setTermsError(null); // Reset terms error
     setShowThankYou(false); // Reset thank you message
+    setFieldErrors({}); // Reset field errors
+    
+    const formDataObj = new FormData(e.currentTarget);
+    const formObject = Object.fromEntries(formDataObj.entries());
+    
+    // Validate all required fields
+    const errors: Record<string, string> = {};
+    
+    if (!formData.name.trim()) {
+      errors.name = 'Please fill this field';
+    }
+    if (!formData.companyName.trim()) {
+      errors.companyName = 'Please fill this field';
+    }
+    if (!formData.email.trim()) {
+      errors.email = 'Please fill this field';
+    }
+    if (!formData.phone.trim()) {
+      errors.phone = 'Please fill this field';
+    }
+    if (!passwordValue.trim()) {
+      errors.password = 'Please fill this field';
+    }
+    if (!formObject.confirmPassword || !(formObject.confirmPassword as string).trim()) {
+      errors.confirmPassword = 'Please fill this field';
+    }
+    if (!formObject.city || !(formObject.city as string).trim()) {
+      errors.city = 'Please fill this field';
+    }
+    if (!formObject.projectPostcode || !(formObject.projectPostcode as string).trim()) {
+      errors.projectPostcode = 'Please fill this field';
+    }
+    if (!formObject.teamSize || !(formObject.teamSize as string).trim()) {
+      errors.teamSize = 'Please fill this field';
+    }
+    
+    // Validate booking dates
+    const hasValidBooking = bookings.some(booking => booking.startDate && booking.endDate);
+    if (!hasValidBooking) {
+      bookings.forEach((booking, index) => {
+        if (!booking.startDate) {
+          errors[`startDate-${booking.id}`] = 'Please fill this field';
+        }
+        if (!booking.endDate) {
+          errors[`endDate-${booking.id}`] = 'Please fill this field';
+        }
+      });
+    }
     
     // Validate terms acceptance
     if (!termsAccepted) {
       setTermsError('You must agree to the client terms and conditions');
+    }
+    
+    // If there are any errors, set them and return
+    if (Object.keys(errors).length > 0 || !termsAccepted) {
+      setFieldErrors(errors);
+      setIsSubmitting(false);
       return;
     }
     
     setIsSubmitting(true); // Start loading
-    const formData = new FormData(e.currentTarget);
-    const formObject = Object.fromEntries(formData.entries());
     
     // Normalize email to lowercase for case-insensitive comparison
-    const enteredEmail = (formObject.email as string) || '';
+    const enteredEmail = formData.email || '';
     const normalizedEmail = enteredEmail.toLowerCase().trim();
     
     if (!normalizedEmail) {
@@ -176,7 +237,7 @@ export default function BookingRequestPage() {
     }
     
     // Validate password strength
-    const password = formObject.password as string;
+    const password = passwordValue;
     const passwordErrors: string[] = [];
     if (password.length < 8) passwordErrors.push('at least 8 characters');
     if (!/[A-Z]/.test(password)) passwordErrors.push('an uppercase letter');
@@ -191,7 +252,7 @@ export default function BookingRequestPage() {
     }
     
     // Validate password confirmation
-    if (formObject.password !== formObject.confirmPassword) {
+    if (passwordValue !== formObject.confirmPassword) {
       alert('Passwords do not match. Please try again.');
       setIsSubmitting(false);
       return;
@@ -214,12 +275,12 @@ export default function BookingRequestPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          fullName: formObject.name,
-          companyName: formObject.companyName,
+          fullName: formData.name,
+          companyName: formData.companyName,
           email: normalizedEmail,
-          phone: formObject.phone,
+          phone: formData.phone,
           projectPostcode: formObject.projectPostcode,
-          password: formObject.password,
+          password: passwordValue,
           bookings: bookingDates,
           teamSize: formObject.teamSize ? parseInt(formObject.teamSize as string) : null,
           budgetPerPerson: selectedBudgetOption,
@@ -349,7 +410,7 @@ export default function BookingRequestPage() {
               Submit your requirements and we'll handle the rest
             </p>
 
-            <form className="space-y-2 sm:space-y-6" onSubmit={handleFormSubmit}>
+            <form className="space-y-2 sm:space-y-6" onSubmit={handleFormSubmit} noValidate>
               {/* Line 1: Where do you need accommodation? + Postcode */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
                 <div>
@@ -361,9 +422,21 @@ export default function BookingRequestPage() {
                     id="city"
                     name="city"
                     placeholder="e.g. London"
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors.city ? 'border-red-500' : 'border-booking-teal'}`}
                     style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                    onChange={(e) => {
+                      if (fieldErrors.city) {
+                        setFieldErrors(prev => {
+                          const newErrors = { ...prev };
+                          delete newErrors.city;
+                          return newErrors;
+                        });
+                      }
+                    }}
                   />
+                  {fieldErrors.city && (
+                    <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors.city}</p>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="projectPostcode" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
@@ -373,10 +446,22 @@ export default function BookingRequestPage() {
                     type="text"
                     id="projectPostcode"
                     name="projectPostcode"
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors.projectPostcode ? 'border-red-500' : 'border-booking-teal'}`}
                     style={{ fontFamily: 'var(--font-avenir-regular)' }}
                     placeholder="Enter postcode"
+                    onChange={(e) => {
+                      if (fieldErrors.projectPostcode) {
+                        setFieldErrors(prev => {
+                          const newErrors = { ...prev };
+                          delete newErrors.projectPostcode;
+                          return newErrors;
+                        });
+                      }
+                    }}
                   />
+                  {fieldErrors.projectPostcode && (
+                    <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors.projectPostcode}</p>
+                  )}
                 </div>
               </div>
 
@@ -409,11 +494,22 @@ export default function BookingRequestPage() {
                         <input
                           type="date"
                           value={booking.startDate}
-                          onChange={(e) => updateBooking(booking.id, 'startDate', e.target.value)}
-                          className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          onChange={(e) => {
+                            updateBooking(booking.id, 'startDate', e.target.value);
+                            if (fieldErrors[`startDate-${booking.id}`]) {
+                              setFieldErrors(prev => {
+                                const newErrors = { ...prev };
+                                delete newErrors[`startDate-${booking.id}`];
+                                return newErrors;
+                              });
+                            }
+                          }}
+                          className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors[`startDate-${booking.id}`] ? 'border-red-500' : 'border-booking-teal'}`}
                           style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                          required
                         />
+                        {fieldErrors[`startDate-${booking.id}`] && (
+                          <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors[`startDate-${booking.id}`]}</p>
+                        )}
                       </div>
                       <div>
                         <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
@@ -422,11 +518,22 @@ export default function BookingRequestPage() {
                         <input
                           type="date"
                           value={booking.endDate}
-                          onChange={(e) => updateBooking(booking.id, 'endDate', e.target.value)}
-                          className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                          onChange={(e) => {
+                            updateBooking(booking.id, 'endDate', e.target.value);
+                            if (fieldErrors[`endDate-${booking.id}`]) {
+                              setFieldErrors(prev => {
+                                const newErrors = { ...prev };
+                                delete newErrors[`endDate-${booking.id}`];
+                                return newErrors;
+                              });
+                            }
+                          }}
+                          className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors[`endDate-${booking.id}`] ? 'border-red-500' : 'border-booking-teal'}`}
                           style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                          required
                         />
+                        {fieldErrors[`endDate-${booking.id}`] && (
+                          <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors[`endDate-${booking.id}`]}</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -458,11 +565,22 @@ export default function BookingRequestPage() {
                     id="teamSize"
                     name="teamSize"
                     min="1"
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors.teamSize ? 'border-red-500' : 'border-booking-teal'}`}
                     placeholder="Number of people"
                     style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                    required
+                    onChange={(e) => {
+                      if (fieldErrors.teamSize) {
+                        setFieldErrors(prev => {
+                          const newErrors = { ...prev };
+                          delete newErrors.teamSize;
+                          return newErrors;
+                        });
+                      }
+                    }}
                   />
+                  {fieldErrors.teamSize && (
+                    <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors.teamSize}</p>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="budgetPerPerson" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
@@ -494,11 +612,13 @@ export default function BookingRequestPage() {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors.name ? 'border-red-500' : 'border-booking-teal'}`}
                     placeholder="Full name"
                     style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                    required
                   />
+                  {fieldErrors.name && (
+                    <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors.name}</p>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="companyName" className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
@@ -510,11 +630,13 @@ export default function BookingRequestPage() {
                     name="companyName"
                     value={formData.companyName}
                     onChange={handleInputChange}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors.companyName ? 'border-red-500' : 'border-booking-teal'}`}
                     placeholder="Company name"
                     style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                    required
                   />
+                  {fieldErrors.companyName && (
+                    <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors.companyName}</p>
+                  )}
                 </div>
               </div>
 
@@ -530,11 +652,13 @@ export default function BookingRequestPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors.email ? 'border-red-500' : 'border-booking-teal'}`}
                     placeholder="email@company.com"
                     style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                    required
                   />
+                  {fieldErrors.email && (
+                    <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors.email}</p>
+                  )}
                 </div>
                 <div>
                   <label htmlFor="phone" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
@@ -546,11 +670,13 @@ export default function BookingRequestPage() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors.phone ? 'border-red-500' : 'border-booking-teal'}`}
                     placeholder="Phone number"
                     style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                    required
                   />
+                  {fieldErrors.phone && (
+                    <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors.phone}</p>
+                  )}
                 </div>
               </div>
 
@@ -566,12 +692,23 @@ export default function BookingRequestPage() {
                       id="password"
                       name="password"
                       value={passwordValue}
-                      onChange={(e) => setPasswordValue(e.target.value)}
-                      className="w-full px-3 pr-10 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                      onChange={(e) => {
+                        setPasswordValue(e.target.value);
+                        if (fieldErrors.password) {
+                          setFieldErrors(prev => {
+                            const newErrors = { ...prev };
+                            delete newErrors.password;
+                            return newErrors;
+                          });
+                        }
+                      }}
+                      className={`w-full px-3 pr-10 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors.password ? 'border-red-500' : 'border-booking-teal'}`}
                       placeholder="Create a password"
                       style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                      required
                     />
+                    {fieldErrors.password && (
+                      <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors.password}</p>
+                    )}
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
@@ -600,11 +737,22 @@ export default function BookingRequestPage() {
                       type={showConfirmPassword ? "text" : "password"}
                       id="confirmPassword"
                       name="confirmPassword"
-                      className="w-full px-3 pr-10 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                      onChange={(e) => {
+                        if (fieldErrors.confirmPassword) {
+                          setFieldErrors(prev => {
+                            const newErrors = { ...prev };
+                            delete newErrors.confirmPassword;
+                            return newErrors;
+                          });
+                        }
+                      }}
+                      className={`w-full px-3 pr-10 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors.confirmPassword ? 'border-red-500' : 'border-booking-teal'}`}
                       placeholder="Confirm password"
                       style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                      required
                     />
+                    {fieldErrors.confirmPassword && (
+                      <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors.confirmPassword}</p>
+                    )}
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -730,7 +878,6 @@ export default function BookingRequestPage() {
                 id="termsAccepted"
                 name="termsAccepted"
                 checked={termsAccepted}
-                required
                 onChange={(e) => {
                   setTermsAccepted(e.target.checked);
                   if (e.target.checked && termsError) {

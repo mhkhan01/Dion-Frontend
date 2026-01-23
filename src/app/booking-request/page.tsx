@@ -208,7 +208,7 @@ export default function BookingRequestPage() {
     try {
       // Call backend API endpoint
       const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
-      const response = await fetch(`http://jfgm6v6pkw.us-east-1.awsapprunner.com/api/booking-requests`, {
+      const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/booking-requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

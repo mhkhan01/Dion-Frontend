@@ -164,8 +164,8 @@ function LoginContent() {
             
             // Check if landlord is active via backend API
             try {
-              const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5000/api';
-              const activeCheckResponse = await fetch(`${backendUrl}/partner-login-check`, {
+              const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
+              const activeCheckResponse = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/partner-login-check`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

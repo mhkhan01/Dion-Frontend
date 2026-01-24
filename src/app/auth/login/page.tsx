@@ -118,21 +118,34 @@ function LoginContent() {
                 body: JSON.stringify({ userId: authUser.id }),
               });
               
+              if (!activeCheckResponse.ok) {
+                // Backend check failed, prevent login
+                await supabase.auth.signOut();
+                setError('Unable to verify account status. Please try again.');
+                return;
+              }
+              
               const activeCheckData = await activeCheckResponse.json();
               
               if (activeCheckData.success && activeCheckData.isActive === false) {
                 // Contractor is inactive, sign them out and show error
                 await supabase.auth.signOut();
-                setError('Your account is inactive. Ask the admin to activate it.');
+                setError('Your account is currently inactive, Ask the admin to activate your account');
+                return;
+              }
+              
+              if (!activeCheckData.success) {
+                // Backend returned error, prevent login
+                await supabase.auth.signOut();
+                setError('Unable to verify account status. Please try again.');
                 return;
               }
             } catch (activeCheckError) {
               console.error('Error checking contractor active status:', activeCheckError);
-              // If backend check fails, continue with login (fail-open for better UX)
-              // You can change this to fail-closed by uncommenting below:
-              // await supabase.auth.signOut();
-              // setError('Unable to verify account status. Please try again.');
-              // return;
+              // If backend check fails, prevent login (fail-closed for security)
+              await supabase.auth.signOut();
+              setError('Unable to verify account status. Please try again.');
+              return;
             }
             
             // User exists in contractor table and is active, redirect to contractor dashboard
@@ -160,21 +173,34 @@ function LoginContent() {
                 body: JSON.stringify({ userId: authUser.id }),
               });
               
+              if (!activeCheckResponse.ok) {
+                // Backend check failed, prevent login
+                await supabase.auth.signOut();
+                setError('Unable to verify account status. Please try again.');
+                return;
+              }
+              
               const activeCheckData = await activeCheckResponse.json();
               
               if (activeCheckData.success && activeCheckData.isActive === false) {
                 // Landlord is inactive, sign them out and show error
                 await supabase.auth.signOut();
-                setError('Your account is inactive. Ask the admin to activate it.');
+                setError('Your account is currently inactive, Ask the admin to activate your account');
+                return;
+              }
+              
+              if (!activeCheckData.success) {
+                // Backend returned error, prevent login
+                await supabase.auth.signOut();
+                setError('Unable to verify account status. Please try again.');
                 return;
               }
             } catch (activeCheckError) {
               console.error('Error checking landlord active status:', activeCheckError);
-              // If backend check fails, continue with login (fail-open for better UX)
-              // You can change this to fail-closed by uncommenting below:
-              // await supabase.auth.signOut();
-              // setError('Unable to verify account status. Please try again.');
-              // return;
+              // If backend check fails, prevent login (fail-closed for security)
+              await supabase.auth.signOut();
+              setError('Unable to verify account status. Please try again.');
+              return;
             }
             
             // User exists in landlord table and is active, redirect to landlord dashboard

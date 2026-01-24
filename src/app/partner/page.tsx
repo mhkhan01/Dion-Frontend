@@ -1051,7 +1051,7 @@ export default function PartnerDashboard() {
                             property.activity === 'active'
                               ? 'bg-green-100 text-green-800' 
                               : 'bg-red-100 text-red-800'
-                          }`}>
+                          }`} style={{fontSize: '14px', letterSpacing: '0.5px'}}>
                             {property.activity === 'active' ? 'Active' : 'Inactive'}
                             </span>
                           <div className="relative">
@@ -1071,7 +1071,7 @@ export default function PartnerDashboard() {
                                       handleTogglePropertyStatus(property.id, property.activity || 'inactive');
                                       setOpenDropdownId(null);
                                     }}
-                                    className="block w-full text-left px-4 py-2 text-xs sm:text-base font-avenir text-booking-dark hover:bg-gray-100" style={{fontSize: '9px'}}
+                                    className="block w-full text-left px-4 py-2 text-xs sm:text-base font-avenir text-booking-dark hover:bg-gray-100" style={{fontSize: '14px'}}
                                   >
                                     {property.activity === 'active' ? 'Delist' : 'List'}
                           </button>
@@ -1080,7 +1080,7 @@ export default function PartnerDashboard() {
                                       handleDeleteProperty(property.id);
                                       setOpenDropdownId(null);
                                     }}
-                                    className="block w-full text-left px-4 py-2 text-xs sm:text-base font-avenir text-red-600 hover:bg-gray-100" style={{fontSize: '9px'}}
+                                    className="block w-full text-left px-4 py-2 text-xs sm:text-base font-avenir text-red-600 hover:bg-gray-100" style={{fontSize: '14px'}}
                           >
                             Delete
                           </button>
@@ -1183,7 +1183,7 @@ export default function PartnerDashboard() {
                           property.activity === 'active'
                             ? 'bg-green-100 text-green-800' 
                             : 'bg-red-100 text-red-800'
-                        }`}>
+                        }`} style={{fontSize: '14px', letterSpacing: '0.5px'}}>
                           {property.activity === 'active' ? 'Active' : 'Inactive'}
                         </span>
                       </div>

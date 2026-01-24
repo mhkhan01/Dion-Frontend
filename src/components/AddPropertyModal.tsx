@@ -21,7 +21,7 @@ const propertySchema = z.object({
   bedrooms: z.number().min(1, 'Must have at least 1 bedroom'),
   beds: z.number().min(1, 'Must have at least 1 bed'),
   bedsBreakdown: z.string().optional(),
-  bathrooms: z.number().min(0.5, 'Must have at least 0.5 bathrooms'),
+  bathrooms: z.number().min(1, 'Must have at least 1 bathroom'),
   maxOccupancy: z.number().min(1, 'Must accommodate at least 1 person'),
   parkingType: z.enum(['Driveway', 'Off-Street', 'Secure Bay', 'On-Street']).optional(),
   
@@ -386,10 +386,10 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   <input
                     {...register('bathrooms', { valueAsNumber: true })}
                     type="number"
-                    min="0.5"
-                    step="0.5"
+                    min="1"
+                    step="1"
                     className={`w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-xs sm:text-base ${errors.bathrooms ? 'border-red-500' : ''}`}
-                    placeholder="1.5"
+                    placeholder="1"
                   />
                   {errors.bathrooms && (
                     <p className="mt-1 text-sm text-red-600">{errors.bathrooms.message}</p>

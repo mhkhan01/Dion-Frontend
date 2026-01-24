@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import CustomSelect from './CustomSelect';
 
 const propertySchema = z.object({
   // Basic Details
@@ -222,17 +223,25 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   <label htmlFor="propertyType" className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
                     Property Type *
                   </label>
-                  <select
-                    {...register('propertyType')}
-                    className={`w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-xs sm:text-base ${errors.propertyType ? 'border-red-500' : ''}`}
-                  >
-                    <option value="">Select property type</option>
-                    <option value="House">House</option>
-                    <option value="Flat">Flat</option>
-                    <option value="Apartment">Apartment</option>
-                    <option value="Townhouse">Townhouse</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  <CustomSelect
+                    id="propertyType"
+                    name="propertyType"
+                    value={watch('propertyType') || ''}
+                    onChange={(value) => {
+                      setValue('propertyType', value as 'House' | 'Flat' | 'Apartment' | 'Townhouse' | 'Other');
+                      trigger('propertyType');
+                    }}
+                    placeholder="Select property type"
+                    options={[
+                      { value: 'House', label: 'House' },
+                      { value: 'Flat', label: 'Flat' },
+                      { value: 'Apartment', label: 'Apartment' },
+                      { value: 'Townhouse', label: 'Townhouse' },
+                      { value: 'Other', label: 'Other' },
+                    ]}
+                    error={!!errors.propertyType}
+                    className={errors.propertyType ? 'border-red-500' : ''}
+                  />
                   {errors.propertyType && (
                     <p className="mt-1 text-sm text-red-600">{errors.propertyType.message}</p>
                   )}
@@ -418,16 +427,22 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   <label htmlFor="parkingType" className="block text-xs sm:text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
                     Parking Type
                   </label>
-                  <select
-                    {...register('parkingType')}
-                    className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-xs sm:text-base"
-                  >
-                    <option value="">Select parking type</option>
-                    <option value="Driveway">Driveway</option>
-                    <option value="Off-Street">Off-Street</option>
-                    <option value="Secure Bay">Secure Bay</option>
-                    <option value="On-Street">On-Street</option>
-                  </select>
+                  <CustomSelect
+                    id="parkingType"
+                    name="parkingType"
+                    value={watch('parkingType') || ''}
+                    onChange={(value) => {
+                      setValue('parkingType', value as 'Driveway' | 'Off-Street' | 'Secure Bay' | 'On-Street' | undefined);
+                      trigger('parkingType');
+                    }}
+                    placeholder="Select parking type"
+                    options={[
+                      { value: 'Driveway', label: 'Driveway' },
+                      { value: 'Off-Street', label: 'Off-Street' },
+                      { value: 'Secure Bay', label: 'Secure Bay' },
+                      { value: 'On-Street', label: 'On-Street' },
+                    ]}
+                  />
                 </div>
               </div>
             </div>
@@ -717,16 +732,22 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   <label htmlFor="paymentMethod.preferredPaymentMethod" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
                     Preferred Payment Method
                   </label>
-                  <select
-                    {...register('paymentMethod.preferredPaymentMethod')}
-                    className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-xs sm:text-base"
-                  >
-                    <option value="">Select payment method</option>
-                    <option value="bank_transfer">Bank Transfer</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="stripe">Stripe</option>
-                    <option value="other">Other</option>
-                  </select>
+                  <CustomSelect
+                    id="paymentMethod.preferredPaymentMethod"
+                    name="paymentMethod.preferredPaymentMethod"
+                    value={watch('paymentMethod.preferredPaymentMethod') || ''}
+                    onChange={(value) => {
+                      setValue('paymentMethod.preferredPaymentMethod', value as 'bank_transfer' | 'paypal' | 'stripe' | 'other' | undefined);
+                      trigger('paymentMethod.preferredPaymentMethod');
+                    }}
+                    placeholder="Select payment method"
+                    options={[
+                      { value: 'bank_transfer', label: 'Bank Transfer' },
+                      { value: 'paypal', label: 'PayPal' },
+                      { value: 'stripe', label: 'Stripe' },
+                      { value: 'other', label: 'Other' },
+                    ]}
+                  />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">

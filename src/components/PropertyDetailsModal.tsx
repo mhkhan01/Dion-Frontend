@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/lib/supabase';
+import CustomSelect from './CustomSelect';
 
 interface Property {
   id: string;
@@ -44,6 +45,17 @@ interface Property {
   // Additional Information
   additional_info?: string;
   
+  // VAT Details, Comments, Airbnb
+  vat_details?: string;
+  comments?: string;
+  airbnb?: string;
+  
+  // Payment Information (stored as separate columns in database)
+  payment_method?: string;
+  bank_name?: string;
+  account_holder_name?: string;
+  sort_code?: string;
+  account_number?: string;
   
   // Status and metadata
   is_available: boolean;
@@ -152,6 +164,14 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
           gas_safety_certificate: editedProperty.gas_safety_certificate,
           eicr: editedProperty.eicr,
           additional_info: editedProperty.additional_info,
+          vat_details: editedProperty.vat_details || null,
+          comments: editedProperty.comments || null,
+          airbnb: editedProperty.airbnb || null,
+          payment_method: editedProperty.payment_method || null,
+          bank_name: editedProperty.bank_name || null,
+          account_holder_name: editedProperty.account_holder_name || null,
+          sort_code: editedProperty.sort_code || null,
+          account_number: editedProperty.account_number || null,
           is_available: editedProperty.is_available,
           updated_at: new Date().toISOString()
         })
@@ -341,7 +361,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                     type="text"
                     value={displayProperty.property_name}
                     onChange={(e) => handleInputChange('property_name', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                    className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   />
                 ) : (
                   <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.property_name}</p>
@@ -350,17 +370,18 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
               <div>
                 <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Property Type</label>
                 {isEditMode ? (
-                  <select
-                    value={displayProperty.property_type}
-                    onChange={(e) => handleInputChange('property_type', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
-                  >
-                    <option value="House">House</option>
-                    <option value="Flat">Flat</option>
-                    <option value="Apartment">Apartment</option>
-                    <option value="Townhouse">Townhouse</option>
-                    <option value="Other">Other</option>
-                  </select>
+                  <CustomSelect
+                    value={displayProperty.property_type || ''}
+                    onChange={(value) => handleInputChange('property_type', value)}
+                    placeholder="Select property type"
+                    options={[
+                      { value: 'House', label: 'House' },
+                      { value: 'Flat', label: 'Flat' },
+                      { value: 'Apartment', label: 'Apartment' },
+                      { value: 'Townhouse', label: 'Townhouse' },
+                      { value: 'Other', label: 'Other' },
+                    ]}
+                  />
                 ) : (
                   <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.property_type}</p>
                 )}
@@ -375,7 +396,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                       value={displayProperty.house_address}
                       onChange={(e) => handleInputChange('house_address', e.target.value)}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                       placeholder="Enter house address"
                     />
                   </div>
@@ -387,7 +408,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                       type="text"
                       value={displayProperty.locality || ''}
                       onChange={(e) => handleInputChange('locality', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                       placeholder="e.g., Westminster"
                     />
                   </div>
@@ -399,7 +420,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                       type="text"
                       value={displayProperty.city}
                       onChange={(e) => handleInputChange('city', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                       placeholder="e.g., London"
                     />
                   </div>
@@ -411,7 +432,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                       type="text"
                       value={displayProperty.county || ''}
                       onChange={(e) => handleInputChange('county', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                       placeholder="e.g., Greater London"
                     />
                   </div>
@@ -423,7 +444,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                       type="text"
                       value={displayProperty.country}
                       onChange={(e) => handleInputChange('country', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                       placeholder="e.g., United Kingdom"
                     />
                   </div>
@@ -435,7 +456,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                       type="text"
                       value={displayProperty.postcode}
                       onChange={(e) => handleInputChange('postcode', e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                      className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                       placeholder="e.g., SW1A 1AA"
                     />
                   </div>
@@ -458,17 +479,17 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
               <div>
                 <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Parking Type</label>
                 {isEditMode ? (
-                  <select
+                  <CustomSelect
                     value={displayProperty.parking_type || ''}
-                    onChange={(e) => handleInputChange('parking_type', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
-                  >
-                    <option value="">Select parking type</option>
-                    <option value="Driveway">Driveway</option>
-                    <option value="Off-Street">Off-Street</option>
-                    <option value="Secure Bay">Secure Bay</option>
-                    <option value="On-Street">On-Street</option>
-                  </select>
+                    onChange={(value) => handleInputChange('parking_type', value || null)}
+                    placeholder="Select parking type"
+                    options={[
+                      { value: 'Driveway', label: 'Driveway' },
+                      { value: 'Off-Street', label: 'Off-Street' },
+                      { value: 'Secure Bay', label: 'Secure Bay' },
+                      { value: 'On-Street', label: 'On-Street' },
+                    ]}
+                  />
                 ) : (
                   <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.parking_type || 'Not specified'}</p>
                 )}
@@ -545,7 +566,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                     type="text"
                     value={displayProperty.beds_breakdown || ''}
                     onChange={(e) => handleInputChange('beds_breakdown', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                    className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                     placeholder="e.g., 2 Queen beds, 1 Single bed"
                   />
                 ) : (
@@ -627,7 +648,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                   <textarea
                     value={displayProperty.additional_info || ''}
                     onChange={(e) => handleInputChange('additional_info', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal min-h-[100px]"
+                    className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent min-h-[100px]"
                     placeholder="Enter any additional information about the property..."
                   />
                 ) : (
@@ -636,6 +657,179 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
               </div>
             </div>
           )}
+
+          {/* VAT Details */}
+          {(displayProperty.vat_details || isEditMode) && (
+            <div>
+              <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">VAT Details</h3>
+              <div className="p-3 sm:p-4 bg-gray-50 rounded-lg">
+                {isEditMode ? (
+                  <textarea
+                    value={displayProperty.vat_details || ''}
+                    onChange={(e) => handleInputChange('vat_details', e.target.value)}
+                    className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent min-h-[80px]"
+                    placeholder="Enter VAT details for this property (VAT number, rate, registration status, etc.)..."
+                  />
+                ) : (
+                  <p className="text-xs sm:text-base font-avenir-regular text-booking-dark">{displayProperty.vat_details || 'Not specified'}</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Comments / Notes */}
+          {(displayProperty.comments || isEditMode) && (
+            <div>
+              <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">Comments / Notes</h3>
+              <div className="p-3 sm:p-4 bg-gray-50 rounded-lg">
+                {isEditMode ? (
+                  <textarea
+                    value={displayProperty.comments || ''}
+                    onChange={(e) => handleInputChange('comments', e.target.value)}
+                    className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent min-h-[100px]"
+                    placeholder="Add any comments, notes, or special instructions for this property..."
+                  />
+                ) : (
+                  <p className="text-xs sm:text-base font-avenir-regular text-booking-dark">{displayProperty.comments || 'Not specified'}</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Airbnb Reference */}
+          {(displayProperty.airbnb || isEditMode) && (
+            <div>
+              <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">Airbnb Reference</h3>
+              <div>
+                <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Airbnb Listing Link (Optional)</label>
+                {isEditMode ? (
+                  <input
+                    type="url"
+                    value={displayProperty.airbnb || ''}
+                    onChange={(e) => handleInputChange('airbnb', e.target.value)}
+                    className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="https://www.airbnb.co.uk/rooms/..."
+                  />
+                ) : (
+                  <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">
+                    {displayProperty.airbnb ? (
+                      <a href={displayProperty.airbnb} target="_blank" rel="noopener noreferrer" className="text-booking-teal hover:underline">
+                        {displayProperty.airbnb}
+                      </a>
+                    ) : (
+                      'Not specified'
+                    )}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Payment Information */}
+          <div>
+            <h3 className="text-sm sm:text-lg font-avenir-bold font-semibold text-booking-dark mb-2 sm:mb-4">Payout Information</h3>
+            <div className="space-y-3 sm:space-y-4">
+              <div>
+                <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Preferred Payment Method</label>
+                {isEditMode ? (
+                  <CustomSelect
+                    value={displayProperty.payment_method || ''}
+                    onChange={(value) => handleInputChange('payment_method', value || null)}
+                    placeholder="Select payment method"
+                    options={[
+                      { value: 'bank_transfer', label: 'Bank Transfer' },
+                      { value: 'paypal', label: 'PayPal' },
+                      { value: 'stripe', label: 'Stripe' },
+                      { value: 'other', label: 'Other' },
+                    ]}
+                  />
+                ) : (
+                  <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">
+                    {displayProperty.payment_method 
+                      ? displayProperty.payment_method.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
+                      : 'Not specified'}
+                  </p>
+                )}
+              </div>
+
+              {isEditMode && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
+                  <div>
+                    <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Bank Name</label>
+                    <input
+                      type="text"
+                      value={displayProperty.bank_name || ''}
+                      onChange={(e) => handleInputChange('bank_name', e.target.value || null)}
+                      className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                      placeholder="e.g., Barclays, HSBC"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Account Holder Name</label>
+                    <input
+                      type="text"
+                      value={displayProperty.account_holder_name || ''}
+                      onChange={(e) => handleInputChange('account_holder_name', e.target.value || null)}
+                      className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                      placeholder="Full name on account"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Sort Code</label>
+                    <input
+                      type="text"
+                      value={displayProperty.sort_code || ''}
+                      onChange={(e) => handleInputChange('sort_code', e.target.value || null)}
+                      className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                      placeholder="12-34-56"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Account Number</label>
+                    <input
+                      type="text"
+                      value={displayProperty.account_number || ''}
+                      onChange={(e) => handleInputChange('account_number', e.target.value || null)}
+                      className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                      placeholder="12345678"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {!isEditMode && (displayProperty.bank_name || displayProperty.account_holder_name || displayProperty.sort_code || displayProperty.account_number) && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-6">
+                  {displayProperty.bank_name && (
+                    <div>
+                      <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Bank Name</label>
+                      <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.bank_name}</p>
+                    </div>
+                  )}
+                  {displayProperty.account_holder_name && (
+                    <div>
+                      <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Account Holder Name</label>
+                      <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.account_holder_name}</p>
+                    </div>
+                  )}
+                  {displayProperty.sort_code && (
+                    <div>
+                      <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Sort Code</label>
+                      <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.sort_code}</p>
+                    </div>
+                  )}
+                  {displayProperty.account_number && (
+                    <div>
+                      <label className="block text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Account Number</label>
+                      <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.account_number}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* Status and Metadata */}
           <div>
@@ -647,7 +841,7 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                   <select
                     value={displayProperty.is_available ? 'available' : 'unavailable'}
                     onChange={(e) => handleInputChange('is_available', e.target.value === 'available')}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
+                    className="w-full px-2 sm:px-4 py-2 sm:py-3 border border-booking-teal rounded text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   >
                     <option value="available">Available</option>
                     <option value="unavailable">Unavailable</option>

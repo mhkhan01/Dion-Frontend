@@ -546,6 +546,18 @@ export default function PartnerDashboard() {
           // Additional Information
           additional_info: propertyData.additionalInfo || null,
           
+          // VAT Details, Comments, Airbnb
+          vat_details: propertyData.vatDetails || null,
+          comments: propertyData.comments || null,
+          airbnb: propertyData.airbnb || null,
+          
+          // Payment Method
+          payment_method: propertyData.paymentMethod?.preferredPaymentMethod || null,
+          bank_name: propertyData.paymentMethod?.bankName || null,
+          account_holder_name: propertyData.paymentMethod?.accountHolderName || null,
+          sort_code: propertyData.paymentMethod?.sortCode || null,
+          account_number: propertyData.paymentMethod?.accountNumber || null,
+          
           // Pricing (set default values)
           weekly_rate: null,
           monthly_rate: null,

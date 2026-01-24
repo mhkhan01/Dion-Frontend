@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import SingleDatePicker from '../../components/SingleDatePicker';
+import SingleDatePicker from '@/components/SingleDatePicker';
 
 interface Booking {
   id: string;
@@ -539,7 +539,7 @@ export default function BookingRequestPage() {
                             <SingleDatePicker
                               isOpen={true}
                               onClose={() => setOpenCalendarFor(null)}
-                              onSelect={(date: string) => handleDateSelect(booking.id, 'startDate', date)}
+                              onSelect={(date) => handleDateSelect(booking.id, 'startDate', date)}
                               initialDate={booking.startDate}
                             />
                           )}
@@ -571,7 +571,7 @@ export default function BookingRequestPage() {
                             <SingleDatePicker
                               isOpen={true}
                               onClose={() => setOpenCalendarFor(null)}
-                              onSelect={(date: string) => handleDateSelect(booking.id, 'endDate', date)}
+                              onSelect={(date) => handleDateSelect(booking.id, 'endDate', date)}
                               initialDate={booking.endDate}
                               minDate={booking.startDate || undefined}
                               alignRight={true}
@@ -729,7 +729,7 @@ export default function BookingRequestPage() {
                   <label htmlFor="password" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Password *
                   </label>
-                  <div className="relative">
+                  <div className="relative isolate">
                     <input
                       type={showPassword ? "text" : "password"}
                       id="password"
@@ -755,7 +755,7 @@ export default function BookingRequestPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-gray-500 hover:text-gray-700 focus:outline-none"
                       aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                       {showPassword ? (
@@ -775,7 +775,7 @@ export default function BookingRequestPage() {
                   <label htmlFor="confirmPassword" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                     Confirm Password *
                   </label>
-                  <div className="relative">
+                  <div className="relative isolate">
                     <input
                       type={showConfirmPassword ? "text" : "password"}
                       id="confirmPassword"
@@ -799,7 +799,7 @@ export default function BookingRequestPage() {
                     <button
                       type="button"
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 z-10 text-gray-500 hover:text-gray-700 focus:outline-none"
                       aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                     >
                       {showConfirmPassword ? (

@@ -1,9 +1,63 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import { supabase } from '@/lib/supabase';
 
 export default function SignupChoicePage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    // Check if user is an admin and redirect to admin login page
+    const checkAdminAndRedirect = async () => {
+      try {
+        // Check URL hash for Supabase auth tokens (email confirmation links)
+        const hash = window.location.hash;
+        const hasAuthToken = hash.includes('access_token') || hash.includes('type=recovery') || hash.includes('type=signup');
+        
+        // Get session (might be established after email confirmation)
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session?.user) {
+          // Check if user has admin role in metadata
+          const userRole = session.user.user_metadata?.role;
+          
+          if (userRole === 'admin') {
+            // Determine admin frontend URL
+            const adminFrontendUrl = process.env.NEXT_PUBLIC_ADMIN_FRONTEND_URL || 
+              (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+                ? 'http://localhost:3002' 
+                : 'https://admin.booking-hub.co.uk');
+            
+            // Redirect to admin frontend login page
+            window.location.href = `${adminFrontendUrl}/auth/login?message=Email confirmed successfully. Please sign in.`;
+            return;
+          }
+        } else if (hasAuthToken) {
+          // If we have an auth token in the URL but no session yet, wait a bit and check again
+          // This handles the case where Supabase is still processing the confirmation
+          setTimeout(async () => {
+            const { data: { session: retrySession } } = await supabase.auth.getSession();
+            if (retrySession?.user?.user_metadata?.role === 'admin') {
+              const adminFrontendUrl = process.env.NEXT_PUBLIC_ADMIN_FRONTEND_URL || 
+                (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+                  ? 'http://localhost:3002' 
+                  : 'https://admin.booking-hub.co.uk');
+              window.location.href = `${adminFrontendUrl}/auth/login?message=Email confirmed successfully. Please sign in.`;
+            }
+          }, 1000);
+        }
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+        // Continue with normal page rendering if check fails
+      }
+    };
+
+    checkAdminAndRedirect();
+  }, [router]);
+
   return (
     <div className="min-h-screen relative overflow-hidden flex flex-col items-center justify-start px-4 sm:px-6 pt-8 sm:pt-12 pb-8 sm:pb-12">
       {/* Animated Background Image with Ken Burns effect */}

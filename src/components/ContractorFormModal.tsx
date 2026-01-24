@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { supabase } from '@/lib/supabase';
+import SingleDatePicker from '@/components/SingleDatePicker';
 
 interface Booking {
   id: string;
@@ -44,6 +45,7 @@ export default function ContractorFormModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showThankYou, setShowThankYou] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [openCalendarFor, setOpenCalendarFor] = useState<{ bookingId: string; field: 'start' | 'end' } | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -72,6 +74,23 @@ export default function ContractorFormModal({
     setBookings(prev => prev.map(booking => 
       booking.id === id ? { ...booking, [field]: value } : booking
     ));
+  };
+
+  // Helper function to format date string (YYYY-MM-DD) for display
+  const formatDateForDisplay = (dateString: string): string => {
+    if (!dateString) return '';
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
+
+  const handleDateSelect = (bookingId: string, field: 'startDate' | 'endDate', date: string) => {
+    updateBooking(bookingId, field, date);
+    setOpenCalendarFor(null);
   };
 
   const selectBudgetOption = (label: string) => {
@@ -418,29 +437,63 @@ export default function ContractorFormModal({
                     </div>
                   )}
                   <div className="grid grid-cols-2 gap-4">
-                    <div>
+                    <div className="relative">
                       <label className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                         Start Date
                       </label>
-                      <input
-                        type="date"
-                        value={booking.startDate}
-                        onChange={(e) => updateBooking(booking.id, 'startDate', e.target.value)}
-                        className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                        required
-                      />
+                      <button
+                        type="button"
+                        onClick={() => setOpenCalendarFor({ bookingId: booking.id, field: 'start' })}
+                        className={`w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-left flex items-center justify-between ${booking.startDate ? 'text-[#0B1D37]' : 'text-[#4B4E53]'} border-booking-teal`}
+                      >
+                        <span>
+                          {booking.startDate
+                            ? formatDateForDisplay(booking.startDate)
+                            : 'Select start date'}
+                        </span>
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#008080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </button>
+                      {/* Start Date Picker */}
+                      {openCalendarFor && openCalendarFor.bookingId === booking.id && openCalendarFor.field === 'start' && (
+                        <SingleDatePicker
+                          isOpen={true}
+                          onClose={() => setOpenCalendarFor(null)}
+                          onSelect={(date) => handleDateSelect(booking.id, 'startDate', date)}
+                          initialDate={booking.startDate}
+                        />
+                      )}
                     </div>
-                    <div>
+                    <div className="relative">
                       <label className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
                         End Date
                       </label>
-                      <input
-                        type="date"
-                        value={booking.endDate}
-                        onChange={(e) => updateBooking(booking.id, 'endDate', e.target.value)}
-                        className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
-                        required
-                      />
+                      <button
+                        type="button"
+                        onClick={() => setOpenCalendarFor({ bookingId: booking.id, field: 'end' })}
+                        className={`w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-left flex items-center justify-between ${booking.endDate ? 'text-[#0B1D37]' : 'text-[#4B4E53]'} border-booking-teal`}
+                      >
+                        <span>
+                          {booking.endDate
+                            ? formatDateForDisplay(booking.endDate)
+                            : 'Select end date'}
+                        </span>
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#008080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                      </button>
+                      {/* End Date Picker */}
+                      {openCalendarFor && openCalendarFor.bookingId === booking.id && openCalendarFor.field === 'end' && (
+                        <SingleDatePicker
+                          isOpen={true}
+                          onClose={() => setOpenCalendarFor(null)}
+                          onSelect={(date) => handleDateSelect(booking.id, 'endDate', date)}
+                          initialDate={booking.endDate}
+                          minDate={booking.startDate || undefined}
+                          alignRight={true}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

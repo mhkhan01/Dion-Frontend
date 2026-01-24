@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import SingleDatePicker from '../../components/SingleDatePicker';
 
 interface Booking {
   id: string;
@@ -35,7 +36,20 @@ export default function BookingRequestPage() {
     phone: ''
   });
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [openCalendarFor, setOpenCalendarFor] = useState<{ bookingId: string; field: 'start' | 'end' } | null>(null);
 
+
+  // Helper function to format date string (YYYY-MM-DD) for display
+  const formatDateForDisplay = (dateString: string): string => {
+    if (!dateString) return '';
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -82,6 +96,17 @@ export default function BookingRequestPage() {
     setBookings(prev => prev.map(booking => 
       booking.id === id ? { ...booking, [field]: value } : booking
     ));
+  };
+
+  const handleDateSelect = (bookingId: string, field: 'startDate' | 'endDate', date: string) => {
+    updateBooking(bookingId, field, date);
+    setOpenCalendarFor(null);
+    // Clear error for this field
+    setFieldErrors(prev => {
+      const newErrors = { ...prev };
+      delete newErrors[`${field}-${bookingId}`];
+      return newErrors;
+    });
   };
 
   const selectBudgetOption = (label: string) => {
@@ -487,55 +512,73 @@ export default function BookingRequestPage() {
                       )}
                     </div>
                     <div className="grid grid-cols-2 gap-2 sm:gap-4">
-                      <div>
-                        <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
-                          Start Date
-                        </label>
-                        <input
-                          type="date"
-                          value={booking.startDate}
-                          onChange={(e) => {
-                            updateBooking(booking.id, 'startDate', e.target.value);
-                            if (fieldErrors[`startDate-${booking.id}`]) {
-                              setFieldErrors(prev => {
-                                const newErrors = { ...prev };
-                                delete newErrors[`startDate-${booking.id}`];
-                                return newErrors;
-                              });
-                            }
-                          }}
-                          className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors[`startDate-${booking.id}`] ? 'border-red-500' : 'border-booking-teal'}`}
-                          style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                        />
-                        {fieldErrors[`startDate-${booking.id}`] && (
-                          <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors[`startDate-${booking.id}`]}</p>
-                        )}
+                      <div className="relative">
+                          <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                            Start Date
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setOpenCalendarFor({ bookingId: booking.id, field: 'start' })}
+                            className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-left flex items-center justify-between ${fieldErrors[`startDate-${booking.id}`] ? 'border-red-500' : 'border-booking-teal'} ${booking.startDate ? 'text-[#0B1D37]' : 'text-[#4B4E53]'}`}
+                            style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                          >
+                            <span>
+                              {booking.startDate
+                                ? formatDateForDisplay(booking.startDate)
+                                : 'Select start date'}
+                            </span>
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#008080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                          {fieldErrors[`startDate-${booking.id}`] && (
+                            <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors[`startDate-${booking.id}`]}</p>
+                          )}
+                          {/* Start Date Picker */}
+                          {openCalendarFor && openCalendarFor.bookingId === booking.id && openCalendarFor.field === 'start' && (
+                            <SingleDatePicker
+                              isOpen={true}
+                              onClose={() => setOpenCalendarFor(null)}
+                              onSelect={(date: string) => handleDateSelect(booking.id, 'startDate', date)}
+                              initialDate={booking.startDate}
+                            />
+                          )}
+                        </div>
+                        <div className="relative">
+                          <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                            End Date
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setOpenCalendarFor({ bookingId: booking.id, field: 'end' })}
+                            className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-left flex items-center justify-between ${fieldErrors[`endDate-${booking.id}`] ? 'border-red-500' : 'border-booking-teal'} ${booking.endDate ? 'text-[#0B1D37]' : 'text-[#4B4E53]'}`}
+                            style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                          >
+                            <span>
+                              {booking.endDate
+                                ? formatDateForDisplay(booking.endDate)
+                                : 'Select end date'}
+                            </span>
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5 text-[#008080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                          {fieldErrors[`endDate-${booking.id}`] && (
+                            <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors[`endDate-${booking.id}`]}</p>
+                          )}
+                          {/* End Date Picker */}
+                          {openCalendarFor && openCalendarFor.bookingId === booking.id && openCalendarFor.field === 'end' && (
+                            <SingleDatePicker
+                              isOpen={true}
+                              onClose={() => setOpenCalendarFor(null)}
+                              onSelect={(date: string) => handleDateSelect(booking.id, 'endDate', date)}
+                              initialDate={booking.endDate}
+                              minDate={booking.startDate || undefined}
+                              alignRight={true}
+                            />
+                          )}
+                        </div>
                       </div>
-                      <div>
-                        <label className="block text-xs sm:text-lg font-medium text-booking-dark mb-0.5 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
-                          End Date
-                        </label>
-                        <input
-                          type="date"
-                          value={booking.endDate}
-                          onChange={(e) => {
-                            updateBooking(booking.id, 'endDate', e.target.value);
-                            if (fieldErrors[`endDate-${booking.id}`]) {
-                              setFieldErrors(prev => {
-                                const newErrors = { ...prev };
-                                delete newErrors[`endDate-${booking.id}`];
-                                return newErrors;
-                              });
-                            }
-                          }}
-                          className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${fieldErrors[`endDate-${booking.id}`] ? 'border-red-500' : 'border-booking-teal'}`}
-                          style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                        />
-                        {fieldErrors[`endDate-${booking.id}`] && (
-                          <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{fieldErrors[`endDate-${booking.id}`]}</p>
-                        )}
-                      </div>
-                    </div>
                   </div>
                 ))}
                 <div className="mt-3">
@@ -865,7 +908,7 @@ export default function BookingRequestPage() {
                 <div className="pt-2 sm:pt-4">
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
                     <p className="text-green-800 text-xs sm:text-base font-medium" style={{ fontFamily: 'var(--font-avenir-regular)' }}>
-                      Thanks — your request has been received and your client account has been created. A confirmation email has been sent and may take up to 5–10 minutes to arrive.                    
+                    Thanks — your request has been received and your client account has been created. A confirmation email has been sent and may take up to 5–10 minutes to arrive.                    
                     </p>
                   </div>
                 </div>

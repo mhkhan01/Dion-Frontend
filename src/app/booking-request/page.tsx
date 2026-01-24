@@ -865,7 +865,7 @@ export default function BookingRequestPage() {
                 <div className="pt-2 sm:pt-4">
                   <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
                     <p className="text-green-800 text-xs sm:text-base font-medium" style={{ fontFamily: 'var(--font-avenir-regular)' }}>
-                      Thanks — your request has been received. And your client account has been created.
+                      Thanks — your request has been received and your client account has been created. A confirmation email has been sent and may take up to 5–10 minutes to arrive.                    
                     </p>
                   </div>
                 </div>

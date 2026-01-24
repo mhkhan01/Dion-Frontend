@@ -238,7 +238,7 @@ export default function ContractorSignupPage() {
             {success && (
               <div className="rounded-xl bg-green-50 border border-green-200 p-3 sm:p-4">
                 <div className="text-xs sm:text-sm text-green-800">
-                  We've sent you an email, please confirm your account creation by clicking the link in the email.
+                We’ve sent you a confirmation email. Please click the link in the email to complete your account setup. The email may take up to 5–10 minutes to arrive.               
                 </div>
               </div>
             )}

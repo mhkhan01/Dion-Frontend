@@ -458,13 +458,17 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
               <div>
                 <label className="block text-xs sm:text-xs sm:text-sm font-avenir-bold font-medium text-booking-gray mb-1">Parking Type</label>
                 {isEditMode ? (
-                  <input
-                    type="text"
+                  <select
                     value={displayProperty.parking_type || ''}
                     onChange={(e) => handleInputChange('parking_type', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
-                    placeholder="e.g., Street parking, Garage"
-                  />
+                  >
+                    <option value="">Select parking type</option>
+                    <option value="Driveway">Driveway</option>
+                    <option value="Off-Street">Off-Street</option>
+                    <option value="Secure Bay">Secure Bay</option>
+                    <option value="On-Street">On-Street</option>
+                  </select>
                 ) : (
                   <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.parking_type || 'Not specified'}</p>
                 )}

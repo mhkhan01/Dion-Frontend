@@ -356,10 +356,10 @@ export default function PropertyDetailsModal({ isOpen, onClose, property, onProp
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-base font-avenir-regular focus:outline-none focus:ring-2 focus:ring-booking-teal"
                   >
                     <option value="House">House</option>
+                    <option value="Flat">Flat</option>
                     <option value="Apartment">Apartment</option>
-                    <option value="Studio">Studio</option>
-                    <option value="Villa">Villa</option>
-                    <option value="Cottage">Cottage</option>
+                    <option value="Townhouse">Townhouse</option>
+                    <option value="Other">Other</option>
                   </select>
                 ) : (
                   <p className="text-xs sm:text-base font-avenir-regular text-booking-dark font-medium">{displayProperty.property_type}</p>

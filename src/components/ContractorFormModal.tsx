@@ -46,6 +46,7 @@ export default function ContractorFormModal({
   const [showThankYou, setShowThankYou] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [openCalendarFor, setOpenCalendarFor] = useState<{ bookingId: string; field: 'start' | 'end' } | null>(null);
+  const submitButtonClickedRef = useRef<boolean>(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,6 +54,13 @@ export default function ContractorFormModal({
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Prevent form submission on Enter key press in input fields
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
   };
 
   const addBooking = () => {
@@ -97,6 +105,13 @@ export default function ContractorFormModal({
     setSelectedBudgetOption(label);
     setIsDropdownOpen(false);
   };
+
+  // Reset submit button flag when modal opens/closes
+  useEffect(() => {
+    if (isOpen) {
+      submitButtonClickedRef.current = false;
+    }
+  }, [isOpen]);
 
   // Fetch contractor data when modal opens
   useEffect(() => {
@@ -200,6 +215,15 @@ export default function ContractorFormModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Only allow submission if the submit button was explicitly clicked
+    if (!submitButtonClickedRef.current) {
+      return;
+    }
+    
+    // Reset the flag
+    submitButtonClickedRef.current = false;
+    
     setIsSubmitting(true);
     
     try {
@@ -398,6 +422,7 @@ export default function ContractorFormModal({
                   name="city"
                   value={formData.city}
                   onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
                   placeholder="e.g. London"
                   className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                 />
@@ -412,6 +437,7 @@ export default function ContractorFormModal({
                   name="projectPostcode"
                   value={formData.projectPostcode}
                   onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
                   className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="Enter postcode"
                 />
@@ -521,6 +547,7 @@ export default function ContractorFormModal({
                   name="teamSize"
                   value={formData.teamSize}
                   onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
                   min="1"
                   className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="Number of people"
@@ -537,6 +564,7 @@ export default function ContractorFormModal({
                   name="budgetPerPerson"
                   value={selectedBudgetOption}
                   onChange={(e) => setSelectedBudgetOption(e.target.value)}
+                  onKeyDown={handleKeyDown}
                   min="0"
                   className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="Enter budget"
@@ -556,6 +584,7 @@ export default function ContractorFormModal({
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
                   className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="Your full name"
                   required
@@ -571,6 +600,7 @@ export default function ContractorFormModal({
                   name="companyName"
                   value={formData.companyName}
                   onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
                   className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="Company name"
                   required
@@ -590,6 +620,7 @@ export default function ContractorFormModal({
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
                   className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="your.email@company.com"
                   required
@@ -605,6 +636,7 @@ export default function ContractorFormModal({
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
                   className="w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
                   placeholder="Your phone number"
                   required
@@ -624,6 +656,9 @@ export default function ContractorFormModal({
               <button
                 type="submit"
                 disabled={isSubmitting}
+                onClick={() => {
+                  submitButtonClickedRef.current = true;
+                }}
                 className="w-full bg-booking-teal text-white px-6 py-3 rounded-lg font-avenir tracking-wide text-base hover:bg-opacity-90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'Submitting...' : editingBookingRequestId ? 'Update Request' : 'Submit Request'}

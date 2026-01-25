@@ -132,7 +132,8 @@ export default function PartnerDashboard() {
   const [filterValues, setFilterValues] = useState({
     search: '',
     postcode: '',
-    property_type: ''
+    property_type: '',
+    parking_type: ''
   });
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -643,6 +644,13 @@ export default function PartnerDashboard() {
         }
       }
 
+      // Apply parking type filter
+      if (selectedFilters.has('parking_type') && filterValues.parking_type) {
+        if (property.parking_type !== filterValues.parking_type) {
+          return false;
+        }
+      }
+
       return true;
     });
   };
@@ -924,6 +932,7 @@ export default function PartnerDashboard() {
                           {selectedFilters.size === 1 && selectedFilters.has('search') ? 'Search All' :
                            selectedFilters.size === 1 && selectedFilters.has('postcode') ? 'Postcode' :
                            selectedFilters.size === 1 && selectedFilters.has('property_type') ? 'Property Type' :
+                           selectedFilters.size === 1 && selectedFilters.has('parking_type') ? 'Parking Type' :
                            `${selectedFilters.size} Filters`}
                         </span>
                         <svg className="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -937,7 +946,8 @@ export default function PartnerDashboard() {
                             {[
                               { value: 'search', label: 'Search All' },
                               { value: 'postcode', label: 'Filter by Postcode' },
-                              { value: 'property_type', label: 'Filter by Property Type' }
+                              { value: 'property_type', label: 'Filter by Property Type' },
+                              { value: 'parking_type', label: 'Filter by Parking Type' }
                             ].map((option) => (
                               <label key={option.value} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-1 rounded">
                                 <input
@@ -1011,6 +1021,25 @@ export default function PartnerDashboard() {
                             <option value="Townhouse">Townhouse</option>
                             <option value="Condo">Condo</option>
                             <option value="Villa">Villa</option>
+                          </select>
+                          <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
+                      )}
+                      
+                      {selectedFilters.has('parking_type') && (
+                        <div className="relative">
+                          <select
+                            value={filterValues.parking_type}
+                            onChange={(e) => setFilterValues(prev => ({ ...prev, parking_type: e.target.value }))}
+                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir"
+                          >
+                            <option value="">Select parking type</option>
+                            <option value="Driveway">Driveway</option>
+                            <option value="Off-Street">Off-Street</option>
+                            <option value="Secure Bay">Secure Bay</option>
+                            <option value="On-Street">On-Street</option>
                           </select>
                           <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />

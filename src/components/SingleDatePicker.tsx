@@ -53,9 +53,11 @@ export default function SingleDatePicker({
     };
 
     if (isOpen) {
-      setTimeout(() => {
+      // Use requestAnimationFrame to ensure the picker is rendered before adding the listener
+      // This prevents the initial click from immediately closing the picker while allowing immediate opening
+      requestAnimationFrame(() => {
         document.addEventListener('mousedown', handleClickOutside);
-      }, 100);
+      });
     }
 
     return () => {
@@ -157,7 +159,7 @@ export default function SingleDatePicker({
       {/* Calendar Popover */}
       <div
         ref={modalRef}
-        className={`absolute z-50 top-full mt-1.5 sm:mt-2 bg-[#F6F6F4] rounded-lg sm:rounded-xl shadow-2xl w-[calc(100vw-2.5rem)] max-w-[280px] sm:w-[320px] md:w-[340px] animate-card-entrance-1 overflow-hidden border border-[#008080]/20 ${alignRight ? 'right-0 sm:left-0' : 'left-0'}`}
+        className={`absolute z-50 top-full mt-1.5 sm:mt-2 bg-[#F6F6F4] rounded-lg sm:rounded-xl shadow-2xl w-[calc(100vw-2.5rem)] max-w-[280px] sm:w-[320px] md:w-[340px] overflow-hidden border border-[#008080]/20 ${alignRight ? 'right-0 sm:left-0' : 'left-0'}`}
         style={{ fontFamily: 'var(--font-avenir-regular)' }}
       >
         {/* Header */}

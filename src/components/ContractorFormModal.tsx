@@ -469,7 +469,10 @@ export default function ContractorFormModal({
                       </label>
                       <button
                         type="button"
-                        onClick={() => setOpenCalendarFor({ bookingId: booking.id, field: 'start' })}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenCalendarFor({ bookingId: booking.id, field: 'start' });
+                        }}
                         className={`w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-left flex items-center justify-between ${booking.startDate ? 'text-[#0B1D37]' : 'text-[#4B4E53]'} border-booking-teal`}
                       >
                         <span>
@@ -497,7 +500,10 @@ export default function ContractorFormModal({
                       </label>
                       <button
                         type="button"
-                        onClick={() => setOpenCalendarFor({ bookingId: booking.id, field: 'end' })}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenCalendarFor({ bookingId: booking.id, field: 'end' });
+                        }}
                         className={`w-full px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide border rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-left flex items-center justify-between ${booking.endDate ? 'text-[#0B1D37]' : 'text-[#4B4E53]'} border-booking-teal`}
                       >
                         <span>

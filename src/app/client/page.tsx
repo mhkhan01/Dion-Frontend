@@ -5,6 +5,7 @@ import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import ContractorFormModal from '@/components/ContractorFormModal';
+import SingleDatePicker from '@/components/SingleDatePicker';
 
 interface Booking {
   id: string;
@@ -62,6 +63,19 @@ export default function ContractorDashboard() {
   const [editingBookingRequestId, setEditingBookingRequestId] = useState<string | null>(null);
   const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [openDatePickerFor, setOpenDatePickerFor] = useState<'startDate' | 'endDate' | null>(null);
+
+  // Helper function to format date string (YYYY-MM-DD) for display
+  const formatDateForDisplay = (dateString: string): string => {
+    if (!dateString) return '';
+    const [year, month, day] = dateString.split('-').map(Number);
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  };
 
   const fetchContractorData = async () => {
     if (!user?.id) return;
@@ -455,50 +469,290 @@ export default function ContractorDashboard() {
             {/* Analytics Tiles */}
             <div className="grid grid-cols-2 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-6 max-w-4xl mx-auto">
               {/* Active Requests Analytics */}
-              <div className="rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 text-white" style={{ background: 'linear-gradient(to top, #00BAB5, rgba(0, 186, 181, 0.54))' }}>
-                <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
-                  <h3 className="text-sm sm:text-base lg:text-lg font-avenir-bold tracking-wide font-semibold">Active Requests</h3>
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                    <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+              <div 
+                className="rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 text-white animate-tile-slide-in-left hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-out cursor-pointer group relative overflow-hidden" 
+                style={{ 
+                  background: 'linear-gradient(135deg, #00BAB5, rgba(0, 186, 181, 0.54))',
+                  animationDelay: '0.1s',
+                  animationFillMode: 'backwards'
+                }}
+              >
+                {/* Animated background overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
+                    <h3 className="text-sm sm:text-base lg:text-lg font-avenir-bold tracking-wide font-semibold">Active Requests</h3>
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center group-hover:rotate-12 group-hover:scale-110 transition-all duration-500">
+                      <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4 animate-pulse-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
                   </div>
-                </div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-avenir font-bold tracking-wide mb-1 sm:mb-2">{activeBookings.length}</div>
-                <div className="text-xs sm:text-sm font-avenir font-medium tracking-wide opacity-90 mb-2 sm:mb-3 lg:mb-4">Currently active projects</div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm font-avenir font-medium tracking-wide">
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-white rounded-full"></div>
-                    <span>Confirmed: {activeBookings.filter(b => b.status === 'confirmed').length}</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-white bg-opacity-60 rounded-full"></div>
-                    <span>Paid: {activeBookings.filter(b => b.status === 'paid').length}</span>
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-avenir font-bold tracking-wide mb-1 sm:mb-2 animate-number-pop">{activeBookings.length}</div>
+                  <div className="text-xs sm:text-sm font-avenir font-medium tracking-wide opacity-90 mb-2 sm:mb-3 lg:mb-4">Currently active projects</div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 text-xs sm:text-sm font-avenir font-medium tracking-wide">
+                    <div className="flex items-center space-x-2 animate-fade-in-up" style={{ animationDelay: '0.3s', animationFillMode: 'backwards' }}>
+                      <div className="w-2 h-2 bg-white rounded-full animate-ping-slow"></div>
+                      <span>Confirmed: {activeBookings.filter(b => b.status === 'confirmed').length}</span>
+                    </div>
+                    <div className="flex items-center space-x-2 animate-fade-in-up" style={{ animationDelay: '0.4s', animationFillMode: 'backwards' }}>
+                      <div className="w-2 h-2 bg-white bg-opacity-60 rounded-full animate-ping-slow"></div>
+                      <span>Paid: {activeBookings.filter(b => b.status === 'paid').length}</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Pending Requests Analytics */}
-              <div className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 shadow-lg border border-gray-100">
-                <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
-                  <h3 className="text-sm sm:text-base lg:text-lg font-avenir-bold tracking-wide font-semibold text-booking-dark">Pending Requests</h3>
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 bg-yellow-100 rounded-full flex items-center justify-center">
-                    <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+              <div 
+                className="bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 lg:p-6 shadow-lg border border-gray-100 animate-tile-slide-in-right hover:scale-105 hover:shadow-2xl transition-all duration-500 ease-out cursor-pointer group relative overflow-hidden"
+                style={{ 
+                  animationDelay: '0.2s',
+                  animationFillMode: 'backwards'
+                }}
+              >
+                {/* Animated background overlay */}
+                <div className="absolute inset-0 bg-gradient-to-br from-yellow-50/0 via-yellow-50/50 to-yellow-50/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-2 sm:mb-3 lg:mb-4">
+                    <h3 className="text-sm sm:text-base lg:text-lg font-avenir-bold tracking-wide font-semibold text-booking-dark">Pending Requests</h3>
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8 bg-yellow-100 rounded-full flex items-center justify-center group-hover:rotate-12 group-hover:scale-110 transition-all duration-500">
+                      <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 lg:w-4 lg:h-4 text-yellow-600 animate-pulse-slow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
                   </div>
-                </div>
-                <div className="text-xl sm:text-2xl lg:text-3xl font-avenir font-bold tracking-wide text-booking-dark mb-1 sm:mb-2">{pendingBookings.length}</div>
-                <div className="text-xs sm:text-sm font-avenir font-medium tracking-wide text-booking-gray mb-2 sm:mb-3 lg:mb-4">Awaiting approval</div>
-                <div className="w-full bg-gray-200 rounded-full h-2 mb-2 sm:mb-3 lg:mb-4">
-                  <div className="bg-yellow-500 h-2 rounded-full" style={{width: `${Math.min((pendingBookings.length / 10) * 100, 100)}%`}}></div>
-                </div>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0 text-xs sm:text-sm font-avenir font-medium tracking-wide text-booking-gray">
-                  <span>This week: {pendingBookings.length}</span>
-                  <span>+{Math.floor(Math.random() * 5)}% from last week</span>
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-avenir font-bold tracking-wide text-booking-dark mb-1 sm:mb-2 animate-number-pop">{pendingBookings.length}</div>
+                  <div className="text-xs sm:text-sm font-avenir font-medium tracking-wide text-booking-gray mb-2 sm:mb-3 lg:mb-4">Awaiting approval</div>
+                  <div className="w-full bg-gray-200 rounded-full h-2 mb-2 sm:mb-3 lg:mb-4 overflow-hidden">
+                    <div className="bg-yellow-500 h-2 rounded-full animate-progress-fill transition-all duration-1000 ease-out" style={{width: `${Math.min((pendingBookings.length / 10) * 100, 100)}%`}}></div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-0 text-xs sm:text-sm font-avenir font-medium tracking-wide text-booking-gray">
+                    <span className="animate-fade-in-up" style={{ animationDelay: '0.5s', animationFillMode: 'backwards' }}>This week: {pendingBookings.length}</span>
+                    <span className="animate-fade-in-up" style={{ animationDelay: '0.6s', animationFillMode: 'backwards' }}>+{Math.floor(Math.random() * 5)}% from last week</span>
+                  </div>
                 </div>
               </div>
             </div>
+            
+            {/* Custom CSS Animations */}
+            <style jsx>{`
+              @keyframes tileSlideInLeft {
+                0% {
+                  opacity: 0;
+                  transform: translateX(-50px) translateY(20px) scale(0.9);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateX(0) translateY(0) scale(1);
+                }
+              }
+              
+              @keyframes tileSlideInRight {
+                0% {
+                  opacity: 0;
+                  transform: translateX(50px) translateY(20px) scale(0.9);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateX(0) translateY(0) scale(1);
+                }
+              }
+              
+              @keyframes numberPop {
+                0% {
+                  opacity: 0;
+                  transform: scale(0.5);
+                }
+                50% {
+                  transform: scale(1.1);
+                }
+                100% {
+                  opacity: 1;
+                  transform: scale(1);
+                }
+              }
+              
+              @keyframes fadeInUp {
+                0% {
+                  opacity: 0;
+                  transform: translateY(15px);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+              
+              @keyframes fadeInDown {
+                0% {
+                  opacity: 0;
+                  transform: translateY(-15px);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+              
+              @keyframes fadeIn {
+                0% {
+                  opacity: 0;
+                }
+                100% {
+                  opacity: 1;
+                }
+              }
+              
+              @keyframes slideInLeft {
+                0% {
+                  opacity: 0;
+                  transform: translateX(-30px);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateX(0);
+                }
+              }
+              
+              @keyframes sidebarSlideIn {
+                0% {
+                  opacity: 0;
+                  transform: translateX(-100%);
+                }
+                100% {
+                  opacity: 1;
+                  transform: translateX(0);
+                }
+              }
+              
+              @keyframes mobileSlideIn {
+                0% {
+                  transform: translateX(-100%);
+                }
+                100% {
+                  transform: translateX(0);
+                }
+              }
+              
+              @keyframes logoBounce {
+                0% {
+                  opacity: 0;
+                  transform: scale(0.3) translateY(-20px);
+                }
+                50% {
+                  transform: scale(1.05);
+                }
+                70% {
+                  transform: scale(0.95);
+                }
+                100% {
+                  opacity: 1;
+                  transform: scale(1) translateY(0);
+                }
+              }
+              
+              @keyframes pulseDot {
+                0%, 100% {
+                  opacity: 1;
+                  transform: scale(1);
+                  box-shadow: 0 0 0 0 rgba(0, 186, 181, 0.7);
+                }
+                50% {
+                  opacity: 0.8;
+                  transform: scale(1.2);
+                  box-shadow: 0 0 0 4px rgba(0, 186, 181, 0);
+                }
+              }
+              
+              @keyframes pingSlow {
+                0%, 100% {
+                  opacity: 1;
+                  transform: scale(1);
+                }
+                50% {
+                  opacity: 0.7;
+                  transform: scale(1.3);
+                }
+              }
+              
+              @keyframes pulseSlow {
+                0%, 100% {
+                  opacity: 1;
+                }
+                50% {
+                  opacity: 0.7;
+                }
+              }
+              
+              @keyframes progressFill {
+                0% {
+                  width: 0;
+                  opacity: 0.5;
+                }
+                100% {
+                  opacity: 1;
+                }
+              }
+              
+              .animate-tile-slide-in-left {
+                animation: tileSlideInLeft 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+              }
+              
+              .animate-tile-slide-in-right {
+                animation: tileSlideInRight 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+              }
+              
+              .animate-number-pop {
+                animation: numberPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+              }
+              
+              .animate-fade-in-up {
+                animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+              }
+              
+              .animate-fade-in-down {
+                animation: fadeInDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+              }
+              
+              .animate-fade-in {
+                animation: fadeIn 0.3s ease-out;
+              }
+              
+              .animate-slide-in-left {
+                animation: slideInLeft 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+              }
+              
+              .animate-sidebar-slide-in {
+                animation: sidebarSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+              }
+              
+              .animate-mobile-slide-in {
+                animation: mobileSlideIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+              }
+              
+              .animate-logo-bounce {
+                animation: logoBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+              }
+              
+              .animate-pulse-dot {
+                animation: pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+              }
+              
+              .animate-ping-slow {
+                animation: pingSlow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+              }
+              
+              .animate-pulse-slow {
+                animation: pulseSlow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+              }
+              
+              .animate-progress-fill {
+                animation: progressFill 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+              }
+            `}</style>
 
             {/* Activity Lists */}
             <div className="space-y-4">
@@ -623,31 +877,69 @@ export default function ContractorDashboard() {
                       
                       {selectedFilters.has('startDate') && (
                         <div className="relative">
-                          <input
-                            type="date"
-                            placeholder="Select start date"
-                            value={filterValues.startDate}
-                            onChange={(e) => setFilterValues(prev => ({ ...prev, startDate: e.target.value }))}
-                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir font-medium tracking-wide"
-                          />
-                          <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenDatePickerFor('startDate');
+                            }}
+                            className={`w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir font-medium tracking-wide text-left flex items-center justify-between ${filterValues.startDate ? 'text-booking-dark' : 'text-gray-400'}`}
+                          >
+                            <span>
+                              {filterValues.startDate
+                                ? formatDateForDisplay(filterValues.startDate)
+                                : 'Select start date'}
+                            </span>
+                            <svg className="w-4 h-4 text-booking-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                          {openDatePickerFor === 'startDate' && (
+                            <SingleDatePicker
+                              isOpen={true}
+                              onClose={() => setOpenDatePickerFor(null)}
+                              onSelect={(date) => {
+                                setFilterValues(prev => ({ ...prev, startDate: date }));
+                                setOpenDatePickerFor(null);
+                              }}
+                              initialDate={filterValues.startDate}
+                            />
+                          )}
                         </div>
                       )}
                       
                       {selectedFilters.has('endDate') && (
                         <div className="relative">
-                          <input
-                            type="date"
-                            placeholder="Select end date"
-                            value={filterValues.endDate}
-                            onChange={(e) => setFilterValues(prev => ({ ...prev, endDate: e.target.value }))}
-                            className="w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir font-medium tracking-wide"
-                          />
-                          <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenDatePickerFor('endDate');
+                            }}
+                            className={`w-full px-4 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent font-avenir font-medium tracking-wide text-left flex items-center justify-between ${filterValues.endDate ? 'text-booking-dark' : 'text-gray-400'}`}
+                          >
+                            <span>
+                              {filterValues.endDate
+                                ? formatDateForDisplay(filterValues.endDate)
+                                : 'Select end date'}
+                            </span>
+                            <svg className="w-4 h-4 text-booking-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </button>
+                          {openDatePickerFor === 'endDate' && (
+                            <SingleDatePicker
+                              isOpen={true}
+                              onClose={() => setOpenDatePickerFor(null)}
+                              onSelect={(date) => {
+                                setFilterValues(prev => ({ ...prev, endDate: date }));
+                                setOpenDatePickerFor(null);
+                              }}
+                              initialDate={filterValues.endDate}
+                              minDate={filterValues.startDate || undefined}
+                              alignRight={true}
+                            />
+                          )}
                         </div>
                       )}
                     </div>
@@ -1020,17 +1312,17 @@ export default function ContractorDashboard() {
         <img 
           src="/white-teal.webp" 
           alt="Booking Hub Logo" 
-          className="h-8 w-auto object-contain py-1 mr-3"
+          className="h-8 w-auto object-contain py-1 mr-3 animate-fade-in"
           style={{ maxWidth: '100%' }}
         />
-        <p className="absolute left-1/2 -translate-x-1/2 text-xl font-avenir tracking-wide font-bold text-white pointer-events-none">
+        <p className="absolute left-1/2 -translate-x-1/2 text-xl font-avenir tracking-wide font-bold text-white pointer-events-none animate-fade-in">
           Client Portal
         </p>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="ml-auto p-2 rounded-lg hover:bg-gray-700 transition-colors"
+          className="ml-auto p-2 rounded-lg hover:bg-gray-700 transition-all duration-300 hover:scale-110 active:scale-95 group"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
@@ -1039,24 +1331,24 @@ export default function ContractorDashboard() {
       {/* Mobile Menu Overlay */}
       {isMobileMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-50">
-          <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsMobileMenuOpen(false)}></div>
-          <div className="fixed top-0 left-0 h-full w-64 bg-booking-dark text-white transform transition-transform duration-300 ease-in-out">
+          <div className="fixed inset-0 bg-black bg-opacity-50 animate-fade-in" onClick={() => setIsMobileMenuOpen(false)}></div>
+          <div className="fixed top-0 left-0 h-full w-64 bg-booking-dark text-white transform transition-transform duration-300 ease-in-out animate-mobile-slide-in shadow-2xl">
             <div className="p-4 bg-booking-dark">
               <div className="flex items-center justify-between">
-                <div className="flex flex-col items-center space-y-2 py-2">
+                <div className="flex flex-col items-center space-y-2 py-2 animate-fade-in-down" style={{ animationDelay: '0.2s', animationFillMode: 'backwards' }}>
                   <img 
                     src="/white-teal.webp" 
                     alt="Booking Hub Logo" 
-                    className="h-12 w-auto object-contain"
-                    style={{ maxWidth: '100%' }}
+                    className="h-12 w-auto object-contain animate-logo-bounce"
+                    style={{ maxWidth: '100%', animationDelay: '0.3s', animationFillMode: 'backwards' }}
                   />
                   <p className="text-lg font-avenir tracking-wide font-bold text-white">Client Portal</p>
                 </div>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="p-2 rounded-lg hover:bg-gray-700 transition-colors"
+                  className="p-2 rounded-lg hover:bg-gray-700 transition-all duration-300 hover:rotate-90 group"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
@@ -1067,77 +1359,84 @@ export default function ContractorDashboard() {
             <nav className="p-4 space-y-2 font-avenir tracking-wide">
               <button
                 onClick={() => { setActiveTab('dashboard'); setIsMobileMenuOpen(false); }}
-                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 animate-slide-in-left group relative overflow-hidden ${
                   activeTab === 'dashboard'
-                    ? 'bg-white text-booking-dark'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    ? 'bg-white text-booking-dark shadow-lg'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:translate-x-1'
                 }`}
+                style={{ animationDelay: '0.4s', animationFillMode: 'backwards' }}
               >
-                <div className="flex items-center space-x-3">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="flex items-center space-x-3 relative z-10">
+                  <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
                   </svg>
                   <span className="text-sm font-medium">Dashboard</span>
-                  {activeTab === 'dashboard' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+                  {activeTab === 'dashboard' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto animate-pulse-dot"></div>}
                 </div>
               </button>
 
               <button
                 onClick={() => { setActiveTab('booking-requests'); setIsMobileMenuOpen(false); }}
-                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 animate-slide-in-left group relative overflow-hidden ${
                   activeTab === 'booking-requests'
-                    ? 'bg-white text-booking-dark'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    ? 'bg-white text-booking-dark shadow-lg'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:translate-x-1'
                 }`}
+                style={{ animationDelay: '0.5s', animationFillMode: 'backwards' }}
               >
-                <div className="flex items-center space-x-3">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="flex items-center space-x-3 relative z-10">
+                  <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                   <span className="text-sm font-medium">Booking Requests</span>
-                  {activeTab === 'booking-requests' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+                  {activeTab === 'booking-requests' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto animate-pulse-dot"></div>}
                 </div>
               </button>
 
 
               <button
                 onClick={() => { setActiveTab('contact-info'); setIsMobileMenuOpen(false); }}
-                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+                className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 animate-slide-in-left group relative overflow-hidden ${
                   activeTab === 'contact-info'
-                    ? 'bg-white text-booking-dark'
-                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                    ? 'bg-white text-booking-dark shadow-lg'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:translate-x-1'
                 }`}
+                style={{ animationDelay: '0.6s', animationFillMode: 'backwards' }}
               >
-                <div className="flex items-center space-x-3">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="flex items-center space-x-3 relative z-10">
+                  <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                   <span className="text-sm font-medium">Contact Information</span>
-                  {activeTab === 'contact-info' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+                  {activeTab === 'contact-info' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto animate-pulse-dot"></div>}
                 </div>
               </button>
             </nav>
 
             {/* Mobile Profile Section */}
-            <div className="p-4 mt-auto">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-booking-teal rounded-full flex items-center justify-center">
+            <div className="p-4 mt-auto animate-fade-in-up" style={{ animationDelay: '0.7s', animationFillMode: 'backwards' }}>
+              <div className="flex items-center space-x-3 mb-4 group cursor-pointer hover:bg-gray-700/30 p-2 rounded-lg transition-all duration-300">
+                <div className="w-8 h-8 bg-booking-teal rounded-full flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg">
                   <span className="text-white font-semibold text-sm">
                     {contractorName ? contractorName.charAt(0).toUpperCase() : 'C'}
                   </span>
                 </div>
                 <div>
-                  <p className="text-sm font-avenir font-medium text-white">{contractorName || 'Contractor'}</p>
+                  <p className="text-sm font-avenir font-medium text-white group-hover:text-booking-teal transition-colors duration-300">{contractorName || 'Contractor'}</p>
                   <p className="text-xs font-avenir text-gray-300">Client</p>
                 </div>
               </div>
               <button
                 onClick={() => { setIsLogoutModalOpen(true); setIsMobileMenuOpen(false); }}
-                className="w-full px-4 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 transition-all duration-200"
+                className="w-full px-4 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95 group relative overflow-hidden"
               >
-                <div className="flex items-center justify-center space-x-3">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transform -skew-x-12 group-hover:translate-x-full transition-all duration-700"></div>
+                <div className="flex items-center justify-center space-x-3 relative z-10">
+                  <svg className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
                   <span className="text-sm font-avenir font-medium">Logout</span>
@@ -1149,17 +1448,17 @@ export default function ContractorDashboard() {
       )}
 
       {/* Desktop Sidebar */}
-      <div className="hidden lg:flex w-64 bg-booking-dark text-white flex-col h-screen flex-shrink-0 overflow-y-auto">
+      <div className="hidden lg:flex w-64 bg-booking-dark text-white flex-col h-screen flex-shrink-0 overflow-y-auto animate-sidebar-slide-in">
         {/* Logo/Header */}
-        <div className="p-6 bg-booking-dark">
+        <div className="p-6 bg-booking-dark animate-fade-in-down" style={{ animationDelay: '0.1s', animationFillMode: 'backwards' }}>
           <div className="flex flex-col items-center space-y-2 py-2">
             <img 
               src="/white-teal.webp" 
               alt="Booking Hub Logo" 
-              className="h-12 w-auto object-contain"
-              style={{ maxWidth: '100%' }}
+              className="h-12 w-auto object-contain animate-logo-bounce"
+              style={{ maxWidth: '100%', animationDelay: '0.3s', animationFillMode: 'backwards' }}
             />
-            <p className="text-lg font-avenir tracking-wide font-bold text-white">Client Portal</p>
+            <p className="text-lg font-avenir tracking-wide font-bold text-white animate-fade-in" style={{ animationDelay: '0.5s', animationFillMode: 'backwards' }}>Client Portal</p>
           </div>
         </div>
 
@@ -1167,77 +1466,88 @@ export default function ContractorDashboard() {
         <nav className="flex-1 p-4 space-y-2 font-avenir tracking-wide">
           <button
             onClick={() => setActiveTab('dashboard')}
-            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 animate-slide-in-left group relative overflow-hidden ${
               activeTab === 'dashboard'
-                ? 'bg-white text-booking-dark'
-                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                ? 'bg-white text-booking-dark shadow-lg'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:translate-x-1'
             }`}
+            style={{ animationDelay: '0.6s', animationFillMode: 'backwards' }}
           >
-            <div className="flex items-center space-x-3">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {/* Hover gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="flex items-center space-x-3 relative z-10">
+              <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
               </svg>
               <span className="text-sm lg:text-base font-medium">Dashboard</span>
-              {activeTab === 'dashboard' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+              {activeTab === 'dashboard' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto animate-pulse-dot"></div>}
             </div>
           </button>
 
           <button
             onClick={() => setActiveTab('booking-requests')}
-            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 animate-slide-in-left group relative overflow-hidden ${
               activeTab === 'booking-requests'
-                ? 'bg-white text-booking-dark'
-                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                ? 'bg-white text-booking-dark shadow-lg'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:translate-x-1'
             }`}
+            style={{ animationDelay: '0.7s', animationFillMode: 'backwards' }}
           >
-            <div className="flex items-center space-x-3">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {/* Hover gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="flex items-center space-x-3 relative z-10">
+              <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
               </svg>
               <span className="text-sm lg:text-base font-medium">Booking Requests</span>
-              {activeTab === 'booking-requests' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+              {activeTab === 'booking-requests' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto animate-pulse-dot"></div>}
             </div>
           </button>
 
 
           <button
             onClick={() => setActiveTab('contact-info')}
-            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-200 ${
+            className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 animate-slide-in-left group relative overflow-hidden ${
               activeTab === 'contact-info'
-                ? 'bg-white text-booking-dark'
-                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                ? 'bg-white text-booking-dark shadow-lg'
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white hover:translate-x-1'
             }`}
+            style={{ animationDelay: '0.8s', animationFillMode: 'backwards' }}
           >
-            <div className="flex items-center space-x-3">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {/* Hover gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="flex items-center space-x-3 relative z-10">
+              <svg className="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
               <span className="text-sm lg:text-base font-medium">Contact Information</span>
-              {activeTab === 'contact-info' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto"></div>}
+              {activeTab === 'contact-info' && <div className="w-1 h-1 bg-booking-teal rounded-full ml-auto animate-pulse-dot"></div>}
             </div>
           </button>
         </nav>
 
         {/* Profile Section */}
-        <div className="p-4">
-          <div className="flex items-center space-x-3 mb-4">
-            <div className="w-8 h-8 bg-booking-teal rounded-full flex items-center justify-center">
+        <div className="p-4 animate-fade-in-up" style={{ animationDelay: '0.9s', animationFillMode: 'backwards' }}>
+          <div className="flex items-center space-x-3 mb-4 group cursor-pointer hover:bg-gray-700/30 p-2 rounded-lg transition-all duration-300">
+            <div className="w-8 h-8 bg-booking-teal rounded-full flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-300 shadow-lg">
               <span className="text-white font-semibold text-sm">
                 {contractorName ? contractorName.charAt(0).toUpperCase() : 'C'}
               </span>
             </div>
             <div>
-              <p className="text-sm lg:text-base font-avenir font-medium text-white">{contractorName || 'Contractor'}</p>
+              <p className="text-sm lg:text-base font-avenir font-medium text-white group-hover:text-booking-teal transition-colors duration-300">{contractorName || 'Contractor'}</p>
               <p className="text-xs lg:text-sm font-avenir text-gray-300">Client</p>
             </div>
           </div>
           <button
             onClick={() => setIsLogoutModalOpen(true)}
-            className="w-full px-4 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 transition-all duration-200"
+            className="w-full px-4 py-3 rounded-xl bg-red-600 text-white hover:bg-red-700 transition-all duration-300 hover:shadow-lg hover:scale-105 active:scale-95 group relative overflow-hidden"
           >
-            <div className="flex items-center justify-center space-x-3">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            {/* Button shine effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transform -skew-x-12 group-hover:translate-x-full transition-all duration-700"></div>
+            <div className="flex items-center justify-center space-x-3 relative z-10">
+              <svg className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
               </svg>
               <span className="text-sm lg:text-base font-avenir font-medium">Logout</span>

@@ -518,7 +518,10 @@ export default function BookingRequestPage() {
                           </label>
                           <button
                             type="button"
-                            onClick={() => setOpenCalendarFor({ bookingId: booking.id, field: 'start' })}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenCalendarFor({ bookingId: booking.id, field: 'start' });
+                            }}
                             className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-left flex items-center justify-between ${fieldErrors[`startDate-${booking.id}`] ? 'border-red-500' : 'border-booking-teal'} ${booking.startDate ? 'text-[#0B1D37]' : 'text-[#4B4E53]'}`}
                             style={{ fontFamily: 'var(--font-avenir-regular)' }}
                           >
@@ -550,7 +553,10 @@ export default function BookingRequestPage() {
                           </label>
                           <button
                             type="button"
-                            onClick={() => setOpenCalendarFor({ bookingId: booking.id, field: 'end' })}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setOpenCalendarFor({ bookingId: booking.id, field: 'end' });
+                            }}
                             className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-base border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-left flex items-center justify-between ${fieldErrors[`endDate-${booking.id}`] ? 'border-red-500' : 'border-booking-teal'} ${booking.endDate ? 'text-[#0B1D37]' : 'text-[#4B4E53]'}`}
                             style={{ fontFamily: 'var(--font-avenir-regular)' }}
                           >

@@ -199,7 +199,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible' && cameraInputRef.current && isProcessingCameraRef.current) {
-        // Check if files were selected while we were away
+        // Check if files were selected while we were away - increased timeout for reliability
         setTimeout(() => {
           const cameraInput = cameraInputRef.current;
           if (cameraInput && cameraInput.files && cameraInput.files.length > 0) {
@@ -210,15 +210,8 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
               cameraInput.parentNode.removeChild(cameraInput);
             }
             cameraInputRef.current = null;
-          } else if (cameraInput && isProcessingCameraRef.current) {
-            // No files selected, cleanup
-            isProcessingCameraRef.current = false;
-            if (cameraInput.parentNode) {
-              cameraInput.parentNode.removeChild(cameraInput);
-            }
-            cameraInputRef.current = null;
           }
-        }, 300);
+        }, 500);
       }
     };
 
@@ -577,16 +570,17 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                       cameraInputRef.current = cameraInput;
                       isProcessingCameraRef.current = true;
                       
-                      // Handle file change event
-                      const handleFileChange = (e: Event) => {
-                        const target = e.target as HTMLInputElement;
-                        const newFiles = target.files;
-                        
-                        if (newFiles && newFiles.length > 0 && isProcessingCameraRef.current) {
-                          processCameraFiles(newFiles);
+                      // Track if we've processed files to avoid duplicate processing
+                      let hasProcessed = false;
+                      
+                      // Function to process and cleanup
+                      const processAndCleanup = () => {
+                        if (!hasProcessed && cameraInput.files && cameraInput.files.length > 0) {
+                          hasProcessed = true;
+                          processCameraFiles(cameraInput.files);
                           isProcessingCameraRef.current = false;
                           
-                          // Clean up after processing
+                          // Clean up after a short delay
                           setTimeout(() => {
                             try {
                               if (cameraInput.parentNode) {
@@ -595,6 +589,8 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                               if (cameraInputRef.current === cameraInput) {
                                 cameraInputRef.current = null;
                               }
+                              window.removeEventListener('focus', handleWindowFocus);
+                              cameraInput.removeEventListener('change', handleFileChange);
                             } catch (error) {
                               // Ignore cleanup errors
                             }
@@ -602,89 +598,58 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                         }
                       };
                       
+                      // Handle file change event (works on some browsers/devices)
+                      const handleFileChange = (e: Event) => {
+                        const target = e.target as HTMLInputElement;
+                        const newFiles = target.files;
+                        
+                        if (newFiles && newFiles.length > 0 && isProcessingCameraRef.current) {
+                          processAndCleanup();
+                        }
+                      };
+                      
                       // Handle window focus (for mobile when returning from camera)
                       const handleWindowFocus = () => {
+                        // Increased timeout to ensure files are available after camera closes
                         setTimeout(() => {
-                          if (isProcessingCameraRef.current && cameraInput.files && cameraInput.files.length > 0) {
-                            processCameraFiles(cameraInput.files);
-                            isProcessingCameraRef.current = false;
-                            
-                            // Clean up
-                            setTimeout(() => {
-                              try {
-                                if (cameraInput.parentNode) {
-                                  cameraInput.parentNode.removeChild(cameraInput);
-                                }
-                                if (cameraInputRef.current === cameraInput) {
-                                  cameraInputRef.current = null;
-                                }
-                                window.removeEventListener('focus', handleWindowFocus);
-                              } catch (error) {
-                                // Ignore cleanup errors
-                              }
-                            }, 100);
-                          } else if (isProcessingCameraRef.current) {
-                            // No files after returning, cleanup
-                            isProcessingCameraRef.current = false;
-                            setTimeout(() => {
-                              try {
-                                if (cameraInput.parentNode) {
-                                  cameraInput.parentNode.removeChild(cameraInput);
-                                }
-                                if (cameraInputRef.current === cameraInput) {
-                                  cameraInputRef.current = null;
-                                }
-                                window.removeEventListener('focus', handleWindowFocus);
-                              } catch (error) {
-                                // Ignore cleanup errors
-                              }
-                            }, 100);
+                          if (isProcessingCameraRef.current && !hasProcessed) {
+                            processAndCleanup();
                           }
-                        }, 200);
+                        }, 500);
                       };
                       
                       // Add event listeners
                       cameraInput.addEventListener('change', handleFileChange);
-                      window.addEventListener('focus', handleWindowFocus);
+                      window.addEventListener('focus', handleWindowFocus, { once: true });
                       
                       // Add to DOM and trigger click
                       document.body.appendChild(cameraInput);
                       cameraInput.click();
                       
-                      // Fallback: check for files after a delay (in case change event doesn't fire)
+                      // Extended fallback: check for files after a longer delay
+                      // This handles cases where change/focus events don't fire
                       setTimeout(() => {
-                        if (isProcessingCameraRef.current && cameraInput.files && cameraInput.files.length > 0) {
-                          processCameraFiles(cameraInput.files);
-                          isProcessingCameraRef.current = false;
-                          
-                          // Clean up
-                          try {
-                            if (cameraInput.parentNode) {
-                              cameraInput.parentNode.removeChild(cameraInput);
+                        if (isProcessingCameraRef.current && !hasProcessed) {
+                          if (cameraInput.files && cameraInput.files.length > 0) {
+                            processAndCleanup();
+                          } else {
+                            // User cancelled, cleanup
+                            isProcessingCameraRef.current = false;
+                            try {
+                              if (cameraInput.parentNode) {
+                                cameraInput.parentNode.removeChild(cameraInput);
+                              }
+                              if (cameraInputRef.current === cameraInput) {
+                                cameraInputRef.current = null;
+                              }
+                              window.removeEventListener('focus', handleWindowFocus);
+                              cameraInput.removeEventListener('change', handleFileChange);
+                            } catch (error) {
+                              // Ignore cleanup errors
                             }
-                            if (cameraInputRef.current === cameraInput) {
-                              cameraInputRef.current = null;
-                            }
-                            window.removeEventListener('focus', handleWindowFocus);
-                          } catch (error) {
-                            // Ignore cleanup errors
-                          }
-                        } else if (isProcessingCameraRef.current) {
-                          // No files, cleanup
-                          isProcessingCameraRef.current = false;
-                          try {
-                            if (cameraInput.parentNode) {
-                              cameraInput.parentNode.removeChild(cameraInput);
-                            }
-                            if (cameraInputRef.current === cameraInput) {
-                              cameraInputRef.current = null;
-                            }
-                            window.removeEventListener('focus', handleWindowFocus);
-                          } catch (error) {
-                            // Ignore cleanup errors
                           }
                         }
-                      }, 3000);
+                      }, 5000);
                     }}
                     className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 bg-gray-100 text-booking-dark rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-xs sm:text-base"
                     title="Take photos with camera"

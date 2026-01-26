@@ -81,7 +81,13 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
   const [error, setError] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
+  const [showCameraModal, setShowCameraModal] = useState(false);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const [facingMode, setFacingMode] = useState<'environment' | 'user'>('environment');
+  const [capturedPhotos, setCapturedPhotos] = useState<File[]>([]);
   const cameraInputRef = useRef<HTMLInputElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const mediaStreamRef = useRef<MediaStream | null>(null);
   const isProcessingCameraRef = useRef(false);
   const cameraFilesProcessedRef = useRef(false);
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -323,6 +329,146 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
       }
     }, 500);
   }, [handleCameraFilesReady, cleanupPolling]);
+
+  // ==================== IN-BROWSER CAMERA FUNCTIONS (getUserMedia) ====================
+  
+  // Start the in-browser camera stream
+  const startCameraStream = useCallback(async (facing: 'environment' | 'user' = 'environment') => {
+    setCameraError(null);
+    
+    try {
+      // Stop any existing stream first
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach(track => track.stop());
+      }
+      
+      const constraints: MediaStreamConstraints = {
+        video: {
+          facingMode: facing,
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        },
+        audio: false
+      };
+      
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      mediaStreamRef.current = stream;
+      
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+      
+      setFacingMode(facing);
+    } catch (err: any) {
+      console.error('Camera access error:', err);
+      if (err.name === 'NotAllowedError') {
+        setCameraError('Camera access denied. Please allow camera access in your browser settings.');
+      } else if (err.name === 'NotFoundError') {
+        setCameraError('No camera found on this device.');
+      } else if (err.name === 'NotReadableError') {
+        setCameraError('Camera is in use by another application.');
+      } else {
+        setCameraError('Failed to access camera. Please try again.');
+      }
+    }
+  }, []);
+  
+  // Stop the camera stream
+  const stopCameraStream = useCallback(() => {
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach(track => track.stop());
+      mediaStreamRef.current = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+  }, []);
+  
+  // Capture a photo from the video stream
+  const capturePhotoFromStream = useCallback(() => {
+    if (!videoRef.current || !mediaStreamRef.current) {
+      return;
+    }
+    
+    const video = videoRef.current;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    // Draw the current video frame to canvas
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // Convert to blob and create file
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const file = new File([blob], `photo-${Date.now()}.jpg`, { type: 'image/jpeg' });
+        setCapturedPhotos(prev => [...prev, file]);
+      }
+    }, 'image/jpeg', 0.9);
+  }, []);
+  
+  // Switch between front and back camera
+  const switchCamera = useCallback(() => {
+    const newFacing = facingMode === 'environment' ? 'user' : 'environment';
+    startCameraStream(newFacing);
+  }, [facingMode, startCameraStream]);
+  
+  // Open the in-browser camera modal
+  const openCameraModal = useCallback(() => {
+    setCapturedPhotos([]);
+    setCameraError(null);
+    setShowCameraModal(true);
+    // Start camera after a brief delay to ensure modal is rendered
+    setTimeout(() => {
+      startCameraStream('environment');
+    }, 100);
+  }, [startCameraStream]);
+  
+  // Close the camera modal and add captured photos to form
+  const closeCameraModal = useCallback((savePhotos: boolean = false) => {
+    stopCameraStream();
+    
+    if (savePhotos && capturedPhotos.length > 0) {
+      // Add captured photos to the selected files
+      setSelectedFiles(prevFiles => {
+        const existingFiles = prevFiles ? Array.from(prevFiles) : [];
+        const allFiles = [...existingFiles, ...capturedPhotos];
+        
+        // Create a new FileList from the combined files
+        const dataTransfer = new DataTransfer();
+        allFiles.forEach(file => dataTransfer.items.add(file));
+        const combinedFileList = dataTransfer.files;
+        
+        // Update form value and trigger validation
+        setValue('photos', combinedFileList);
+        trigger('photos');
+        
+        return combinedFileList;
+      });
+    }
+    
+    setCapturedPhotos([]);
+    setShowCameraModal(false);
+    setCameraError(null);
+  }, [capturedPhotos, setValue, trigger, stopCameraStream]);
+  
+  // Remove a captured photo from the preview
+  const removeCapturedPhoto = useCallback((index: number) => {
+    setCapturedPhotos(prev => prev.filter((_, i) => i !== index));
+  }, []);
+
+  // Cleanup camera stream when modal closes or component unmounts
+  useEffect(() => {
+    if (!showCameraModal) {
+      stopCameraStream();
+    }
+  }, [showCameraModal, stopCameraStream]);
+
+  // ==================== END IN-BROWSER CAMERA FUNCTIONS ====================
 
   // Handle visibility change (when app returns from background/camera on mobile)
   useEffect(() => {
@@ -762,81 +908,9 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   
                   <button
                     type="button"
-                    onClick={() => {
-                      // Prevent multiple camera operations
-                      if (isProcessingCameraRef.current || isCameraActive) {
-                        return;
-                      }
-                      
-                      // CRITICAL: Save form data before opening camera to prevent data loss
-                      saveFormDataToSession();
-                      
-                      // Reset processing flags
-                      cameraFilesProcessedRef.current = false;
-                      isProcessingCameraRef.current = true;
-                      setIsCameraActive(true);
-                      
-                      // Use or create the camera input
-                      let cameraInput = cameraInputRef.current;
-                      
-                      if (!cameraInput) {
-                        cameraInput = document.createElement('input');
-                        cameraInput.type = 'file';
-                        cameraInput.accept = 'image/*';
-                        cameraInput.capture = 'environment';
-                        cameraInput.style.cssText = 'position:absolute;left:-9999px;opacity:0;pointer-events:none;';
-                        cameraInput.id = 'camera-capture-input';
-                        document.body.appendChild(cameraInput);
-                        cameraInputRef.current = cameraInput;
-                      }
-                      
-                      // Reset the input value to allow re-selection of same files
-                      cameraInput.value = '';
-                      
-                      // Handle file change event - this is the primary handler
-                      const handleCameraChange = (e: Event) => {
-                        const target = e.target as HTMLInputElement;
-                        if (target.files && target.files.length > 0 && !cameraFilesProcessedRef.current) {
-                          handleCameraFilesReady(target.files);
-                        }
-                        // Remove this specific listener after handling
-                        cameraInput?.removeEventListener('change', handleCameraChange);
-                      };
-                      
-                      // Remove any existing listeners and add new one
-                      cameraInput.removeEventListener('change', handleCameraChange);
-                      cameraInput.addEventListener('change', handleCameraChange);
-                      
-                      // Click to open camera
-                      cameraInput.click();
-                      
-                      // Start polling as fallback for mobile devices where change event may not fire
-                      startFilePolling();
-                      
-                      // Handle cancel detection - if user cancels without taking photo
-                      // Use focus event with delay to detect cancel
-                      const handleFocusAfterCamera = () => {
-                        setTimeout(() => {
-                          if (isProcessingCameraRef.current && !cameraFilesProcessedRef.current) {
-                            // Check one more time for files
-                            if (cameraInput && cameraInput.files && cameraInput.files.length > 0) {
-                              handleCameraFilesReady(cameraInput.files);
-                            } else {
-                              // No files means user cancelled
-                              cleanupPolling();
-                              isProcessingCameraRef.current = false;
-                              setIsCameraActive(false);
-                              cameraFilesProcessedRef.current = false;
-                            }
-                          }
-                        }, 500);
-                        window.removeEventListener('focus', handleFocusAfterCamera);
-                      };
-                      
-                      window.addEventListener('focus', handleFocusAfterCamera);
-                    }}
-                    disabled={isCameraActive}
-                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 bg-gray-100 text-booking-dark rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-xs sm:text-base ${isCameraActive ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    onClick={openCameraModal}
+                    disabled={showCameraModal}
+                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 bg-gray-100 text-booking-dark rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-xs sm:text-base ${showCameraModal ? 'opacity-50 cursor-not-allowed' : ''}`}
                     title="Take photos with camera"
                   >
                     <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1151,6 +1225,133 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
           </form>
         </div>
       </div>
+
+      {/* In-Browser Camera Modal */}
+      {showCameraModal && (
+        <div className="fixed inset-0 bg-black z-[60] flex flex-col">
+          {/* Camera Header */}
+          <div className="flex items-center justify-between p-4 bg-black/80">
+            <h3 className="text-white font-semibold text-lg">Take Photos</h3>
+            <div className="flex items-center gap-2">
+              {/* Switch Camera Button */}
+              <button
+                type="button"
+                onClick={switchCamera}
+                className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+                title="Switch Camera"
+              >
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </button>
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => closeCameraModal(false)}
+                className="p-2 bg-white/20 rounded-full hover:bg-white/30 transition-colors"
+              >
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          {/* Camera View */}
+          <div className="flex-1 relative bg-black flex items-center justify-center overflow-hidden">
+            {cameraError ? (
+              <div className="text-center p-6">
+                <div className="text-red-400 mb-4">
+                  <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <p className="text-white text-lg mb-4">{cameraError}</p>
+                <button
+                  type="button"
+                  onClick={() => startCameraStream(facingMode)}
+                  className="px-6 py-2 bg-booking-teal text-white rounded-lg hover:bg-opacity-90 transition-colors"
+                >
+                  Try Again
+                </button>
+              </div>
+            ) : (
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full object-cover"
+                style={{ transform: facingMode === 'user' ? 'scaleX(-1)' : 'none' }}
+              />
+            )}
+          </div>
+
+          {/* Captured Photos Preview */}
+          {capturedPhotos.length > 0 && (
+            <div className="bg-black/80 p-3">
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {capturedPhotos.map((photo, index) => (
+                  <div key={index} className="relative flex-shrink-0">
+                    <img
+                      src={URL.createObjectURL(photo)}
+                      alt={`Captured ${index + 1}`}
+                      className="w-16 h-16 object-cover rounded-lg border-2 border-white/50"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeCapturedPhoto(index)}
+                      className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-xs"
+                    >
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <p className="text-white/70 text-sm text-center mt-1">
+                {capturedPhotos.length} photo{capturedPhotos.length !== 1 ? 's' : ''} captured
+              </p>
+            </div>
+          )}
+
+          {/* Camera Controls */}
+          <div className="bg-black/80 p-6 flex items-center justify-center gap-8">
+            {/* Cancel Button */}
+            <button
+              type="button"
+              onClick={() => closeCameraModal(false)}
+              className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors font-medium"
+            >
+              Cancel
+            </button>
+            
+            {/* Capture Button */}
+            <button
+              type="button"
+              onClick={capturePhotoFromStream}
+              disabled={!!cameraError}
+              className="w-20 h-20 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              title="Capture Photo"
+            >
+              <div className="w-16 h-16 border-4 border-booking-teal rounded-full"></div>
+            </button>
+            
+            {/* Done Button */}
+            <button
+              type="button"
+              onClick={() => closeCameraModal(true)}
+              disabled={capturedPhotos.length === 0}
+              className={`px-6 py-3 bg-booking-teal text-white rounded-lg transition-colors font-medium ${
+                capturedPhotos.length === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-opacity-90'
+              }`}
+            >
+              Done ({capturedPhotos.length})
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

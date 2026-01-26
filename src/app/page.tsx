@@ -104,7 +104,7 @@ export default function SignupChoicePage() {
           <div className="signup-card bg-white rounded-xl shadow-lg p-4 sm:p-6 flex flex-col items-center text-center border border-gray-200 animate-card-entrance-1">
             {/* Heading */}
             <h2 
-              style={{ fontFamily: 'var(--font-avenir), sans-serif', fontWeight: 700, letterSpacing: '0.05em' }}
+              style={{ fontFamily: 'var(--font-avenir-bold), sans-serif' }}
               className="text-xl sm:text-2xl md:text-3xl text-[#0B1D37] mb-3 sm:mb-4"
             >
               Client
@@ -112,8 +112,8 @@ export default function SignupChoicePage() {
             
             {/* Description */}
             <p 
-              style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
-              className="w-full text-sm sm:text-base md:text-lg text-[#4B4E53] mb-4 sm:mb-6 text-center"
+              style={{ fontFamily: 'var(--font-avenir), sans-serif', fontWeight: 500, letterSpacing: '0.08em' }}
+              className="w-full text-base sm:text-lg md:text-xl text-[#4B4E53] mb-4 sm:mb-6 text-center"
             >
               I'm a client booking accomodation
             </p>
@@ -133,7 +133,7 @@ export default function SignupChoicePage() {
           <div className="signup-card bg-white rounded-xl shadow-lg p-4 sm:p-6 flex flex-col items-center text-center border border-gray-200 animate-card-entrance-2">
             {/* Heading */}
             <h2 
-              style={{ fontFamily: 'var(--font-avenir), sans-serif', fontWeight: 700, letterSpacing: '0.05em' }}
+              style={{ fontFamily: 'var(--font-avenir-bold), sans-serif' }}
               className="text-xl sm:text-2xl md:text-3xl text-[#0B1D37] mb-3 sm:mb-4"
             >
               Partner
@@ -141,8 +141,8 @@ export default function SignupChoicePage() {
             
             {/* Description */}
             <p 
-              style={{ fontFamily: 'var(--font-avenir-regular), sans-serif' }}
-              className="w-full text-sm sm:text-base md:text-lg text-[#4B4E53] mb-4 sm:mb-6 text-center"
+              style={{ fontFamily: 'var(--font-avenir), sans-serif', fontWeight: 500, letterSpacing: '0.08em' }}
+              className="w-full text-base sm:text-lg md:text-xl text-[#4B4E53] mb-4 sm:mb-6 text-center"
             >
               I'm a partner listing properties.
             </p>

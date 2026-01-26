@@ -80,8 +80,11 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
+  const [isCameraActive, setIsCameraActive] = useState(false);
   const cameraInputRef = useRef<HTMLInputElement | null>(null);
   const isProcessingCameraRef = useRef(false);
+  const cameraFilesProcessedRef = useRef(false);
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const formDataBackupKey = 'addPropertyFormBackup';
   const photoFilesBackupKey = 'addPropertyPhotosBackup';
 
@@ -193,6 +196,22 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
   };
 
   const handleClose = () => {
+    // Clean up camera state
+    cleanupPolling();
+    isProcessingCameraRef.current = false;
+    cameraFilesProcessedRef.current = false;
+    setIsCameraActive(false);
+    
+    // Remove camera input from DOM if it exists
+    if (cameraInputRef.current && cameraInputRef.current.parentNode) {
+      try {
+        cameraInputRef.current.parentNode.removeChild(cameraInputRef.current);
+      } catch (e) {
+        // Ignore cleanup errors
+      }
+      cameraInputRef.current = null;
+    }
+    
     clearFormBackup(); // Clear backup on close
     reset();
     setError(null);
@@ -254,6 +273,57 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
     }
   }, [setValue, trigger]);
 
+  // Cleanup polling interval
+  const cleanupPolling = useCallback(() => {
+    if (pollingIntervalRef.current) {
+      clearInterval(pollingIntervalRef.current);
+      pollingIntervalRef.current = null;
+    }
+  }, []);
+
+  // Process camera files with deduplication protection
+  const handleCameraFilesReady = useCallback((files: FileList) => {
+    if (cameraFilesProcessedRef.current || !files || files.length === 0) {
+      return;
+    }
+    
+    cameraFilesProcessedRef.current = true;
+    cleanupPolling();
+    processCameraFiles(files);
+    isProcessingCameraRef.current = false;
+    setIsCameraActive(false);
+    
+    // Reset the camera input value to allow re-selection
+    if (cameraInputRef.current) {
+      cameraInputRef.current.value = '';
+    }
+  }, [processCameraFiles, cleanupPolling]);
+
+  // Start polling for files after camera opens
+  const startFilePolling = useCallback(() => {
+    cleanupPolling();
+    
+    let pollCount = 0;
+    const maxPolls = 60; // Poll for up to 30 seconds (500ms intervals)
+    
+    pollingIntervalRef.current = setInterval(() => {
+      pollCount++;
+      
+      if (cameraInputRef.current && cameraInputRef.current.files && cameraInputRef.current.files.length > 0) {
+        handleCameraFilesReady(cameraInputRef.current.files);
+        return;
+      }
+      
+      // Stop polling after max attempts
+      if (pollCount >= maxPolls) {
+        cleanupPolling();
+        isProcessingCameraRef.current = false;
+        setIsCameraActive(false);
+        cameraFilesProcessedRef.current = false;
+      }
+    }, 500);
+  }, [handleCameraFilesReady, cleanupPolling]);
+
   // Handle visibility change (when app returns from background/camera on mobile)
   useEffect(() => {
     const handleVisibilityChange = () => {
@@ -264,27 +334,39 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
       
       // Restore and process when page becomes visible again (returning from camera)
       if (document.visibilityState === 'visible' && cameraInputRef.current && isProcessingCameraRef.current) {
-        // Check if files were selected while we were away - increased timeout for reliability
-        setTimeout(() => {
-          const cameraInput = cameraInputRef.current;
-          if (cameraInput && cameraInput.files && cameraInput.files.length > 0) {
-            processCameraFiles(cameraInput.files);
-            isProcessingCameraRef.current = false;
-            // Reset the camera input
-            if (cameraInput.parentNode) {
-              cameraInput.parentNode.removeChild(cameraInput);
+        // Use multiple timeouts to check for files at different intervals
+        const checkIntervals = [100, 300, 500, 1000, 2000];
+        checkIntervals.forEach((delay) => {
+          setTimeout(() => {
+            if (cameraInputRef.current && cameraInputRef.current.files && cameraInputRef.current.files.length > 0) {
+              handleCameraFilesReady(cameraInputRef.current.files);
             }
-            cameraInputRef.current = null;
+          }, delay);
+        });
+      }
+    };
+
+    // pageshow event is more reliable on iOS Safari
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (isProcessingCameraRef.current && cameraInputRef.current) {
+        // Slight delay to ensure files are populated
+        setTimeout(() => {
+          if (cameraInputRef.current && cameraInputRef.current.files && cameraInputRef.current.files.length > 0) {
+            handleCameraFilesReady(cameraInputRef.current.files);
           }
-        }, 500);
+        }, 300);
       }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pageshow', handlePageShow);
+    
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pageshow', handlePageShow);
+      cleanupPolling();
     };
-  }, [processCameraFiles, saveFormDataToSession]);
+  }, [handleCameraFilesReady, saveFormDataToSession, cleanupPolling]);
 
   // Prevent data loss if page reloads during camera operation
   useEffect(() => {
@@ -307,7 +389,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
   // Prevent page navigation during camera operation
   useEffect(() => {
-    if (isProcessingCameraRef.current) {
+    if (isCameraActive) {
       // Save form state
       saveFormDataToSession();
       
@@ -316,7 +398,21 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
     } else {
       sessionStorage.removeItem('cameraOperationActive');
     }
-  }, [isProcessingCameraRef.current, saveFormDataToSession]);
+  }, [isCameraActive, saveFormDataToSession]);
+
+  // Cleanup camera input when component unmounts
+  useEffect(() => {
+    return () => {
+      cleanupPolling();
+      if (cameraInputRef.current && cameraInputRef.current.parentNode) {
+        try {
+          cameraInputRef.current.parentNode.removeChild(cameraInputRef.current);
+        } catch (e) {
+          // Ignore cleanup errors
+        }
+      }
+    };
+  }, [cleanupPolling]);
 
   if (!isOpen) return null;
 
@@ -667,112 +763,80 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   <button
                     type="button"
                     onClick={() => {
+                      // Prevent multiple camera operations
+                      if (isProcessingCameraRef.current || isCameraActive) {
+                        return;
+                      }
+                      
                       // CRITICAL: Save form data before opening camera to prevent data loss
                       saveFormDataToSession();
                       
-                      // Clean up any existing camera input
-                      if (cameraInputRef.current && cameraInputRef.current.parentNode) {
-                        try {
-                          cameraInputRef.current.parentNode.removeChild(cameraInputRef.current);
-                        } catch (e) {
-                          // Ignore cleanup errors
-                        }
+                      // Reset processing flags
+                      cameraFilesProcessedRef.current = false;
+                      isProcessingCameraRef.current = true;
+                      setIsCameraActive(true);
+                      
+                      // Use or create the camera input
+                      let cameraInput = cameraInputRef.current;
+                      
+                      if (!cameraInput) {
+                        cameraInput = document.createElement('input');
+                        cameraInput.type = 'file';
+                        cameraInput.accept = 'image/*';
+                        cameraInput.capture = 'environment';
+                        cameraInput.style.cssText = 'position:absolute;left:-9999px;opacity:0;pointer-events:none;';
+                        cameraInput.id = 'camera-capture-input';
+                        document.body.appendChild(cameraInput);
+                        cameraInputRef.current = cameraInput;
                       }
                       
-                      // Create new camera input
-                      const cameraInput = document.createElement('input');
-                      cameraInput.type = 'file';
-                      cameraInput.accept = 'image/*';
-                      cameraInput.capture = 'environment';
-                      cameraInput.style.display = 'none';
-                      cameraInput.multiple = true;
+                      // Reset the input value to allow re-selection of same files
+                      cameraInput.value = '';
                       
-                      // Store reference
-                      cameraInputRef.current = cameraInput;
-                      isProcessingCameraRef.current = true;
-                      
-                      // Track if we've processed files to avoid duplicate processing
-                      let hasProcessed = false;
-                      
-                      // Function to process and cleanup
-                      const processAndCleanup = () => {
-                        if (!hasProcessed && cameraInput.files && cameraInput.files.length > 0) {
-                          hasProcessed = true;
-                          processCameraFiles(cameraInput.files);
-                          isProcessingCameraRef.current = false;
-                          
-                          // Clean up after a short delay
-                          setTimeout(() => {
-                            try {
-                              if (cameraInput.parentNode) {
-                                cameraInput.parentNode.removeChild(cameraInput);
-                              }
-                              if (cameraInputRef.current === cameraInput) {
-                                cameraInputRef.current = null;
-                              }
-                              window.removeEventListener('focus', handleWindowFocus);
-                              cameraInput.removeEventListener('change', handleFileChange);
-                            } catch (error) {
-                              // Ignore cleanup errors
-                            }
-                          }, 100);
-                        }
-                      };
-                      
-                      // Handle file change event (works on some browsers/devices)
-                      const handleFileChange = (e: Event) => {
+                      // Handle file change event - this is the primary handler
+                      const handleCameraChange = (e: Event) => {
                         const target = e.target as HTMLInputElement;
-                        const newFiles = target.files;
-                        
-                        if (newFiles && newFiles.length > 0 && isProcessingCameraRef.current) {
-                          processAndCleanup();
+                        if (target.files && target.files.length > 0 && !cameraFilesProcessedRef.current) {
+                          handleCameraFilesReady(target.files);
                         }
+                        // Remove this specific listener after handling
+                        cameraInput?.removeEventListener('change', handleCameraChange);
                       };
                       
-                      // Handle window focus (for mobile when returning from camera)
-                      const handleWindowFocus = () => {
-                        // Increased timeout to ensure files are available after camera closes
-                        setTimeout(() => {
-                          if (isProcessingCameraRef.current && !hasProcessed) {
-                            processAndCleanup();
-                          }
-                        }, 500);
-                      };
+                      // Remove any existing listeners and add new one
+                      cameraInput.removeEventListener('change', handleCameraChange);
+                      cameraInput.addEventListener('change', handleCameraChange);
                       
-                      // Add event listeners
-                      cameraInput.addEventListener('change', handleFileChange);
-                      window.addEventListener('focus', handleWindowFocus, { once: true });
-                      
-                      // Add to DOM and trigger click
-                      document.body.appendChild(cameraInput);
+                      // Click to open camera
                       cameraInput.click();
                       
-                      // Extended fallback: check for files after a longer delay
-                      // This handles cases where change/focus events don't fire
-                      setTimeout(() => {
-                        if (isProcessingCameraRef.current && !hasProcessed) {
-                          if (cameraInput.files && cameraInput.files.length > 0) {
-                            processAndCleanup();
-                          } else {
-                            // User cancelled, cleanup
-                            isProcessingCameraRef.current = false;
-                            try {
-                              if (cameraInput.parentNode) {
-                                cameraInput.parentNode.removeChild(cameraInput);
-                              }
-                              if (cameraInputRef.current === cameraInput) {
-                                cameraInputRef.current = null;
-                              }
-                              window.removeEventListener('focus', handleWindowFocus);
-                              cameraInput.removeEventListener('change', handleFileChange);
-                            } catch (error) {
-                              // Ignore cleanup errors
+                      // Start polling as fallback for mobile devices where change event may not fire
+                      startFilePolling();
+                      
+                      // Handle cancel detection - if user cancels without taking photo
+                      // Use focus event with delay to detect cancel
+                      const handleFocusAfterCamera = () => {
+                        setTimeout(() => {
+                          if (isProcessingCameraRef.current && !cameraFilesProcessedRef.current) {
+                            // Check one more time for files
+                            if (cameraInput && cameraInput.files && cameraInput.files.length > 0) {
+                              handleCameraFilesReady(cameraInput.files);
+                            } else {
+                              // No files means user cancelled
+                              cleanupPolling();
+                              isProcessingCameraRef.current = false;
+                              setIsCameraActive(false);
+                              cameraFilesProcessedRef.current = false;
                             }
                           }
-                        }
-                      }, 5000);
+                        }, 500);
+                        window.removeEventListener('focus', handleFocusAfterCamera);
+                      };
+                      
+                      window.addEventListener('focus', handleFocusAfterCamera);
                     }}
-                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 bg-gray-100 text-booking-dark rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-xs sm:text-base"
+                    disabled={isCameraActive}
+                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 bg-gray-100 text-booking-dark rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-xs sm:text-base ${isCameraActive ? 'opacity-50 cursor-not-allowed' : ''}`}
                     title="Take photos with camera"
                   >
                     <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

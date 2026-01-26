@@ -82,6 +82,8 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const cameraInputRef = useRef<HTMLInputElement | null>(null);
   const isProcessingCameraRef = useRef(false);
+  const formDataBackupKey = 'addPropertyFormBackup';
+  const photoFilesBackupKey = 'addPropertyPhotosBackup';
 
   const {
     register,
@@ -112,6 +114,61 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
     },
   });
 
+  // Restore form data when modal opens (if camera was used previously)
+  useEffect(() => {
+    if (isOpen) {
+      try {
+        const savedFormData = sessionStorage.getItem(formDataBackupKey);
+        const savedPhotoCount = sessionStorage.getItem(photoFilesBackupKey);
+        
+        if (savedFormData) {
+          const parsedData = JSON.parse(savedFormData);
+          // Restore all form fields
+          Object.keys(parsedData).forEach((key) => {
+            if (key !== 'photos') {
+              setValue(key as keyof PropertyForm, parsedData[key]);
+            }
+          });
+          
+          // Note: Actual file objects cannot be stored in sessionStorage
+          // They will be restored via the camera processing
+          if (savedPhotoCount) {
+            console.log(`Note: ${savedPhotoCount} photos were taken, will be processed`);
+          }
+        }
+      } catch (error) {
+        console.error('Error restoring form data:', error);
+      }
+    }
+  }, [isOpen, setValue]);
+
+  // Save form data to sessionStorage before camera opens
+  const saveFormDataToSession = useCallback(() => {
+    try {
+      const currentFormData = watch();
+      const dataToSave = { ...currentFormData };
+      // Remove photos from backup as FileList cannot be serialized
+      delete (dataToSave as any).photos;
+      
+      sessionStorage.setItem(formDataBackupKey, JSON.stringify(dataToSave));
+      if (selectedFiles) {
+        sessionStorage.setItem(photoFilesBackupKey, String(selectedFiles.length));
+      }
+    } catch (error) {
+      console.error('Error saving form data:', error);
+    }
+  }, [watch, selectedFiles]);
+
+  // Clear backup when form is successfully submitted or closed normally
+  const clearFormBackup = useCallback(() => {
+    try {
+      sessionStorage.removeItem(formDataBackupKey);
+      sessionStorage.removeItem(photoFilesBackupKey);
+    } catch (error) {
+      console.error('Error clearing form backup:', error);
+    }
+  }, []);
+
   const handleFormSubmit = async (data: PropertyForm) => {
     setLoading(true);
     setError(null);
@@ -124,6 +181,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
       };
       
       await onSubmit(formDataWithFiles);
+      clearFormBackup(); // Clear backup on successful submit
       reset();
       setSelectedFiles(null);
       onClose();
@@ -135,6 +193,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
   };
 
   const handleClose = () => {
+    clearFormBackup(); // Clear backup on close
     reset();
     setError(null);
     setSelectedFiles(null);
@@ -198,6 +257,12 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
   // Handle visibility change (when app returns from background/camera on mobile)
   useEffect(() => {
     const handleVisibilityChange = () => {
+      // Save form data when page is about to hide (camera opening)
+      if (document.visibilityState === 'hidden' && isProcessingCameraRef.current) {
+        saveFormDataToSession();
+      }
+      
+      // Restore and process when page becomes visible again (returning from camera)
       if (document.visibilityState === 'visible' && cameraInputRef.current && isProcessingCameraRef.current) {
         // Check if files were selected while we were away - increased timeout for reliability
         setTimeout(() => {
@@ -219,12 +284,57 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [processCameraFiles]);
+  }, [processCameraFiles, saveFormDataToSession]);
+
+  // Prevent data loss if page reloads during camera operation
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isProcessingCameraRef.current) {
+        // Save form data before potential reload
+        saveFormDataToSession();
+        
+        // Show warning if user is in middle of camera operation
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [saveFormDataToSession]);
+
+  // Prevent page navigation during camera operation
+  useEffect(() => {
+    if (isProcessingCameraRef.current) {
+      // Save form state
+      saveFormDataToSession();
+      
+      // Mark that camera is active
+      sessionStorage.setItem('cameraOperationActive', 'true');
+    } else {
+      sessionStorage.removeItem('cameraOperationActive');
+    }
+  }, [isProcessingCameraRef.current, saveFormDataToSession]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+    <div 
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4"
+      onClick={(e) => {
+        // Prevent closing modal during camera operation
+        if (isProcessingCameraRef.current) {
+          e.stopPropagation();
+          return;
+        }
+        // Only close if clicking backdrop, not modal content
+        if (e.target === e.currentTarget) {
+          handleClose();
+        }
+      }}
+    >
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto sm:max-w-6xl max-w-xs max-h-[85vh] sm:max-h-[95vh]">
         {/* Header with Logo and Close Button */}
         <div className="flex items-center justify-between p-3 sm:p-6 border-b border-gray-200">
@@ -239,8 +349,16 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
             />
           </div>
           <button
-            onClick={handleClose}
+            onClick={() => {
+              // Prevent closing during camera operation
+              if (isProcessingCameraRef.current) {
+                alert('Please wait for the camera operation to complete');
+                return;
+              }
+              handleClose();
+            }}
             className="p-1 sm:p-2 hover:bg-gray-100 rounded-full transition-colors"
+            disabled={isProcessingCameraRef.current}
           >
             <svg className="w-4 h-4 sm:w-6 sm:h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -549,6 +667,9 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   <button
                     type="button"
                     onClick={() => {
+                      // CRITICAL: Save form data before opening camera to prevent data loss
+                      saveFormDataToSession();
+                      
                       // Clean up any existing camera input
                       if (cameraInputRef.current && cameraInputRef.current.parentNode) {
                         try {
@@ -935,8 +1056,16 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 pt-3 sm:pt-6 border-t border-gray-200">
               <button
                 type="button"
-                onClick={handleClose}
-                className="flex-1 bg-gray-100 text-booking-dark font-medium py-2 sm:py-3 px-3 sm:px-6 rounded hover:bg-gray-200 transition-all duration-200 text-xs sm:text-base"
+                onClick={() => {
+                  // Prevent closing during camera operation
+                  if (isProcessingCameraRef.current) {
+                    alert('Please wait for the camera operation to complete');
+                    return;
+                  }
+                  handleClose();
+                }}
+                disabled={isProcessingCameraRef.current}
+                className="flex-1 bg-gray-100 text-booking-dark font-medium py-2 sm:py-3 px-3 sm:px-6 rounded hover:bg-gray-200 transition-all duration-200 text-xs sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>

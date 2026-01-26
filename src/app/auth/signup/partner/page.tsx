@@ -117,7 +117,7 @@ export default function LandlordSignupPage() {
 
     try {
       // Call backend API for partner signup
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
       const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/partner-signup`, {
         method: 'POST',
         headers: {
@@ -230,14 +230,15 @@ export default function LandlordSignupPage() {
           <form className="space-y-3 sm:space-y-6" onSubmit={handleSubmit(onSubmit)}>
             {error && (
               <div className="rounded-xl bg-red-50 border border-red-200 p-3 sm:p-4">
-                <div className="text-xs sm:text-sm text-red-800">{error}</div>
+                <div className="text-xs sm:text-sm text-red-800" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{error}</div>
               </div>
             )}
 
             {success && (
               <div className="rounded-xl bg-green-50 border border-green-200 p-3 sm:p-4">
-                <div className="text-xs sm:text-sm text-green-800">
+                <div className="text-xs sm:text-sm text-green-800" style={{ fontFamily: 'var(--font-avenir-regular)' }}>
                   We’ve sent you a confirmation email. Please click the link in the email to complete your account setup. The email may take up to 5–10 minutes to arrive.               
+
                 </div>
               </div>
             )}
@@ -247,7 +248,7 @@ export default function LandlordSignupPage() {
 
             {/* Full Name */}
             <div>
-              <label htmlFor="fullName" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+              <label htmlFor="fullName" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                 Full Name *
               </label>
               <input
@@ -256,15 +257,16 @@ export default function LandlordSignupPage() {
                 autoComplete="name"
                 className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.fullName ? 'border-red-500' : ''}`}
                 placeholder="Enter your full name"
+                style={{ fontFamily: 'var(--font-avenir-regular)' }}
               />
               {errors.fullName && (
-                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.fullName.message}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{errors.fullName.message}</p>
               )}
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+              <label htmlFor="email" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                 Email Address *
               </label>
               <input
@@ -273,15 +275,16 @@ export default function LandlordSignupPage() {
                 autoComplete="email"
                 className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.email ? 'border-red-500' : ''}`}
                 placeholder="Enter your email"
+                style={{ fontFamily: 'var(--font-avenir-regular)' }}
               />
               {errors.email && (
-                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.email.message}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{errors.email.message}</p>
               )}
             </div>
 
             {/* Phone */}
             <div>
-              <label htmlFor="phone" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+              <label htmlFor="phone" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                 Phone Number *
               </label>
               <input
@@ -290,15 +293,16 @@ export default function LandlordSignupPage() {
                 autoComplete="tel"
                 className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.phone ? 'border-red-500' : ''}`}
                 placeholder="Enter your phone number"
+                style={{ fontFamily: 'var(--font-avenir-regular)' }}
               />
               {errors.phone && (
-                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.phone.message}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{errors.phone.message}</p>
               )}
             </div>
 
             {/* Company Name */}
             <div>
-              <label htmlFor="companyName" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+              <label htmlFor="companyName" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                 Company Name *
               </label>
               <input
@@ -307,15 +311,16 @@ export default function LandlordSignupPage() {
                 autoComplete="organization"
                 className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.companyName ? 'border-red-500' : ''}`}
                 placeholder="Enter your company name"
+                style={{ fontFamily: 'var(--font-avenir-regular)' }}
               />
               {errors.companyName && (
-                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.companyName.message}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{errors.companyName.message}</p>
               )}
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+              <label htmlFor="password" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                 Password *
               </label>
               <div className="relative">
@@ -325,6 +330,7 @@ export default function LandlordSignupPage() {
                   autoComplete="new-password"
                   className={`w-full px-3 pr-10 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.password ? 'border-red-500' : ''}`}
                   placeholder="Create a password"
+                  style={{ fontFamily: 'var(--font-avenir-regular)' }}
                 />
                 <button
                   type="button"
@@ -347,7 +353,7 @@ export default function LandlordSignupPage() {
               
               {/* Password Criteria Checklist */}
               <div className="mt-2 p-2.5 sm:p-3 bg-gray-50 rounded-lg border border-gray-200">
-                <p className="text-[10px] sm:text-xs text-gray-600 mb-1.5 sm:mb-2 font-medium">Password must contain:</p>
+                <p className="text-[10px] sm:text-xs text-gray-600 mb-1.5 sm:mb-2 font-medium" style={{ fontFamily: 'var(--font-avenir-regular)' }}>Password must contain:</p>
                 <div className="grid grid-cols-2 gap-x-2 gap-y-1 sm:gap-y-1.5">
                   {/* 8+ characters */}
                   <div className="flex items-center gap-1.5">
@@ -360,7 +366,7 @@ export default function LandlordSignupPage() {
                         <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></span>
                       )}
                     </span>
-                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${passwordValue.length >= 8 ? 'text-green-700 font-medium' : 'text-gray-500'}`}>
+                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${passwordValue.length >= 8 ? 'text-green-700 font-medium' : 'text-gray-500'}`} style={{ fontFamily: 'var(--font-avenir-regular)' }}>
                       8+ characters
                     </span>
                   </div>
@@ -376,7 +382,7 @@ export default function LandlordSignupPage() {
                         <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></span>
                       )}
                     </span>
-                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[A-Z]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`}>
+                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[A-Z]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`} style={{ fontFamily: 'var(--font-avenir-regular)' }}>
                       Uppercase letter
                     </span>
                   </div>
@@ -392,7 +398,7 @@ export default function LandlordSignupPage() {
                         <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></span>
                       )}
                     </span>
-                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[a-z]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`}>
+                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[a-z]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`} style={{ fontFamily: 'var(--font-avenir-regular)' }}>
                       Lowercase letter
                     </span>
                   </div>
@@ -408,7 +414,7 @@ export default function LandlordSignupPage() {
                         <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></span>
                       )}
                     </span>
-                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[0-9]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`}>
+                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[0-9]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`} style={{ fontFamily: 'var(--font-avenir-regular)' }}>
                       Number
                     </span>
                   </div>
@@ -424,7 +430,7 @@ export default function LandlordSignupPage() {
                         <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></span>
                       )}
                     </span>
-                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[^A-Za-z0-9]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`}>
+                    <span className={`text-[10px] sm:text-xs transition-colors duration-200 ${/[^A-Za-z0-9]/.test(passwordValue) ? 'text-green-700 font-medium' : 'text-gray-500'}`} style={{ fontFamily: 'var(--font-avenir-regular)' }}>
                       Special character (!@#$%^&*)
                     </span>
                   </div>
@@ -432,13 +438,13 @@ export default function LandlordSignupPage() {
               </div>
               
               {errors.password && (
-                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.password.message}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{errors.password.message}</p>
               )}
             </div>
 
             {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-xs sm:text-sm font-medium text-booking-dark mb-1 sm:mb-2">
+              <label htmlFor="confirmPassword" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
                 Confirm Password *
               </label>
               <div className="relative">
@@ -448,6 +454,7 @@ export default function LandlordSignupPage() {
                   autoComplete="new-password"
                   className={`w-full px-3 pr-10 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.confirmPassword ? 'border-red-500' : ''}`}
                   placeholder="Confirm your password"
+                  style={{ fontFamily: 'var(--font-avenir-regular)' }}
                 />
                 <button
                   type="button"
@@ -468,7 +475,7 @@ export default function LandlordSignupPage() {
                 </button>
               </div>
               {errors.confirmPassword && (
-                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.confirmPassword.message}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{errors.confirmPassword.message}</p>
               )}
             </div>
 
@@ -491,6 +498,7 @@ export default function LandlordSignupPage() {
                     ? 'text-red-700' 
                     : 'text-gray-700'
                 }`}
+                style={{ fontFamily: 'var(--font-avenir-regular)' }}
               >
                 I agree to{' '}
                 <Link
@@ -509,7 +517,7 @@ export default function LandlordSignupPage() {
               </label>
             </div>
             {errors.termsAccepted && (
-              <p className="mt-1 text-xs sm:text-sm text-red-600 flex items-start gap-1.5">
+              <p className="mt-1 text-xs sm:text-sm text-red-600 flex items-start gap-1.5" style={{ fontFamily: 'var(--font-avenir-regular)' }}>
                 <svg
                   className="w-4 h-4 flex-shrink-0 mt-0.5"
                   fill="currentColor"
@@ -532,6 +540,7 @@ export default function LandlordSignupPage() {
                 type="submit"
                 disabled={loading}
                 className="signup-btn w-full bg-booking-teal text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded hover:bg-opacity-90 text-sm sm:text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ fontFamily: 'var(--font-avenir-regular)' }}
               >
                 {loading ? (
                   <div className="flex items-center justify-center">

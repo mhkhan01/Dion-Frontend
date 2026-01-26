@@ -12,6 +12,7 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [userType, setUserType] = useState<'client' | 'partner' | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,6 +21,32 @@ export default function ResetPasswordPage() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         router.push('/auth/login?message=Invalid or expired reset link');
+      } else {
+        // Determine user type by checking which table they exist in
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          // Check contractor table first
+          const { data: contractorProfile } = await supabase
+            .from('contractor')
+            .select('id')
+            .eq('id', user.id)
+            .maybeSingle();
+          
+          if (contractorProfile) {
+            setUserType('client');
+          } else {
+            // Check landlord table
+            const { data: landlordProfile } = await supabase
+              .from('landlord')
+              .select('id')
+              .eq('id', user.id)
+              .maybeSingle();
+            
+            if (landlordProfile) {
+              setUserType('partner');
+            }
+          }
+        }
       }
     };
     checkSession();
@@ -54,9 +81,13 @@ export default function ResetPasswordPage() {
         setError(error.message);
       } else {
         setMessage('Password updated successfully! Redirecting to login...');
-        // Redirect to login after 2 seconds
+        // Redirect to login after 2 seconds with the correct user type
         setTimeout(() => {
-          router.push('/auth/login?message=Password updated successfully');
+          const loginType = userType === 'client' ? 'client' : userType === 'partner' ? 'partner' : '';
+          const loginUrl = loginType 
+            ? `/auth/login?type=${loginType}&message=Password updated successfully`
+            : '/auth/login?message=Password updated successfully';
+          router.push(loginUrl);
         }, 2000);
       }
     } catch (err) {
@@ -164,8 +195,12 @@ export default function ResetPasswordPage() {
               <p className="text-sm text-booking-gray">
                 Remember your password?{' '}
                 <Link 
-                  href="/auth/login" 
-                  onClick={(e) => { e.preventDefault(); window.location.href = '/auth/login'; }}
+                  href={userType ? `/auth/login?type=${userType}` : '/auth/login'} 
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    const loginUrl = userType ? `/auth/login?type=${userType}` : '/auth/login';
+                    window.location.href = loginUrl;
+                  }}
                   className="text-booking-teal hover:text-booking-dark font-medium"
                 >
                   Sign in here

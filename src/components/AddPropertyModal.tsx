@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -80,6 +80,8 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
+  const cameraInputRef = useRef<HTMLInputElement | null>(null);
+  const isProcessingCameraRef = useRef(false);
 
   const {
     register,
@@ -160,6 +162,71 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
       e.target.value = '';
     }
   };
+
+  // Function to process camera files - memoized to avoid recreation
+  const processCameraFiles = useCallback((newFiles: FileList) => {
+    if (newFiles && newFiles.length > 0) {
+      setSelectedFiles(prevFiles => {
+        // Combine existing files with new camera files
+        const existingFiles = prevFiles ? Array.from(prevFiles) : [];
+        const newFilesArray = Array.from(newFiles);
+        const allFiles = [...existingFiles, ...newFilesArray];
+        
+        // Create a new FileList from the combined files
+        const dataTransfer = new DataTransfer();
+        allFiles.forEach(file => dataTransfer.items.add(file));
+        const combinedFileList = dataTransfer.files;
+        
+        // Update form value and trigger validation
+        setValue('photos', combinedFileList);
+        trigger('photos');
+        
+        // Update the hidden input to keep it in sync
+        const photoInput = document.getElementById('photos') as HTMLInputElement;
+        if (photoInput) {
+          // Create a new DataTransfer to set files on the hidden input
+          const hiddenInputDataTransfer = new DataTransfer();
+          allFiles.forEach(file => hiddenInputDataTransfer.items.add(file));
+          photoInput.files = hiddenInputDataTransfer.files;
+        }
+        
+        return combinedFileList;
+      });
+    }
+  }, [setValue, trigger]);
+
+  // Handle visibility change (when app returns from background/camera on mobile)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && cameraInputRef.current && isProcessingCameraRef.current) {
+        // Check if files were selected while we were away
+        setTimeout(() => {
+          const cameraInput = cameraInputRef.current;
+          if (cameraInput && cameraInput.files && cameraInput.files.length > 0) {
+            processCameraFiles(cameraInput.files);
+            isProcessingCameraRef.current = false;
+            // Reset the camera input
+            if (cameraInput.parentNode) {
+              cameraInput.parentNode.removeChild(cameraInput);
+            }
+            cameraInputRef.current = null;
+          } else if (cameraInput && isProcessingCameraRef.current) {
+            // No files selected, cleanup
+            isProcessingCameraRef.current = false;
+            if (cameraInput.parentNode) {
+              cameraInput.parentNode.removeChild(cameraInput);
+            }
+            cameraInputRef.current = null;
+          }
+        }, 300);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [processCameraFiles]);
 
   if (!isOpen) return null;
 
@@ -489,6 +556,16 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   <button
                     type="button"
                     onClick={() => {
+                      // Clean up any existing camera input
+                      if (cameraInputRef.current && cameraInputRef.current.parentNode) {
+                        try {
+                          cameraInputRef.current.parentNode.removeChild(cameraInputRef.current);
+                        } catch (e) {
+                          // Ignore cleanup errors
+                        }
+                      }
+                      
+                      // Create new camera input
                       const cameraInput = document.createElement('input');
                       cameraInput.type = 'file';
                       cameraInput.accept = 'image/*';
@@ -496,34 +573,118 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                       cameraInput.style.display = 'none';
                       cameraInput.multiple = true;
                       
-                      cameraInput.onchange = (e) => {
-                        const newFiles = (e.target as HTMLInputElement).files;
-                        if (newFiles) {
-                          // Combine existing files with new camera files
-                          const existingFiles = selectedFiles ? Array.from(selectedFiles) : [];
-                          const newFilesArray = Array.from(newFiles);
-                          const allFiles = [...existingFiles, ...newFilesArray];
+                      // Store reference
+                      cameraInputRef.current = cameraInput;
+                      isProcessingCameraRef.current = true;
+                      
+                      // Handle file change event
+                      const handleFileChange = (e: Event) => {
+                        const target = e.target as HTMLInputElement;
+                        const newFiles = target.files;
+                        
+                        if (newFiles && newFiles.length > 0 && isProcessingCameraRef.current) {
+                          processCameraFiles(newFiles);
+                          isProcessingCameraRef.current = false;
                           
-                          // Create a new FileList from the combined files
-                          const dataTransfer = new DataTransfer();
-                          allFiles.forEach(file => dataTransfer.items.add(file));
-                          const combinedFileList = dataTransfer.files;
-                          
-                          setSelectedFiles(combinedFileList);
-                          setValue('photos', combinedFileList);
-                          trigger('photos');
-                          
-                          // Update the hidden input
-                          const photoInput = document.getElementById('photos') as HTMLInputElement;
-                          if (photoInput) {
-                            photoInput.files = combinedFileList;
-                          }
+                          // Clean up after processing
+                          setTimeout(() => {
+                            try {
+                              if (cameraInput.parentNode) {
+                                cameraInput.parentNode.removeChild(cameraInput);
+                              }
+                              if (cameraInputRef.current === cameraInput) {
+                                cameraInputRef.current = null;
+                              }
+                            } catch (error) {
+                              // Ignore cleanup errors
+                            }
+                          }, 100);
                         }
-                        document.body.removeChild(cameraInput);
                       };
                       
+                      // Handle window focus (for mobile when returning from camera)
+                      const handleWindowFocus = () => {
+                        setTimeout(() => {
+                          if (isProcessingCameraRef.current && cameraInput.files && cameraInput.files.length > 0) {
+                            processCameraFiles(cameraInput.files);
+                            isProcessingCameraRef.current = false;
+                            
+                            // Clean up
+                            setTimeout(() => {
+                              try {
+                                if (cameraInput.parentNode) {
+                                  cameraInput.parentNode.removeChild(cameraInput);
+                                }
+                                if (cameraInputRef.current === cameraInput) {
+                                  cameraInputRef.current = null;
+                                }
+                                window.removeEventListener('focus', handleWindowFocus);
+                              } catch (error) {
+                                // Ignore cleanup errors
+                              }
+                            }, 100);
+                          } else if (isProcessingCameraRef.current) {
+                            // No files after returning, cleanup
+                            isProcessingCameraRef.current = false;
+                            setTimeout(() => {
+                              try {
+                                if (cameraInput.parentNode) {
+                                  cameraInput.parentNode.removeChild(cameraInput);
+                                }
+                                if (cameraInputRef.current === cameraInput) {
+                                  cameraInputRef.current = null;
+                                }
+                                window.removeEventListener('focus', handleWindowFocus);
+                              } catch (error) {
+                                // Ignore cleanup errors
+                              }
+                            }, 100);
+                          }
+                        }, 200);
+                      };
+                      
+                      // Add event listeners
+                      cameraInput.addEventListener('change', handleFileChange);
+                      window.addEventListener('focus', handleWindowFocus);
+                      
+                      // Add to DOM and trigger click
                       document.body.appendChild(cameraInput);
                       cameraInput.click();
+                      
+                      // Fallback: check for files after a delay (in case change event doesn't fire)
+                      setTimeout(() => {
+                        if (isProcessingCameraRef.current && cameraInput.files && cameraInput.files.length > 0) {
+                          processCameraFiles(cameraInput.files);
+                          isProcessingCameraRef.current = false;
+                          
+                          // Clean up
+                          try {
+                            if (cameraInput.parentNode) {
+                              cameraInput.parentNode.removeChild(cameraInput);
+                            }
+                            if (cameraInputRef.current === cameraInput) {
+                              cameraInputRef.current = null;
+                            }
+                            window.removeEventListener('focus', handleWindowFocus);
+                          } catch (error) {
+                            // Ignore cleanup errors
+                          }
+                        } else if (isProcessingCameraRef.current) {
+                          // No files, cleanup
+                          isProcessingCameraRef.current = false;
+                          try {
+                            if (cameraInput.parentNode) {
+                              cameraInput.parentNode.removeChild(cameraInput);
+                            }
+                            if (cameraInputRef.current === cameraInput) {
+                              cameraInputRef.current = null;
+                            }
+                            window.removeEventListener('focus', handleWindowFocus);
+                          } catch (error) {
+                            // Ignore cleanup errors
+                          }
+                        }
+                      }, 3000);
                     }}
                     className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 sm:py-3 bg-gray-100 text-booking-dark rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-xs sm:text-base"
                     title="Take photos with camera"

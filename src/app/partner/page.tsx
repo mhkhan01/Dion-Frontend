@@ -1157,8 +1157,8 @@ export default function PartnerDashboard() {
         return (
           <div className="space-y-4 lg:space-y-6">
             <div>
-              <h2 className="font-avenir-bold text-booking-dark mb-2 text-xl sm:text-2xl" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Add New Property</h2>
-              <p className="text-booking-gray text-[18px] lg:text-[20px]" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}>Create a new property listing</p>
+              <h2 className="font-avenir-bold text-booking-dark mb-1 sm:mb-2 text-xl sm:text-2xl" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Add New Property</h2>
+              <p className="text-booking-gray text-sm lg:text-[20px]" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}>Create a new property listing</p>
             </div>
 
             <div className="bg-white rounded-xl lg:rounded-2xl p-6 lg:p-8 shadow-lg border border-gray-100">
@@ -1168,8 +1168,8 @@ export default function PartnerDashboard() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
                 </div>
-                <h3 className="font-avenir-bold text-booking-dark mb-2 text-[20px] lg:text-[24px]" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Create Property Listing</h3>
-                <p className="text-booking-gray mb-6 text-[16px]" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}>Add a new property to start receiving bookings.</p>
+                <h3 className="font-avenir-bold text-booking-dark mb-1 sm:mb-2 text-[20px] lg:text-[24px]" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Create Property Listing</h3>
+                <p className="text-booking-gray mb-6 text-sm sm:text-base" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}>Add a new property to start receiving bookings.</p>
                 <button 
                   onClick={() => setIsAddPropertyModalOpen(true)}
                   className="bg-booking-teal text-white px-6 lg:px-8 py-2.5 lg:py-3 rounded-lg lg:rounded-xl hover:bg-opacity-90 transition-all duration-200 font-medium text-[16px]"

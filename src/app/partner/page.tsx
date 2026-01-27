@@ -1157,7 +1157,7 @@ export default function PartnerDashboard() {
         return (
           <div className="space-y-4 lg:space-y-6">
             <div>
-              <h2 className="font-avenir-bold text-booking-dark mb-2 text-xl lg:text-[32px]" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Add New Property</h2>
+              <h2 className="font-avenir-bold text-booking-dark mb-2 text-xl sm:text-2xl" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Add New Property</h2>
               <p className="text-booking-gray text-[18px] lg:text-[20px]" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500 }}>Create a new property listing</p>
             </div>
 

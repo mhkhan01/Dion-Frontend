@@ -577,7 +577,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
         }
       }}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto sm:max-w-6xl max-w-xs max-h-[65vh] sm:max-h-[95vh]">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto sm:max-w-6xl max-w-xs max-h-[50vh] sm:max-h-[95vh]">
         {/* Header with Logo and Close Button */}
         <div className="flex items-center justify-between p-3 sm:p-6 border-b border-gray-200">
           <div className="py-1">

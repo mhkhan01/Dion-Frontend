@@ -810,7 +810,7 @@ export default function PartnerDashboard() {
             <div className="flex flex-col space-y-4">
             <div className="flex justify-between items-start">
               <div>
-                <h1 className="text-xl sm:text-2xl font-avenir-bold font-bold text-booking-dark">Analytics</h1>
+                <h1 className="text-xl sm:text-2xl font-avenir-bold font-bold text-booking-dark" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Analytics</h1>
                 <p className="text-sm sm:text-base font-avenir font-medium tracking-wide text-booking-gray">Property listing overview</p>
               </div>
               <div className="p-1">

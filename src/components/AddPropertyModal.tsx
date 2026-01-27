@@ -577,7 +577,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
         }
       }}
     >
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto sm:max-w-6xl max-w-xs max-h-[75vh] sm:max-h-[95vh]">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto sm:max-w-6xl max-w-xs max-h-[65vh] sm:max-h-[95vh]">
         {/* Header with Logo and Close Button */}
         <div className="flex items-center justify-between p-3 sm:p-6 border-b border-gray-200">
           <div className="py-1">
@@ -609,8 +609,8 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
         </div>
 
         {/* Form Content */}
-        <div className="p-3 sm:p-6">
-          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-2 sm:space-y-8">
+        <div className="p-2 sm:p-6">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-1 sm:space-y-8">
             {error && (
               <div className="rounded-xl bg-red-50 border border-red-200 p-2 sm:p-4">
                 <div className="text-[10px] sm:text-sm text-red-800" style={{ fontFamily: 'var(--font-avenir)' }}>{error}</div>
@@ -619,18 +619,19 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Basic Details Section */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1.5 sm:mb-6">Basic Details</h3>
+              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Basic Details</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-6">
                 {/* Property Name */}
                 <div>
-                  <label htmlFor="propertyName" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="propertyName" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Property Name *
                   </label>
                   <input
                     {...register('propertyName')}
                     type="text"
-                    className={`w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.propertyName ? 'border-red-500' : ''}`}
+                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.propertyName ? 'border-red-500' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="e.g., Modern City Apartment"
                   />
                   {errors.propertyName && (
@@ -640,7 +641,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
                 {/* Property Type */}
                 <div>
-                  <label htmlFor="propertyType" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="propertyType" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Property Type *
                   </label>
                   <CustomSelect
@@ -674,8 +675,9 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   </label>
                   <textarea
                     {...register('houseAddress')}
-                    rows={2}
-                    className={`w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.houseAddress ? 'border-red-500' : ''}`}
+                    rows={1}
+                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.houseAddress ? 'border-red-500' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="Enter house address"
                   />
                   {errors.houseAddress && (
@@ -685,26 +687,28 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
                 {/* Locality/District */}
                 <div>
-                  <label htmlFor="locality" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="locality" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Locality/District
                   </label>
                   <input
                     {...register('locality')}
                     type="text"
-                    className="w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                    className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="e.g., Westminster"
                   />
                 </div>
 
                 {/* City */}
                 <div>
-                  <label htmlFor="city" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="city" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     City *
                   </label>
                   <input
                     {...register('city')}
                     type="text"
-                    className={`w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.city ? 'border-red-500' : ''}`}
+                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.city ? 'border-red-500' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="e.g., London"
                   />
                   {errors.city && (
@@ -714,13 +718,14 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
                 {/* County */}
                 <div>
-                  <label htmlFor="county" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="county" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     County *
                   </label>
                   <input
                     {...register('county')}
                     type="text"
-                    className={`w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.county ? 'border-red-500' : ''}`}
+                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.county ? 'border-red-500' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="e.g., Greater London"
                   />
                   {errors.county && (
@@ -730,13 +735,14 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
                 {/* Country */}
                 <div>
-                  <label htmlFor="country" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="country" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Country *
                   </label>
                   <input
                     {...register('country')}
                     type="text"
-                    className={`w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.country ? 'border-red-500' : ''}`}
+                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.country ? 'border-red-500' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="e.g., United Kingdom"
                   />
                   {errors.country && (
@@ -746,13 +752,14 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
                 {/* Postcode */}
                 <div>
-                  <label htmlFor="postcode" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="postcode" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Postcode *
                   </label>
                   <input
                     {...register('postcode')}
                     type="text"
-                    className={`w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.postcode ? 'border-red-500' : ''}`}
+                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.postcode ? 'border-red-500' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="e.g., SW1A 1AA"
                   />
                   {errors.postcode && (
@@ -769,7 +776,8 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                     {...register('bedrooms', { valueAsNumber: true })}
                     type="number"
                     min="1"
-                    className={`w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.bedrooms ? 'border-red-500' : ''}`}
+                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.bedrooms ? 'border-red-500' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="2"
                   />
                   {errors.bedrooms && (
@@ -779,14 +787,15 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
                 {/* Beds */}
                 <div>
-                  <label htmlFor="beds" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="beds" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Number of Beds *
                   </label>
                   <input
                     {...register('beds', { valueAsNumber: true })}
                     type="number"
                     min="1"
-                    className={`w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.beds ? 'border-red-500' : ''}`}
+                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.beds ? 'border-red-500' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="2"
                   />
                   {errors.beds && (
@@ -796,20 +805,21 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
                 {/* Beds Breakdown */}
                 <div>
-                  <label htmlFor="bedsBreakdown" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="bedsBreakdown" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Beds Breakdown (if multiple types)
                   </label>
                   <input
                     {...register('bedsBreakdown')}
                     type="text"
-                    className="w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                    className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="e.g., 1 double, 2 singles"
                   />
                 </div>
 
                 {/* Bathrooms */}
                 <div>
-                  <label htmlFor="bathrooms" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="bathrooms" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Number of Bathrooms *
                   </label>
                   <input
@@ -817,7 +827,8 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                     type="number"
                     min="1"
                     step="1"
-                    className={`w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.bathrooms ? 'border-red-500' : ''}`}
+                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.bathrooms ? 'border-red-500' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="1"
                   />
                   {errors.bathrooms && (
@@ -827,14 +838,15 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
                 {/* Max Occupancy */}
                 <div>
-                  <label htmlFor="maxOccupancy" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="maxOccupancy" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Maximum Occupancy *
                   </label>
                   <input
                     {...register('maxOccupancy', { valueAsNumber: true })}
                     type="number"
                     min="1"
-                    className={`w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.maxOccupancy ? 'border-red-500' : ''}`}
+                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.maxOccupancy ? 'border-red-500' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     placeholder="4"
                   />
                   {errors.maxOccupancy && (
@@ -844,7 +856,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
                 {/* Parking Type */}
                 <div>
-                  <label htmlFor="parkingType" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="parkingType" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Parking Type
                   </label>
                   <CustomSelect
@@ -869,14 +881,14 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Photos Section */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1.5 sm:mb-6">Photos</h3>
-              <p className="text-[10px] sm:text-sm text-booking-gray mb-1.5 sm:mb-4">
+              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Photos</h3>
+              <p className="text-[10px] sm:text-sm text-booking-gray mb-1 sm:mb-4" style={{ fontFamily: 'var(--font-avenir)' }}>
                 Minimum 5 photos required (kitchen, living space, bedrooms, bathrooms, or other key areas). 
                 Exterior photos optional but encouraged.
               </p>
               
               <div>
-                <label htmlFor="photos" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                <label htmlFor="photos" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                   Property Photos (Minimum 5 required) *
                 </label>
                 
@@ -891,14 +903,15 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                 />
                 
                 {/* Add Photos Button */}
-                <div className="flex gap-2 sm:gap-3 mb-1.5 sm:mb-4">
+                <div className="flex gap-2 sm:gap-3 mb-1 sm:mb-4">
                   <button
                     type="button"
                     onClick={() => {
                       const fileInput = document.getElementById('photos') as HTMLInputElement;
                       fileInput.click();
                     }}
-                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-3 bg-booking-teal text-white rounded-lg hover:bg-opacity-90 transition-all duration-200 font-medium text-[11px] sm:text-base"
+                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-3 bg-booking-teal text-white rounded-lg hover:bg-opacity-90 transition-all duration-200 font-medium text-[11px] sm:text-base"
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                   >
                     <svg className="w-3.5 h-3.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -910,7 +923,8 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                     type="button"
                     onClick={openCameraModal}
                     disabled={showCameraModal}
-                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-3 bg-gray-100 text-booking-dark rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-[11px] sm:text-base ${showCameraModal ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-3 bg-gray-100 text-booking-dark rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-[11px] sm:text-base ${showCameraModal ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    style={{ fontFamily: 'var(--font-avenir)' }}
                     title="Take photos with camera"
                   >
                     <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -923,8 +937,8 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                 
                 {/* Selected Files Display */}
                 {selectedFiles && selectedFiles.length > 0 && (
-                  <div className="mt-4">
-                    <div className="flex items-center justify-between mb-2">
+                  <div className="mt-2 sm:mt-4">
+                    <div className="flex items-center justify-between mb-1 sm:mb-2">
                       <p className="text-[10px] sm:text-sm font-medium text-booking-dark" style={{ fontFamily: 'var(--font-avenir)' }}>
                         Selected Photos ({selectedFiles.length})
                       </p>
@@ -984,9 +998,9 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Amenities Section */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1.5 sm:mb-6">Amenities</h3>
+              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Amenities</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 sm:gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 sm:gap-4">
                 {[
                   { key: 'workspaceDesk', label: 'Workspace / Desk' },
                   { key: 'highSpeedWifi', label: 'High-Speed Wi-Fi' },
@@ -998,14 +1012,14 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   { key: 'linenTowelsProvided', label: 'Linen & Towels Provided' },
                   { key: 'consumablesProvided', label: 'Consumables Provided' },
                 ].map(({ key, label }) => (
-                  <div key={key} className="flex items-center justify-between p-1.5 sm:p-4 border border-gray-200 rounded-lg">
-                    <label htmlFor={key} className="text-[10px] sm:text-sm font-medium text-booking-dark">
+                  <div key={key} className="flex items-center justify-between p-1 sm:p-4 border border-gray-200 rounded-lg">
+                    <label htmlFor={key} className="text-[10px] sm:text-sm font-medium text-booking-dark" style={{ fontFamily: 'var(--font-avenir)' }}>
                       {label}
                     </label>
                     <input
                       {...register(key as keyof PropertyForm)}
                       type="checkbox"
-                      className="w-5 h-5 text-booking-teal border-gray-300 rounded focus:ring-booking-teal"
+                      className="w-4 h-4 sm:w-5 sm:h-5 text-booking-teal border-gray-300 rounded focus:ring-booking-teal"
                     />
                   </div>
                 ))}
@@ -1014,9 +1028,9 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Safety & Compliance Section */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1.5 sm:mb-6">Safety & Compliance</h3>
+              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Safety & Compliance</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1.5 sm:gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 sm:gap-4">
                 {[
                   { key: 'smokeAlarm', label: 'Smoke Alarm' },
                   { key: 'coAlarm', label: 'CO Alarm' },
@@ -1025,14 +1039,14 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   { key: 'gasSafetyCertificate', label: 'Gas Safety Certificate' },
                   { key: 'eicr', label: 'EICR' },
                 ].map(({ key, label }) => (
-                  <div key={key} className="flex items-center justify-between p-1.5 sm:p-4 border border-gray-200 rounded-lg">
-                    <label htmlFor={key} className="text-[10px] sm:text-sm font-medium text-booking-dark">
+                  <div key={key} className="flex items-center justify-between p-1 sm:p-4 border border-gray-200 rounded-lg">
+                    <label htmlFor={key} className="text-[10px] sm:text-sm font-medium text-booking-dark" style={{ fontFamily: 'var(--font-avenir)' }}>
                       {label}
                     </label>
                     <input
                       {...register(key as keyof PropertyForm)}
                       type="checkbox"
-                      className="w-5 h-5 text-booking-teal border-gray-300 rounded focus:ring-booking-teal"
+                      className="w-4 h-4 sm:w-5 sm:h-5 text-booking-teal border-gray-300 rounded focus:ring-booking-teal"
                     />
                   </div>
                 ))}
@@ -1041,16 +1055,17 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Additional Information Section */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1.5 sm:mb-6">Additional Information</h3>
+              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Additional Information</h3>
               
               <div>
-                <label htmlFor="additionalInfo" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                <label htmlFor="additionalInfo" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                   Additional Information
                 </label>
                 <textarea
                   {...register('additionalInfo')}
-                  rows={3}
-                  className="w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                  rows={2}
+                  className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                  style={{ fontFamily: 'var(--font-avenir)' }}
                   placeholder="Add any special features, rules, notes, or other information about the property..."
                 />
               </div>
@@ -1058,16 +1073,17 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* VAT Details Section */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1.5 sm:mb-6">VAT Details</h3>
+              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>VAT Details</h3>
               
               <div>
-                <label htmlFor="vatDetails" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                <label htmlFor="vatDetails" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                   VAT Details
                 </label>
                 <textarea
                   {...register('vatDetails')}
-                  rows={2}
-                  className="w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                  rows={1}
+                  className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                  style={{ fontFamily: 'var(--font-avenir)' }}
                   placeholder="Enter VAT details for this property (VAT number, rate, registration status, etc.)..."
                 />
               </div>
@@ -1075,16 +1091,17 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Comments Section */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1.5 sm:mb-6">Comments / Notes</h3>
+              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Comments / Notes</h3>
               
               <div>
-                <label htmlFor="comments" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                <label htmlFor="comments" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                   Property Comments
                 </label>
                 <textarea
                   {...register('comments')}
-                  rows={3}
-                  className="w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                  rows={2}
+                  className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                  style={{ fontFamily: 'var(--font-avenir)' }}
                   placeholder="Add any comments, notes, or special instructions for this property..."
                 />
               </div>
@@ -1092,29 +1109,30 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Airbnb Link Section */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1.5 sm:mb-6">Airbnb Reference</h3>
+              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Airbnb Reference</h3>
               
               <div>
-                <label htmlFor="airbnb" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                <label htmlFor="airbnb" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                   Airbnb Listing Link (Optional)
                 </label>
                 <input
                   {...register('airbnb')}
                   type="url"
-                  className="w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                  className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                  style={{ fontFamily: 'var(--font-avenir)' }}
                   placeholder="https://www.airbnb.co.uk/rooms/..."
                 />
-                <p className="mt-0.5 text-[9px] sm:text-xs text-gray-500">Optional reference to existing Airbnb listing</p>
+                <p className="mt-0 text-[9px] sm:text-xs text-gray-500" style={{ fontFamily: 'var(--font-avenir)' }}>Optional reference to existing Airbnb listing</p>
               </div>
             </div>
 
             {/* Payment Information Section */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1.5 sm:mb-6">Payout Information</h3>
+              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Payout Information</h3>
               
-              <div className="space-y-2 sm:space-y-4">
+              <div className="space-y-1 sm:space-y-4">
                 <div>
-                  <label htmlFor="paymentMethod.preferredPaymentMethod" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                  <label htmlFor="paymentMethod.preferredPaymentMethod" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                     Preferred Payment Method
                   </label>
                   <CustomSelect
@@ -1135,15 +1153,16 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-6">
                   <div>
-                    <label htmlFor="paymentMethod.bankName" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
+                    <label htmlFor="paymentMethod.bankName" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                       Bank Name
                     </label>
                     <input
                       {...register('paymentMethod.bankName')}
                       type="text"
-                      className="w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                      className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                      style={{ fontFamily: 'var(--font-avenir)' }}
                       placeholder="e.g., Barclays, HSBC"
                     />
                   </div>
@@ -1155,33 +1174,33 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                     <input
                       {...register('paymentMethod.accountHolderName')}
                       type="text"
-                      className="w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                      className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
                       style={{ fontFamily: 'var(--font-avenir)' }}
                       placeholder="Full name on account"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="paymentMethod.sortCode" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
+                    <label htmlFor="paymentMethod.sortCode" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                       Sort Code
                     </label>
                     <input
                       {...register('paymentMethod.sortCode')}
                       type="text"
-                      className="w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                      className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
                       style={{ fontFamily: 'var(--font-avenir)' }}
                       placeholder="12-34-56"
                     />
                   </div>
 
                   <div>
-                    <label htmlFor="paymentMethod.accountNumber" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
+                    <label htmlFor="paymentMethod.accountNumber" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
                       Account Number
                     </label>
                     <input
                       {...register('paymentMethod.accountNumber')}
                       type="text"
-                      className="w-full px-2 sm:px-4 py-1.5 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
+                      className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
                       style={{ fontFamily: 'var(--font-avenir)' }}
                       placeholder="12345678"
                     />
@@ -1194,7 +1213,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
 
             {/* Form Actions */}
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 pt-2 sm:pt-6 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-4 pt-1.5 sm:pt-6 border-t border-gray-200">
               <button
                 type="button"
                 onClick={() => {
@@ -1206,7 +1225,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   handleClose();
                 }}
                 disabled={isProcessingCameraRef.current}
-                className="flex-1 bg-gray-100 text-booking-dark font-medium py-1.5 sm:py-3 px-3 sm:px-6 rounded hover:bg-gray-200 transition-all duration-200 text-[11px] sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 bg-gray-100 text-booking-dark font-medium py-1 sm:py-3 px-3 sm:px-6 rounded hover:bg-gray-200 transition-all duration-200 text-[11px] sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{ fontFamily: 'var(--font-avenir)' }}
               >
                 Cancel
@@ -1214,7 +1233,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-booking-teal text-white font-bold py-1.5 sm:py-3 px-3 sm:px-6 rounded hover:bg-opacity-90 transition-all duration-200 text-[11px] sm:text-base"
+                className="flex-1 bg-booking-teal text-white font-bold py-1 sm:py-3 px-3 sm:px-6 rounded hover:bg-opacity-90 transition-all duration-200 text-[11px] sm:text-base"
                 style={{ fontFamily: 'var(--font-avenir-bold)' }}
               >
                 {loading ? (

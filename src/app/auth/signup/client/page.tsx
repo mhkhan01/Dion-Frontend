@@ -12,6 +12,7 @@ const signupSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters'),
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().min(10, 'Phone number must be at least 10 characters'),
+  companyName: z.string().min(2, 'Company name must be at least 2 characters'),
   password: z.string()
     .min(8, 'Password must be at least 8 characters')
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
@@ -129,6 +130,7 @@ export default function ContractorSignupPage() {
           fullName: data.fullName,
           email: normalizedEmail,
           phone: data.phone,
+          companyName: data.companyName,
           password: data.password,
           confirmPassword: data.confirmPassword,
           termsAccepted: data.termsAccepted
@@ -293,6 +295,23 @@ export default function ContractorSignupPage() {
               />
               {errors.phone && (
                 <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{errors.phone.message}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="companyName" className="block text-xs sm:text-lg font-medium text-booking-dark mb-1 sm:mb-2 leading-tight" style={{ fontFamily: 'var(--font-avenir)', fontWeight: 500, letterSpacing: '0.02em' }}>
+                Company Name
+              </label>
+              <input
+                {...register('companyName')}
+                type="text"
+                autoComplete="organization"
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.companyName ? 'border-red-500' : ''}`}
+                placeholder="Enter your company name"
+                style={{ fontFamily: 'var(--font-avenir-regular)' }}
+              />
+              {errors.companyName && (
+                <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{errors.companyName.message}</p>
               )}
             </div>
 

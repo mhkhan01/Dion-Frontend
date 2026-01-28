@@ -609,258 +609,232 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
         </div>
 
         {/* Form Content */}
-        <div className="p-2 sm:p-6">
-          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-1 sm:space-y-8">
+        <div className="px-6 py-6 pb-8">
+          <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
             {error && (
-              <div className="rounded-xl bg-red-50 border border-red-200 p-2 sm:p-4">
-                <div className="text-[10px] sm:text-sm text-red-800" style={{ fontFamily: 'var(--font-avenir)' }}>{error}</div>
+              <div className="rounded-xl bg-red-50 border border-red-200 p-4">
+                <div className="text-sm text-red-800" style={{ fontFamily: 'var(--font-avenir)' }}>{error}</div>
               </div>
             )}
 
-            {/* Basic Details Section */}
+            {/* Property Name + Property Type */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="propertyName" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Property Name *
+                </label>
+                <input
+                  {...register('propertyName')}
+                  type="text"
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.propertyName ? 'border-red-500' : ''}`}
+                  placeholder="e.g., Modern City Apartment"
+                />
+                {errors.propertyName && (
+                  <p className="mt-1 text-sm text-red-600">{errors.propertyName.message}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="propertyType" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Property Type *
+                </label>
+                <CustomSelect
+                  id="propertyType"
+                  name="propertyType"
+                  value={watch('propertyType') || ''}
+                  onChange={(value) => {
+                    setValue('propertyType', value as 'House' | 'Flat' | 'Apartment' | 'Townhouse' | 'Other');
+                    trigger('propertyType');
+                  }}
+                  placeholder="Select property type"
+                  options={[
+                    { value: 'House', label: 'House' },
+                    { value: 'Flat', label: 'Flat' },
+                    { value: 'Apartment', label: 'Apartment' },
+                    { value: 'Townhouse', label: 'Townhouse' },
+                    { value: 'Other', label: 'Other' },
+                  ]}
+                  error={!!errors.propertyType}
+                  className={errors.propertyType ? 'border-red-500' : ''}
+                />
+                {errors.propertyType && (
+                  <p className="mt-1 text-sm text-red-600">{errors.propertyType.message}</p>
+                )}
+              </div>
+            </div>
+
+            {/* House Address + Locality */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="houseAddress" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  House Address *
+                </label>
+                <textarea
+                  {...register('houseAddress')}
+                  rows={1}
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.houseAddress ? 'border-red-500' : ''}`}
+                  placeholder="Enter house address"
+                />
+                {errors.houseAddress && (
+                  <p className="mt-1 text-sm text-red-600">{errors.houseAddress.message}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="locality" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Locality/District
+                </label>
+                <input
+                  {...register('locality')}
+                  type="text"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  placeholder="e.g., Westminster"
+                />
+              </div>
+            </div>
+
+            {/* City */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Basic Details</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-6">
-                {/* Property Name */}
-                <div>
-                  <label htmlFor="propertyName" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Property Name *
-                  </label>
-                  <input
-                    {...register('propertyName')}
-                    type="text"
-                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.propertyName ? 'border-red-500' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="e.g., Modern City Apartment"
-                  />
-                  {errors.propertyName && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.propertyName.message}</p>
-                  )}
-                </div>
+              <label htmlFor="city" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                City *
+              </label>
+              <input
+                {...register('city')}
+                type="text"
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.city ? 'border-red-500' : ''}`}
+                placeholder="e.g., London"
+              />
+              {errors.city && (
+                <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>
+              )}
+            </div>
 
-                {/* Property Type */}
-                <div>
-                  <label htmlFor="propertyType" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Property Type *
-                  </label>
+            {/* County + Country */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="county" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  County *
+                </label>
+                <input
+                  {...register('county')}
+                  type="text"
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.county ? 'border-red-500' : ''}`}
+                  placeholder="e.g., Greater London"
+                />
+                {errors.county && (
+                  <p className="mt-1 text-sm text-red-600">{errors.county.message}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="country" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Country *
+                </label>
+                <input
+                  {...register('country')}
+                  type="text"
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.country ? 'border-red-500' : ''}`}
+                  placeholder="e.g., United Kingdom"
+                />
+                {errors.country && (
+                  <p className="mt-1 text-sm text-red-600">{errors.country.message}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Postcode + Bedrooms */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="postcode" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Postcode *
+                </label>
+                <input
+                  {...register('postcode')}
+                  type="text"
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.postcode ? 'border-red-500' : ''}`}
+                  placeholder="e.g., SW1A 1AA"
+                />
+                {errors.postcode && (
+                  <p className="mt-1 text-sm text-red-600">{errors.postcode.message}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="bedrooms" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Number of Bedrooms *
+                </label>
+                <input
+                  {...register('bedrooms', { valueAsNumber: true })}
+                  type="number"
+                  min="1"
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.bedrooms ? 'border-red-500' : ''}`}
+                  placeholder="2"
+                />
+                {errors.bedrooms && (
+                  <p className="mt-1 text-sm text-red-600">{errors.bedrooms.message}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Beds + Bathrooms */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="beds" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Number of Beds *
+                </label>
+                <input
+                  {...register('beds', { valueAsNumber: true })}
+                  type="number"
+                  min="1"
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.beds ? 'border-red-500' : ''}`}
+                  placeholder="2"
+                />
+                {errors.beds && (
+                  <p className="mt-1 text-sm text-red-600">{errors.beds.message}</p>
+                )}
+              </div>
+              <div>
+                <label htmlFor="bathrooms" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Number of Bathrooms *
+                </label>
+                <input
+                  {...register('bathrooms', { valueAsNumber: true })}
+                  type="number"
+                  min="1"
+                  step="1"
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.bathrooms ? 'border-red-500' : ''}`}
+                  placeholder="1"
+                />
+                {errors.bathrooms && (
+                  <p className="mt-1 text-sm text-red-600">{errors.bathrooms.message}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Max Occupancy + Beds Breakdown / Parking Type */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="maxOccupancy" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Maximum Occupancy *
+                </label>
+                <input
+                  {...register('maxOccupancy', { valueAsNumber: true })}
+                  type="number"
+                  min="1"
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.maxOccupancy ? 'border-red-500' : ''}`}
+                  placeholder="4"
+                />
+                {errors.maxOccupancy && (
+                  <p className="mt-1 text-sm text-red-600">{errors.maxOccupancy.message}</p>
+                )}
+              </div>
+              {/* Mobile: Parking Type, Desktop: Beds Breakdown */}
+              <div>
+                <label htmlFor="parkingType-mobile" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2 md:hidden">
+                  Parking Type
+                </label>
+                <label htmlFor="bedsBreakdown-desktop" className="hidden md:block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Beds Breakdown (if multiple types)
+                </label>
+                <div className="md:hidden">
                   <CustomSelect
-                    id="propertyType"
-                    name="propertyType"
-                    value={watch('propertyType') || ''}
-                    onChange={(value) => {
-                      setValue('propertyType', value as 'House' | 'Flat' | 'Apartment' | 'Townhouse' | 'Other');
-                      trigger('propertyType');
-                    }}
-                    placeholder="Select property type"
-                    options={[
-                      { value: 'House', label: 'House' },
-                      { value: 'Flat', label: 'Flat' },
-                      { value: 'Apartment', label: 'Apartment' },
-                      { value: 'Townhouse', label: 'Townhouse' },
-                      { value: 'Other', label: 'Other' },
-                    ]}
-                    error={!!errors.propertyType}
-                    className={errors.propertyType ? 'border-red-500' : ''}
-                  />
-                  {errors.propertyType && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.propertyType.message}</p>
-                  )}
-                </div>
-
-                {/* House Address */}
-                <div className="md:col-span-2">
-                  <label htmlFor="houseAddress" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
-                    House Address *
-                  </label>
-                  <textarea
-                    {...register('houseAddress')}
-                    rows={1}
-                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.houseAddress ? 'border-red-500' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="Enter house address"
-                  />
-                  {errors.houseAddress && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.houseAddress.message}</p>
-                  )}
-                </div>
-
-                {/* Locality/District */}
-                <div>
-                  <label htmlFor="locality" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Locality/District
-                  </label>
-                  <input
-                    {...register('locality')}
-                    type="text"
-                    className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="e.g., Westminster"
-                  />
-                </div>
-
-                {/* City */}
-                <div>
-                  <label htmlFor="city" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    City *
-                  </label>
-                  <input
-                    {...register('city')}
-                    type="text"
-                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.city ? 'border-red-500' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="e.g., London"
-                  />
-                  {errors.city && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.city.message}</p>
-                  )}
-                </div>
-
-                {/* County */}
-                <div>
-                  <label htmlFor="county" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    County *
-                  </label>
-                  <input
-                    {...register('county')}
-                    type="text"
-                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.county ? 'border-red-500' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="e.g., Greater London"
-                  />
-                  {errors.county && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.county.message}</p>
-                  )}
-                </div>
-
-                {/* Country */}
-                <div>
-                  <label htmlFor="country" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Country *
-                  </label>
-                  <input
-                    {...register('country')}
-                    type="text"
-                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.country ? 'border-red-500' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="e.g., United Kingdom"
-                  />
-                  {errors.country && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.country.message}</p>
-                  )}
-                </div>
-
-                {/* Postcode */}
-                <div>
-                  <label htmlFor="postcode" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Postcode *
-                  </label>
-                  <input
-                    {...register('postcode')}
-                    type="text"
-                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.postcode ? 'border-red-500' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="e.g., SW1A 1AA"
-                  />
-                  {errors.postcode && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.postcode.message}</p>
-                  )}
-                </div>
-
-                {/* Bedrooms */}
-                <div>
-                  <label htmlFor="bedrooms" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2">
-                    Number of Bedrooms *
-                  </label>
-                  <input
-                    {...register('bedrooms', { valueAsNumber: true })}
-                    type="number"
-                    min="1"
-                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.bedrooms ? 'border-red-500' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="2"
-                  />
-                  {errors.bedrooms && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.bedrooms.message}</p>
-                  )}
-                </div>
-
-                {/* Beds */}
-                <div>
-                  <label htmlFor="beds" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Number of Beds *
-                  </label>
-                  <input
-                    {...register('beds', { valueAsNumber: true })}
-                    type="number"
-                    min="1"
-                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.beds ? 'border-red-500' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="2"
-                  />
-                  {errors.beds && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.beds.message}</p>
-                  )}
-                </div>
-
-                {/* Beds Breakdown */}
-                <div>
-                  <label htmlFor="bedsBreakdown" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Beds Breakdown (if multiple types)
-                  </label>
-                  <input
-                    {...register('bedsBreakdown')}
-                    type="text"
-                    className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="e.g., 1 double, 2 singles"
-                  />
-                </div>
-
-                {/* Bathrooms */}
-                <div>
-                  <label htmlFor="bathrooms" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Number of Bathrooms *
-                  </label>
-                  <input
-                    {...register('bathrooms', { valueAsNumber: true })}
-                    type="number"
-                    min="1"
-                    step="1"
-                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.bathrooms ? 'border-red-500' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="1"
-                  />
-                  {errors.bathrooms && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.bathrooms.message}</p>
-                  )}
-                </div>
-
-                {/* Max Occupancy */}
-                <div>
-                  <label htmlFor="maxOccupancy" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Maximum Occupancy *
-                  </label>
-                  <input
-                    {...register('maxOccupancy', { valueAsNumber: true })}
-                    type="number"
-                    min="1"
-                    className={`w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base ${errors.maxOccupancy ? 'border-red-500' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    placeholder="4"
-                  />
-                  {errors.maxOccupancy && (
-                    <p className="mt-0.5 text-[10px] sm:text-sm text-red-600">{errors.maxOccupancy.message}</p>
-                  )}
-                </div>
-
-                {/* Parking Type */}
-                <div>
-                  <label htmlFor="parkingType" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Parking Type
-                  </label>
-                  <CustomSelect
-                    id="parkingType"
+                    id="parkingType-mobile"
                     name="parkingType"
                     value={watch('parkingType') || ''}
                     onChange={(value) => {
@@ -876,21 +850,62 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                     ]}
                   />
                 </div>
+                <div className="hidden md:block">
+                  <input
+                    {...register('bedsBreakdown')}
+                    id="bedsBreakdown-desktop"
+                    type="text"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                    placeholder="e.g., 1 double, 2 singles"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Photos Section */}
+            {/* Mobile: Beds Breakdown, Desktop: Parking Type */}
+            <div className="md:hidden">
+              <label htmlFor="bedsBreakdown-mobile" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                Beds Breakdown (if multiple types)
+              </label>
+              <input
+                {...register('bedsBreakdown')}
+                id="bedsBreakdown-mobile"
+                type="text"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                placeholder="e.g., 1 double, 2 singles"
+              />
+            </div>
+            <div className="hidden md:block">
+              <label htmlFor="parkingType-desktop" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                Parking Type
+              </label>
+              <CustomSelect
+                id="parkingType-desktop"
+                name="parkingType"
+                value={watch('parkingType') || ''}
+                onChange={(value) => {
+                  setValue('parkingType', value as 'Driveway' | 'Off-Street' | 'Secure Bay' | 'On-Street' | undefined);
+                  trigger('parkingType');
+                }}
+                placeholder="Select parking type"
+                options={[
+                  { value: 'Driveway', label: 'Driveway' },
+                  { value: 'Off-Street', label: 'Off-Street' },
+                  { value: 'Secure Bay', label: 'Secure Bay' },
+                  { value: 'On-Street', label: 'On-Street' },
+                ]}
+              />
+            </div>
+
+            {/* Photos */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Photos</h3>
-              <p className="text-[10px] sm:text-sm text-booking-gray mb-1 sm:mb-4" style={{ fontFamily: 'var(--font-avenir)' }}>
+              <label htmlFor="photos" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                Property Photos (Minimum 5 required) *
+              </label>
+              <p className="text-xs sm:text-sm text-booking-gray mb-4 font-avenir tracking-wide">
                 Minimum 5 photos required (kitchen, living space, bedrooms, bathrooms, or other key areas). 
                 Exterior photos optional but encouraged.
               </p>
-              
-              <div>
-                <label htmlFor="photos" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                  Property Photos (Minimum 5 required) *
-                </label>
                 
                 {/* Hidden file input */}
                 <input
@@ -902,105 +917,101 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   className="hidden"
                 />
                 
-                {/* Add Photos Button */}
-                <div className="flex gap-2 sm:gap-3 mb-1 sm:mb-4">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const fileInput = document.getElementById('photos') as HTMLInputElement;
-                      fileInput.click();
-                    }}
-                    className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-3 bg-booking-teal text-white rounded-lg hover:bg-opacity-90 transition-all duration-200 font-medium text-[11px] sm:text-base"
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                  >
-                    <svg className="w-3.5 h-3.5 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                    Add Photos
-                  </button>
-                  
-                  <button
-                    type="button"
-                    onClick={openCameraModal}
-                    disabled={showCameraModal}
-                    className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1 sm:py-3 bg-gray-100 text-booking-dark rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-[11px] sm:text-base ${showCameraModal ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    style={{ fontFamily: 'var(--font-avenir)' }}
-                    title="Take photos with camera"
-                  >
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Take Photos
-                  </button>
-                </div>
+              <div className="flex gap-3 mb-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const fileInput = document.getElementById('photos') as HTMLInputElement;
+                    fileInput.click();
+                  }}
+                  className="flex items-center gap-2 px-4 py-3 bg-booking-teal text-white rounded-lg hover:bg-opacity-90 transition-all duration-200 font-medium text-base font-avenir tracking-wide"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  Add Photos
+                </button>
                 
-                {/* Selected Files Display */}
-                {selectedFiles && selectedFiles.length > 0 && (
-                  <div className="mt-2 sm:mt-4">
-                    <div className="flex items-center justify-between mb-1 sm:mb-2">
-                      <p className="text-[10px] sm:text-sm font-medium text-booking-dark" style={{ fontFamily: 'var(--font-avenir)' }}>
-                        Selected Photos ({selectedFiles.length})
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedFiles(null);
-                          setValue('photos', null);
-                          trigger('photos');
-                        }}
-                        className="text-sm text-red-600 hover:text-red-800 transition-colors"
-                      >
-                        Clear All
-                      </button>
-                    </div>
-                    
-                    {/* Photo Preview Grid */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                      {Array.from(selectedFiles).map((file, index) => (
-                        <div key={index} className="relative group">
-                          <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                            <img
-                              src={URL.createObjectURL(file)}
-                              alt={`Preview ${index + 1}`}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const newFiles = Array.from(selectedFiles);
-                              newFiles.splice(index, 1);
-                              const newFileList = new DataTransfer();
-                              newFiles.forEach(file => newFileList.items.add(file));
-                              const updatedFiles = newFileList.files;
-                              setSelectedFiles(updatedFiles);
-                              setValue('photos', updatedFiles);
-                              trigger('photos');
-                            }}
-                            className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {errors.photos && (
-                  <p className="mt-1 text-[10px] sm:text-sm text-red-600">{String(errors.photos.message || 'Invalid photos')}</p>
-                )}
+                <button
+                  type="button"
+                  onClick={openCameraModal}
+                  disabled={showCameraModal}
+                  className={`flex items-center gap-2 px-4 py-3 bg-gray-100 text-booking-dark rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-base font-avenir tracking-wide ${showCameraModal ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  title="Take photos with camera"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Take Photos
+                </button>
               </div>
+                
+              {selectedFiles && selectedFiles.length > 0 && (
+                <div className="mt-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-sm font-medium text-booking-dark font-avenir tracking-wide">
+                      Selected Photos ({selectedFiles.length})
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedFiles(null);
+                        setValue('photos', null);
+                        trigger('photos');
+                      }}
+                      className="text-sm text-red-600 hover:text-red-800 transition-colors font-avenir tracking-wide"
+                    >
+                      Clear All
+                    </button>
+                  </div>
+                  
+                  {/* Photo Preview Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                    {Array.from(selectedFiles).map((file, index) => (
+                      <div key={index} className="relative group">
+                        <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={`Preview ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newFiles = Array.from(selectedFiles);
+                            newFiles.splice(index, 1);
+                            const newFileList = new DataTransfer();
+                            newFiles.forEach(file => newFileList.items.add(file));
+                            const updatedFiles = newFileList.files;
+                            setSelectedFiles(updatedFiles);
+                            setValue('photos', updatedFiles);
+                            trigger('photos');
+                          }}
+                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-red-600"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {errors.photos && (
+                <p className="mt-2 text-sm text-red-600">{String(errors.photos.message || 'Invalid photos')}</p>
+              )}
             </div>
 
-            {/* Amenities Section */}
+            {/* Amenities */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Amenities</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 sm:gap-4">
+              <label className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                Amenities
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[
                   { key: 'workspaceDesk', label: 'Workspace / Desk' },
                   { key: 'highSpeedWifi', label: 'High-Speed Wi-Fi' },
@@ -1012,25 +1023,34 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   { key: 'linenTowelsProvided', label: 'Linen & Towels Provided' },
                   { key: 'consumablesProvided', label: 'Consumables Provided' },
                 ].map(({ key, label }) => (
-                  <div key={key} className="flex items-center justify-between p-1 sm:p-4 border border-gray-200 rounded-lg">
-                    <label htmlFor={key} className="text-[10px] sm:text-sm font-medium text-booking-dark" style={{ fontFamily: 'var(--font-avenir)' }}>
+                  <div 
+                    key={key} 
+                    className={`flex items-center justify-between p-4 border border-gray-200 rounded-lg ${
+                      key === 'fullyEquippedKitchen' ? 'col-span-2 md:col-span-1 order-10 md:order-4' : 
+                      key === 'ironIroningBoard' ? 'order-7 md:order-7' : 
+                      key === 'linenTowelsProvided' ? 'col-span-2 md:col-span-1 order-11 md:order-8' : 
+                      key === 'consumablesProvided' ? 'col-span-2 md:col-span-1 order-12 md:order-9' : ''
+                    }`}
+                  >
+                    <label htmlFor={key} className="text-sm font-medium text-booking-dark font-avenir tracking-wide">
                       {label}
                     </label>
                     <input
                       {...register(key as keyof PropertyForm)}
                       type="checkbox"
-                      className="w-4 h-4 sm:w-5 sm:h-5 text-booking-teal border-gray-300 rounded focus:ring-booking-teal"
+                      className="w-5 h-5 text-booking-teal border-gray-300 rounded focus:ring-booking-teal"
                     />
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Safety & Compliance Section */}
+            {/* Safety & Compliance */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Safety & Compliance</h3>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 sm:gap-4">
+              <label className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                Safety & Compliance
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[
                   { key: 'smokeAlarm', label: 'Smoke Alarm' },
                   { key: 'coAlarm', label: 'CO Alarm' },
@@ -1039,181 +1059,167 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   { key: 'gasSafetyCertificate', label: 'Gas Safety Certificate' },
                   { key: 'eicr', label: 'EICR' },
                 ].map(({ key, label }) => (
-                  <div key={key} className="flex items-center justify-between p-1 sm:p-4 border border-gray-200 rounded-lg">
-                    <label htmlFor={key} className="text-[10px] sm:text-sm font-medium text-booking-dark" style={{ fontFamily: 'var(--font-avenir)' }}>
+                  <div 
+                    key={key} 
+                    className={`flex items-center justify-between p-4 border border-gray-200 rounded-lg ${
+                      key === 'fireExtinguisherBlanket' ? 'col-span-2 md:col-span-1' : ''
+                    }`}
+                  >
+                    <label htmlFor={key} className="text-sm font-medium text-booking-dark font-avenir tracking-wide">
                       {label}
                     </label>
                     <input
                       {...register(key as keyof PropertyForm)}
                       type="checkbox"
-                      className="w-4 h-4 sm:w-5 sm:h-5 text-booking-teal border-gray-300 rounded focus:ring-booking-teal"
+                      className="w-5 h-5 text-booking-teal border-gray-300 rounded focus:ring-booking-teal"
                     />
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Additional Information Section */}
+            {/* Additional Information */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Additional Information</h3>
-              
-              <div>
-                <label htmlFor="additionalInfo" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                  Additional Information
-                </label>
-                <textarea
-                  {...register('additionalInfo')}
-                  rows={2}
-                  className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
-                  style={{ fontFamily: 'var(--font-avenir)' }}
-                  placeholder="Add any special features, rules, notes, or other information about the property..."
-                />
-              </div>
+              <label htmlFor="additionalInfo" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                Additional Information
+              </label>
+              <textarea
+                {...register('additionalInfo')}
+                rows={4}
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                placeholder="Add any special features, rules, notes, or other information about the property..."
+              />
             </div>
 
-            {/* VAT Details Section */}
+            {/* VAT Details */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>VAT Details</h3>
-              
-              <div>
-                <label htmlFor="vatDetails" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                  VAT Details
-                </label>
-                <textarea
-                  {...register('vatDetails')}
-                  rows={1}
-                  className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
-                  style={{ fontFamily: 'var(--font-avenir)' }}
-                  placeholder="Enter VAT details for this property (VAT number, rate, registration status, etc.)..."
-                />
-              </div>
+              <label htmlFor="vatDetails" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                VAT Details
+              </label>
+              <textarea
+                {...register('vatDetails')}
+                rows={1}
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent min-h-[60px] md:min-h-0"
+                placeholder="Enter VAT details for this property (VAT number, rate, registration status, etc.)..."
+              />
             </div>
 
-            {/* Comments Section */}
+            {/* Comments */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Comments / Notes</h3>
-              
-              <div>
-                <label htmlFor="comments" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                  Property Comments
-                </label>
-                <textarea
-                  {...register('comments')}
-                  rows={2}
-                  className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
-                  style={{ fontFamily: 'var(--font-avenir)' }}
-                  placeholder="Add any comments, notes, or special instructions for this property..."
-                />
-              </div>
+              <label htmlFor="comments" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                Property Comments
+              </label>
+              <textarea
+                {...register('comments')}
+                rows={4}
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                placeholder="Add any comments, notes, or special instructions for this property..."
+              />
             </div>
 
-            {/* Airbnb Link Section */}
+            {/* Airbnb Link */}
             <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Airbnb Reference</h3>
-              
+              <label htmlFor="airbnb" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                Airbnb Listing Link (Optional)
+              </label>
+              <input
+                {...register('airbnb')}
+                type="url"
+                className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                placeholder="https://www.airbnb.co.uk/rooms/..."
+              />
+              <p className="mt-1 text-xs text-gray-500 font-avenir tracking-wide">Optional reference to existing Airbnb listing</p>
+            </div>
+
+            {/* Payment Information */}
+            <div>
+              <label htmlFor="paymentMethod.preferredPaymentMethod" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                Preferred Payment Method
+              </label>
+              <CustomSelect
+                id="paymentMethod.preferredPaymentMethod"
+                name="paymentMethod.preferredPaymentMethod"
+                value={watch('paymentMethod.preferredPaymentMethod') || ''}
+                onChange={(value) => {
+                  setValue('paymentMethod.preferredPaymentMethod', value as 'bank_transfer' | 'paypal' | 'stripe' | 'other' | undefined);
+                  trigger('paymentMethod.preferredPaymentMethod');
+                }}
+                placeholder="Select payment method"
+                options={[
+                  { value: 'bank_transfer', label: 'Bank Transfer' },
+                  { value: 'paypal', label: 'PayPal' },
+                  { value: 'stripe', label: 'Stripe' },
+                  { value: 'other', label: 'Other' },
+                ]}
+              />
+            </div>
+
+            {/* Bank Details */}
+            <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="airbnb" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                  Airbnb Listing Link (Optional)
+                <label htmlFor="paymentMethod.bankName" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Bank Name
                 </label>
                 <input
-                  {...register('airbnb')}
-                  type="url"
-                  className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
-                  style={{ fontFamily: 'var(--font-avenir)' }}
-                  placeholder="https://www.airbnb.co.uk/rooms/..."
+                  {...register('paymentMethod.bankName')}
+                  type="text"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  placeholder="e.g., Barclays, HSBC"
                 />
-                <p className="mt-0 text-[9px] sm:text-xs text-gray-500" style={{ fontFamily: 'var(--font-avenir)' }}>Optional reference to existing Airbnb listing</p>
               </div>
-            </div>
-
-            {/* Payment Information Section */}
-            <div>
-              <h3 className="text-xs sm:text-xl font-bold text-booking-dark mb-1 sm:mb-6" style={{ fontFamily: 'var(--font-avenir-bold)' }}>Payout Information</h3>
-              
-              <div className="space-y-1 sm:space-y-4">
-                <div>
-                  <label htmlFor="paymentMethod.preferredPaymentMethod" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                    Preferred Payment Method
-                  </label>
-                  <CustomSelect
-                    id="paymentMethod.preferredPaymentMethod"
-                    name="paymentMethod.preferredPaymentMethod"
-                    value={watch('paymentMethod.preferredPaymentMethod') || ''}
-                    onChange={(value) => {
-                      setValue('paymentMethod.preferredPaymentMethod', value as 'bank_transfer' | 'paypal' | 'stripe' | 'other' | undefined);
-                      trigger('paymentMethod.preferredPaymentMethod');
-                    }}
-                    placeholder="Select payment method"
-                    options={[
-                      { value: 'bank_transfer', label: 'Bank Transfer' },
-                      { value: 'paypal', label: 'PayPal' },
-                      { value: 'stripe', label: 'Stripe' },
-                      { value: 'other', label: 'Other' },
-                    ]}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5 sm:gap-6">
-                  <div>
-                    <label htmlFor="paymentMethod.bankName" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                      Bank Name
-                    </label>
-                    <input
-                      {...register('paymentMethod.bankName')}
-                      type="text"
-                      className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
-                      style={{ fontFamily: 'var(--font-avenir)' }}
-                      placeholder="e.g., Barclays, HSBC"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="paymentMethod.accountHolderName" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0.5 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                      Account Holder Name
-                    </label>
-                    <input
-                      {...register('paymentMethod.accountHolderName')}
-                      type="text"
-                      className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
-                      style={{ fontFamily: 'var(--font-avenir)' }}
-                      placeholder="Full name on account"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="paymentMethod.sortCode" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                      Sort Code
-                    </label>
-                    <input
-                      {...register('paymentMethod.sortCode')}
-                      type="text"
-                      className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
-                      style={{ fontFamily: 'var(--font-avenir)' }}
-                      placeholder="12-34-56"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="paymentMethod.accountNumber" className="block text-[10px] sm:text-sm font-medium text-booking-dark mb-0 sm:mb-2" style={{ fontFamily: 'var(--font-avenir)' }}>
-                      Account Number
-                    </label>
-                    <input
-                      {...register('paymentMethod.accountNumber')}
-                      type="text"
-                      className="w-full px-2 sm:px-4 py-1 sm:py-3 border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-[11px] sm:text-base"
-                      style={{ fontFamily: 'var(--font-avenir)' }}
-                      placeholder="12345678"
-                    />
-                  </div>
-                </div>
-
+              <div>
+                <label htmlFor="paymentMethod.accountHolderName" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Account Holder Name
+                </label>
+                <input
+                  {...register('paymentMethod.accountHolderName')}
+                  type="text"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  placeholder="Full name on account"
+                />
+              </div>
+              <div>
+                <label htmlFor="paymentMethod.sortCode" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Sort Code
+                </label>
+                <input
+                  {...register('paymentMethod.sortCode')}
+                  type="text"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  placeholder="12-34-56"
+                />
+              </div>
+              <div>
+                <label htmlFor="paymentMethod.accountNumber" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                  Account Number
+                </label>
+                <input
+                  {...register('paymentMethod.accountNumber')}
+                  type="text"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent"
+                  placeholder="12345678"
+                />
               </div>
             </div>
 
 
 
             {/* Form Actions */}
-            <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-4 pt-1.5 sm:pt-6 border-t border-gray-200">
+            <div className="pt-4 space-y-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-booking-teal text-white px-6 py-3 rounded-lg font-avenir tracking-wide text-base hover:bg-opacity-90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Adding Property...
+                  </div>
+                ) : (
+                  'Add Property'
+                )}
+              </button>
               <button
                 type="button"
                 onClick={() => {
@@ -1225,25 +1231,9 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                   handleClose();
                 }}
                 disabled={isProcessingCameraRef.current}
-                className="flex-1 bg-gray-100 text-booking-dark font-medium py-1 sm:py-3 px-3 sm:px-6 rounded hover:bg-gray-200 transition-all duration-200 text-[11px] sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ fontFamily: 'var(--font-avenir)' }}
+                className="w-full bg-gray-100 text-booking-dark font-medium py-3 px-6 rounded-lg hover:bg-gray-200 transition-all duration-200 text-base font-avenir tracking-wide disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex-1 bg-booking-teal text-white font-bold py-1 sm:py-3 px-3 sm:px-6 rounded hover:bg-opacity-90 transition-all duration-200 text-[11px] sm:text-base"
-                style={{ fontFamily: 'var(--font-avenir-bold)' }}
-              >
-                {loading ? (
-                  <div className="flex items-center justify-center">
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Adding Property...
-                  </div>
-                ) : (
-                  'Add Property'
-                )}
               </button>
             </div>
           </form>

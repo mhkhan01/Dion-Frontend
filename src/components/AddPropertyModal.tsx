@@ -620,13 +620,13 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
             {/* Property Name + Property Type */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="propertyName" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="propertyName" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Property Name *
                 </label>
                 <input
                   {...register('propertyName')}
                   type="text"
-                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.propertyName ? 'border-red-500' : ''}`}
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent h-[38px] sm:h-auto ${errors.propertyName ? 'border-red-500' : ''}`}
                   placeholder="e.g., Modern City Apartment"
                 />
                 {errors.propertyName && (
@@ -634,7 +634,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                 )}
               </div>
               <div>
-                <label htmlFor="propertyType" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="propertyType" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Property Type *
                 </label>
                 <CustomSelect
@@ -665,13 +665,13 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
             {/* House Address + Locality */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="houseAddress" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="houseAddress" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   House Address *
                 </label>
                 <textarea
                   {...register('houseAddress')}
                   rows={1}
-                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent ${errors.houseAddress ? 'border-red-500' : ''}`}
+                  className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base font-avenir tracking-wide placeholder:text-xs sm:placeholder:text-sm border border-booking-teal rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent h-[38px] sm:h-auto ${errors.houseAddress ? 'border-red-500' : ''}`}
                   placeholder="Enter house address"
                 />
                 {errors.houseAddress && (
@@ -679,7 +679,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                 )}
               </div>
               <div>
-                <label htmlFor="locality" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="locality" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Locality/District
                 </label>
                 <input
@@ -693,7 +693,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* City */}
             <div>
-              <label htmlFor="city" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label htmlFor="city" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 City *
               </label>
               <input
@@ -710,7 +710,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
             {/* County + Country */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="county" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="county" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   County *
                 </label>
                 <input
@@ -724,7 +724,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                 )}
               </div>
               <div>
-                <label htmlFor="country" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="country" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Country *
                 </label>
                 <input
@@ -742,7 +742,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
             {/* Postcode + Bedrooms */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="postcode" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="postcode" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Postcode *
                 </label>
                 <input
@@ -756,7 +756,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                 )}
               </div>
               <div>
-                <label htmlFor="bedrooms" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="bedrooms" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Number of Bedrooms *
                 </label>
                 <input
@@ -775,7 +775,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
             {/* Beds + Bathrooms */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="beds" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="beds" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Number of Beds *
                 </label>
                 <input
@@ -790,7 +790,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                 )}
               </div>
               <div>
-                <label htmlFor="bathrooms" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="bathrooms" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Number of Bathrooms *
                 </label>
                 <input
@@ -810,7 +810,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
             {/* Max Occupancy + Beds Breakdown / Parking Type */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="maxOccupancy" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="maxOccupancy" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Maximum Occupancy *
                 </label>
                 <input
@@ -826,10 +826,10 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
               </div>
               {/* Mobile: Parking Type, Desktop: Beds Breakdown */}
               <div>
-                <label htmlFor="parkingType-mobile" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2 md:hidden">
+                <label htmlFor="parkingType-mobile" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2 md:hidden">
                   Parking Type
                 </label>
-                <label htmlFor="bedsBreakdown-desktop" className="hidden md:block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="bedsBreakdown-desktop" className="hidden md:block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Beds Breakdown (if multiple types)
                 </label>
                 <div className="md:hidden">
@@ -864,7 +864,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Mobile: Beds Breakdown, Desktop: Parking Type */}
             <div className="md:hidden">
-              <label htmlFor="bedsBreakdown-mobile" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label htmlFor="bedsBreakdown-mobile" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 Beds Breakdown (if multiple types)
               </label>
               <input
@@ -876,7 +876,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
               />
             </div>
             <div className="hidden md:block">
-              <label htmlFor="parkingType-desktop" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label htmlFor="parkingType-desktop" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 Parking Type
               </label>
               <CustomSelect
@@ -899,7 +899,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Photos */}
             <div>
-              <label htmlFor="photos" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label htmlFor="photos" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 Property Photos (Minimum 5 required) *
               </label>
               <p className="text-xs sm:text-sm text-booking-gray mb-4 font-avenir tracking-wide">
@@ -1008,7 +1008,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Amenities */}
             <div>
-              <label className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 Amenities
               </label>
               <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1032,7 +1032,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                       key === 'consumablesProvided' ? 'col-span-2 md:col-span-1 order-12 md:order-9' : ''
                     }`}
                   >
-                    <label htmlFor={key} className="text-sm font-medium text-booking-dark font-avenir tracking-wide">
+                    <label htmlFor={key} className="text-sm sm:text-base font-medium text-booking-dark font-avenir tracking-wide">
                       {label}
                     </label>
                     <input
@@ -1047,25 +1047,27 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Safety & Compliance */}
             <div>
-              <label className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 Safety & Compliance
               </label>
               <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[
-                  { key: 'smokeAlarm', label: 'Smoke Alarm' },
-                  { key: 'coAlarm', label: 'CO Alarm' },
-                  { key: 'fireExtinguisherBlanket', label: 'Fire Extinguisher / Fire Blanket' },
-                  { key: 'epc', label: 'EPC' },
-                  { key: 'gasSafetyCertificate', label: 'Gas Safety Certificate' },
-                  { key: 'eicr', label: 'EICR' },
-                ].map(({ key, label }) => (
+                  { key: 'smokeAlarm', label: 'Smoke Alarm', order: 'order-1 md:order-1' },
+                  { key: 'coAlarm', label: 'CO Alarm', order: 'order-2 md:order-2' },
+                  { key: 'fireExtinguisherBlanket', label: 'Fire Extinguisher / Fire Blanket', order: 'order-5 md:order-3' },
+                  { key: 'epc', label: 'EPC', order: 'order-3 md:order-4' },
+                  { key: 'gasSafetyCertificate', label: 'Gas Safety Certificate', order: 'order-4 md:order-5' },
+                  { key: 'eicr', label: 'EICR', order: 'order-6 md:order-6' },
+                ].map(({ key, label, order }) => (
                   <div 
                     key={key} 
-                    className={`flex items-center justify-between p-4 border border-gray-200 rounded-lg ${
+                    className={`flex items-center justify-between p-4 border border-gray-200 rounded-lg ${order} ${
                       key === 'fireExtinguisherBlanket' ? 'col-span-2 md:col-span-1' : ''
+                    } ${
+                      key === 'eicr' ? 'col-span-2 md:col-span-1' : ''
                     }`}
                   >
-                    <label htmlFor={key} className="text-sm font-medium text-booking-dark font-avenir tracking-wide">
+                    <label htmlFor={key} className="text-sm sm:text-base font-medium text-booking-dark font-avenir tracking-wide">
                       {label}
                     </label>
                     <input
@@ -1080,7 +1082,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Additional Information */}
             <div>
-              <label htmlFor="additionalInfo" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label htmlFor="additionalInfo" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 Additional Information
               </label>
               <textarea
@@ -1093,7 +1095,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* VAT Details */}
             <div>
-              <label htmlFor="vatDetails" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label htmlFor="vatDetails" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 VAT Details
               </label>
               <textarea
@@ -1106,7 +1108,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Comments */}
             <div>
-              <label htmlFor="comments" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label htmlFor="comments" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 Property Comments
               </label>
               <textarea
@@ -1119,7 +1121,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Airbnb Link */}
             <div>
-              <label htmlFor="airbnb" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label htmlFor="airbnb" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 Airbnb Listing Link (Optional)
               </label>
               <input
@@ -1133,7 +1135,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
             {/* Payment Information */}
             <div>
-              <label htmlFor="paymentMethod.preferredPaymentMethod" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+              <label htmlFor="paymentMethod.preferredPaymentMethod" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                 Preferred Payment Method
               </label>
               <CustomSelect
@@ -1157,7 +1159,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
             {/* Bank Details */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="paymentMethod.bankName" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="paymentMethod.bankName" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Bank Name
                 </label>
                 <input
@@ -1168,7 +1170,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                 />
               </div>
               <div>
-                <label htmlFor="paymentMethod.accountHolderName" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="paymentMethod.accountHolderName" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Account Holder Name
                 </label>
                 <input
@@ -1179,7 +1181,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                 />
               </div>
               <div>
-                <label htmlFor="paymentMethod.sortCode" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="paymentMethod.sortCode" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Sort Code
                 </label>
                 <input
@@ -1190,7 +1192,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
                 />
               </div>
               <div>
-                <label htmlFor="paymentMethod.accountNumber" className="block text-sm font-avenir font-medium tracking-wide text-booking-dark mb-2">
+                <label htmlFor="paymentMethod.accountNumber" className="block text-xs sm:text-lg font-avenir font-medium tracking-wide text-booking-dark mb-2">
                   Account Number
                 </label>
                 <input

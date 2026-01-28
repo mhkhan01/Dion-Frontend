@@ -85,12 +85,12 @@ export default function CustomSelect({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full px-2 sm:px-4 py-2 sm:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-xs sm:text-base text-left flex items-center justify-between ${
+        className={`w-full px-3 sm:px-4 py-2 sm:py-3 border rounded focus:outline-none focus:ring-2 focus:ring-booking-teal focus:border-transparent text-sm sm:text-base text-left flex items-center justify-between h-[38px] sm:h-auto font-avenir tracking-wide ${
           error ? 'border-red-500' : 'border-booking-teal'
         }`}
         style={{ backgroundColor: '#FFFFFF' }}
       >
-        <span className={selectedValue ? 'text-gray-900' : 'text-gray-500'}>
+        <span className={`text-sm sm:text-base font-avenir tracking-wide ${selectedValue ? 'text-gray-900' : 'text-gray-500'}`}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         <svg
@@ -117,7 +117,7 @@ export default function CustomSelect({
               key={option.value}
               type="button"
               onClick={() => handleSelect(option.value)}
-              className={`w-full px-2 sm:px-4 py-2 sm:py-3 text-left text-xs sm:text-base transition-colors ${
+              className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-left text-sm sm:text-base transition-colors font-avenir tracking-wide ${
                 selectedValue === option.value ? 'font-semibold' : ''
               }`}
               style={{

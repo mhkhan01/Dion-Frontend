@@ -146,22 +146,31 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setFetchedUsers(prev => new Set(prev).add(user.id));
     
     try {
-      // Determine role from landlord and contractor tables (same as login page) - query in parallel
+      // Determine role via backend API (bypasses RLS issues)
       let userRole: 'contractor' | 'landlord' | 'admin' = 'contractor';
+      const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
 
-      const [landlordResult, contractorResult] = await Promise.all([
-        supabase.from('landlord').select('id').eq('id', user.id).maybeSingle(),
-        supabase.from('contractor').select('id').eq('id', user.id).maybeSingle()
+      // Call backend endpoints in parallel to check user role
+      const [partnerResponse, clientResponse] = await Promise.all([
+        fetch(`${backendUrl}/partner-login-check`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: user.id }),
+        }).then(res => res.json()).catch(() => ({ exists: false })),
+        fetch(`${backendUrl}/client-login-check`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: user.id }),
+        }).then(res => res.json()).catch(() => ({ exists: false }))
       ]);
-      const { data: landlordProfile } = landlordResult;
-      const { data: contractorProfile } = contractorResult;
 
-      if (landlordProfile) {
+      // Determine role based on which table the user exists in
+      if (partnerResponse.exists) {
         userRole = 'landlord';
-      } else if (contractorProfile) {
+      } else if (clientResponse.exists) {
         userRole = 'contractor';
       } else {
-        // Fallback: email-based (e.g. if RLS blocks table reads)
+        // Fallback: email-based (if backend calls fail)
         if (user.email && user.email.includes('landlord')) {
           userRole = 'landlord';
         }

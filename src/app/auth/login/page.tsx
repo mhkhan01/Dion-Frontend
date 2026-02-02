@@ -64,21 +64,22 @@ function LoginContent() {
         return;
       }
 
-      // Wait a moment for auth state to update
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      // Brief wait for auth state to propagate
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       // Get user profile to determine role and redirect appropriately
       const { data: { user: authUser } } = await supabase.auth.getUser();
-      
+
       if (authUser) {
         try {
-          // Check contractor table first
-          const { data: contractorProfile, error: contractorError } = await supabase
-            .from('contractor')
-            .select('role, email')
-            .eq('id', authUser.id)
-            .maybeSingle();
-          
+          // Check contractor and landlord tables in parallel
+          const [contractorResult, landlordResult] = await Promise.all([
+            supabase.from('contractor').select('role, email').eq('id', authUser.id).maybeSingle(),
+            supabase.from('landlord').select('role, email').eq('id', authUser.id).maybeSingle()
+          ]);
+          const { data: contractorProfile, error: contractorError } = contractorResult;
+          const { data: landlordProfile, error: landlordError } = landlordResult;
+
           if (contractorError) {
             console.error('Contractor query error details:', {
               message: contractorError.message,
@@ -87,13 +88,6 @@ function LoginContent() {
               code: contractorError.code
             });
           }
-
-          // Check landlord table
-          const { data: landlordProfile, error: landlordError } = await supabase
-            .from('landlord')
-            .select('role, email')
-            .eq('id', authUser.id)
-            .maybeSingle();
 
           // Determine expected user type based on URL parameter
           const expectedUserType = userType; // 'contractor' or 'landlord'

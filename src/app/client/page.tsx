@@ -420,10 +420,11 @@ export default function ContractorDashboard() {
   };
 
   const handleLogout = async () => {
+    setIsLogoutModalOpen(false);
+    router.push('/');
     if (user) {
       await signOut();
     }
-    router.push('/');
   };
 
   if (loading) {

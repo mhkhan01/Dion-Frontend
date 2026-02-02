@@ -146,37 +146,48 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setFetchedUsers(prev => new Set(prev).add(user.id));
     
     try {
-      // TEMPORARY FIX: Skip database queries due to RLS issues
-      // Create a basic profile based on user email domain or other logic
-      
-      // Determine role based on email or other logic
-      let userRole = 'contractor'; // Default to contractor
-      if (user.email && user.email.includes('landlord')) {
+      // Determine role from landlord and contractor tables (same as login page) - query in parallel
+      let userRole: 'contractor' | 'landlord' | 'admin' = 'contractor';
+
+      const [landlordResult, contractorResult] = await Promise.all([
+        supabase.from('landlord').select('id').eq('id', user.id).maybeSingle(),
+        supabase.from('contractor').select('id').eq('id', user.id).maybeSingle()
+      ]);
+      const { data: landlordProfile } = landlordResult;
+      const { data: contractorProfile } = contractorResult;
+
+      if (landlordProfile) {
         userRole = 'landlord';
+      } else if (contractorProfile) {
+        userRole = 'contractor';
+      } else {
+        // Fallback: email-based (e.g. if RLS blocks table reads)
+        if (user.email && user.email.includes('landlord')) {
+          userRole = 'landlord';
+        }
       }
-      
-      const basicUser = { 
-        ...user, 
+
+      const basicUser = {
+        ...user,
         full_name: user.email?.split('@')[0] || 'User',
-        role: userRole as 'contractor' | 'landlord' | 'admin',
+        role: userRole,
         is_active: true,
         email_verified: user.email_confirmed_at ? true : false
       };
-      
+
       setUser(basicUser);
       setFetchingProfile(false);
       setLoading(false);
       return;
-
-      // This code is now unreachable due to the return statement above
-      // Keeping it for reference in case we need to revert
     } catch (error) {
       console.error('Error fetching user profile:', error);
-      // Create a basic profile as fallback
-      const fallbackUser = { 
-        ...user, 
+      // Fallback: email-based
+      const fallbackRole: 'contractor' | 'landlord' | 'admin' =
+        user.email && user.email.includes('landlord') ? 'landlord' : 'contractor';
+      const fallbackUser = {
+        ...user,
         full_name: user.email?.split('@')[0] || 'User',
-        role: 'contractor' as 'contractor' | 'landlord' | 'admin' // Default to contractor as fallback
+        role: fallbackRole
       };
       setUser(fallbackUser);
       setFetchingProfile(false);

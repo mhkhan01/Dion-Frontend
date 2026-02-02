@@ -158,7 +158,15 @@ export default function PartnerDashboard() {
   const [loadingConfirmedBookings, setLoadingConfirmedBookings] = useState(false);
 
   useEffect(() => {
-    // All restrictions removed - allow anyone to access partner dashboard without authentication
+    if (!loading && !user) {
+      router.push('/auth/login');
+      return;
+    }
+
+    if (user && user.role !== 'landlord') {
+      router.push('/');
+      return;
+    }
   }, [user, loading, router]);
 
   useEffect(() => {
@@ -267,10 +275,11 @@ export default function PartnerDashboard() {
   };
 
   const handleLogout = async () => {
+    setIsLogoutModalOpen(false);
+    router.push('/');
     if (user) {
       await signOut();
     }
-    router.push('/');
   };
 
   const handleDeleteProperty = async (propertyId: string) => {
@@ -1174,7 +1183,7 @@ export default function PartnerDashboard() {
                   onClick={() => setIsAddPropertyModalOpen(true)}
                   className="w-full sm:w-auto text-white px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 rounded-lg transition-all duration-200 font-avenir font-medium tracking-wide font-bold text-base sm:text-lg lg:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 whitespace-nowrap"
                   style={{ background: 'linear-gradient(to right, #00BAB5, rgba(0, 186, 181, 0.54))' }}
-                  >
+                >
                   Add New Property
                 </button>
               </div>

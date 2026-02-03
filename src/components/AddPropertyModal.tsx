@@ -123,52 +123,7 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
     },
   });
 
-  // Restore form data when modal opens (if camera was used previously)
-  useEffect(() => {
-    if (isOpen) {
-      try {
-        const savedFormData = sessionStorage.getItem(formDataBackupKey);
-        const savedPhotoCount = sessionStorage.getItem(photoFilesBackupKey);
-        
-        if (savedFormData) {
-          const parsedData = JSON.parse(savedFormData);
-          // Restore all form fields
-          Object.keys(parsedData).forEach((key) => {
-            if (key !== 'photos') {
-              setValue(key as keyof PropertyForm, parsedData[key]);
-            }
-          });
-          
-          // Note: Actual file objects cannot be stored in sessionStorage
-          // They will be restored via the camera processing
-          if (savedPhotoCount) {
-            console.log(`Note: ${savedPhotoCount} photos were taken, will be processed`);
-          }
-        }
-      } catch (error) {
-        console.error('Error restoring form data:', error);
-      }
-    }
-  }, [isOpen, setValue]);
-
-  // Save form data to sessionStorage before camera opens
-  const saveFormDataToSession = useCallback(() => {
-    try {
-      const currentFormData = watch();
-      const dataToSave = { ...currentFormData };
-      // Remove photos from backup as FileList cannot be serialized
-      delete (dataToSave as any).photos;
-      
-      sessionStorage.setItem(formDataBackupKey, JSON.stringify(dataToSave));
-      if (selectedFiles) {
-        sessionStorage.setItem(photoFilesBackupKey, String(selectedFiles.length));
-      }
-    } catch (error) {
-      console.error('Error saving form data:', error);
-    }
-  }, [watch, selectedFiles]);
-
-  // Clear backup when form is successfully submitted or closed normally
+  // Clear backup when form is submitted, closed, or when modal opens. SessionStorage is not used for the in-browser camera.
   const clearFormBackup = useCallback(() => {
     try {
       sessionStorage.removeItem(formDataBackupKey);
@@ -177,6 +132,16 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
       console.error('Error clearing form backup:', error);
     }
   }, []);
+
+  // When modal opens: clear any stale sessionStorage backup and reset form so user always gets a fresh form.
+  // This prevents "wiping" caused by restoring old/empty backup from a previous session.
+  useEffect(() => {
+    if (isOpen) {
+      clearFormBackup();
+      reset();
+      setSelectedFiles(null);
+    }
+  }, [isOpen, reset, clearFormBackup]);
 
   const handleFormSubmit = async (data: PropertyForm) => {
     setLoading(true);
@@ -470,17 +435,10 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
   // ==================== END IN-BROWSER CAMERA FUNCTIONS ====================
 
-  // Handle visibility change (when app returns from background/camera on mobile)
+  // Handle visibility change (when app returns from background / native camera on devices that use file input)
   useEffect(() => {
     const handleVisibilityChange = () => {
-      // Save form data when page is about to hide (camera opening)
-      if (document.visibilityState === 'hidden' && isProcessingCameraRef.current) {
-        saveFormDataToSession();
-      }
-      
-      // Restore and process when page becomes visible again (returning from camera)
       if (document.visibilityState === 'visible' && cameraInputRef.current && isProcessingCameraRef.current) {
-        // Use multiple timeouts to check for files at different intervals
         const checkIntervals = [100, 300, 500, 1000, 2000];
         checkIntervals.forEach((delay) => {
           setTimeout(() => {
@@ -492,10 +450,8 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
       }
     };
 
-    // pageshow event is more reliable on iOS Safari
     const handlePageShow = (event: PageTransitionEvent) => {
       if (isProcessingCameraRef.current && cameraInputRef.current) {
-        // Slight delay to ensure files are populated
         setTimeout(() => {
           if (cameraInputRef.current && cameraInputRef.current.files && cameraInputRef.current.files.length > 0) {
             handleCameraFilesReady(cameraInputRef.current.files);
@@ -506,45 +462,24 @@ export default function AddPropertyModal({ isOpen, onClose, onSubmit }: AddPrope
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('pageshow', handlePageShow);
-    
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('pageshow', handlePageShow);
       cleanupPolling();
     };
-  }, [handleCameraFilesReady, saveFormDataToSession, cleanupPolling]);
+  }, [handleCameraFilesReady, cleanupPolling]);
 
-  // Prevent data loss if page reloads during camera operation
+  // Warn user if they try to leave during a native camera operation (in-browser camera does not set this ref)
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (isProcessingCameraRef.current) {
-        // Save form data before potential reload
-        saveFormDataToSession();
-        
-        // Show warning if user is in middle of camera operation
         e.preventDefault();
         e.returnValue = '';
       }
     };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [saveFormDataToSession]);
-
-  // Prevent page navigation during camera operation
-  useEffect(() => {
-    if (isCameraActive) {
-      // Save form state
-      saveFormDataToSession();
-      
-      // Mark that camera is active
-      sessionStorage.setItem('cameraOperationActive', 'true');
-    } else {
-      sessionStorage.removeItem('cameraOperationActive');
-    }
-  }, [isCameraActive, saveFormDataToSession]);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
 
   // Cleanup camera input when component unmounts
   useEffect(() => {

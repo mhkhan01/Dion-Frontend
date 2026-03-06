@@ -106,12 +106,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`h-full ${avenirNext.variable} ${avenirBold.variable} ${avenirRegular.variable}`}>
-      {/* 🧠 Add PWA + iOS Safe Area Meta Tags here */}
+      {/* Next.js generates <meta name="viewport"> automatically from the
+          exported `viewport` object above — do NOT add a manual one here or
+          Safari will see two conflicting viewport tags and behave unpredictably. */}
       <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, viewport-fit=cover"
-        />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         
         {/* Preload critical images for faster loading */}

@@ -3,7 +3,43 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Safari (especially Private Browsing mode) can block or severely restrict
+// localStorage, causing Supabase session persistence to silently fail.
+// This wrapper detects unavailable localStorage and falls back to in-memory
+// storage so the auth flow still works on every browser.
+const createSafeStorage = () => {
+  if (typeof window === 'undefined') return undefined;
+  try {
+    const testKey = '__sb_storage_test__';
+    window.localStorage.setItem(testKey, '1');
+    window.localStorage.removeItem(testKey);
+    // localStorage is available — return undefined so Supabase uses its own
+    // built-in LocalStorageAdapter (the proven default). Passing window.localStorage
+    // directly bypasses that adapter and can cause subtle session-persistence issues.
+    return undefined;
+  } catch {
+    // localStorage is blocked (Safari Private Browsing, sandboxed iframe, etc.)
+    // Provide a simple in-memory fallback so auth still works for the session.
+    const mem: Record<string, string> = {};
+    return {
+      getItem: (key: string) => mem[key] ?? null,
+      setItem: (key: string, value: string) => { mem[key] = value; },
+      removeItem: (key: string) => { delete mem[key]; },
+    };
+  }
+};
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    storage: createSafeStorage() as Storage | undefined,
+    autoRefreshToken: true,
+    persistSession: true,
+    // Required for Supabase email-confirmation links to restore the session
+    // automatically when the user lands back on the app after clicking the
+    // verification email (works on Chrome, Safari, Firefox, Edge).
+    detectSessionInUrl: true,
+  },
+});
 
 export type Database = {
   public: {

@@ -104,7 +104,7 @@ function LoginContent() {
             // Check if contractor is active via backend API
             try {
               const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
-              const activeCheckResponse = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/client-login-check`, {
+              const activeCheckResponse = await fetch(`${backendUrl}/client-login-check`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ function LoginContent() {
             // Check if landlord is active via backend API
             try {
               const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
-              const activeCheckResponse = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/partner-login-check`, {
+              const activeCheckResponse = await fetch(`${backendUrl}/partner-login-check`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

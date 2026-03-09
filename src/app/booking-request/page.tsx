@@ -278,8 +278,8 @@ export default function BookingRequestPage() {
 
     try {
       // Call backend API endpoint
-      const backendUrl = 'http://localhost:5000';
-      const response = await fetch(`http://localhost:5000/api/booking-requests`, {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
+      const response = await fetch(`${backendUrl}/booking-requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -150,7 +150,7 @@ export default function ContractorSignupPage() {
     
     try {
       // Call backend API for client signup
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
       const response = await fetch(`${backendUrl}/client-signup`, {
         method: 'POST',
         headers: {
@@ -506,7 +506,7 @@ export default function ContractorSignupPage() {
             </div>
 
             {/* Terms and Conditions Checkbox */}
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-2.5 sm:gap-3">
                 <input
                   {...register('termsAccepted')}
@@ -548,7 +548,7 @@ export default function ContractorSignupPage() {
                   type="button"
                   onClick={handleResendEmail}
                   disabled={resendLoading}
-                  className="font-medium underline hover:no-underline transition-colors duration-200 text-booking-teal hover:text-booking-dark text-xs sm:text-sm whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="font-medium text-booking-teal hover:text-booking-dark text-xs sm:text-sm whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ fontFamily: 'var(--font-avenir-regular)' }}
                 >
                   {resendLoading ? 'Sending...' : 'Resend Confirmation Email'}

@@ -29,6 +29,10 @@ export default function BookingRequestPage() {
   const [passwordValue, setPasswordValue] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [termsError, setTermsError] = useState<string | null>(null);
+  const [submittedEmail, setSubmittedEmail] = useState<string>('');
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendError, setResendError] = useState<string | null>(null);
+  const [resendSuccess, setResendSuccess] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     companyName: '',
@@ -120,6 +124,8 @@ export default function BookingRequestPage() {
     setTermsError(null); // Reset terms error
     setShowThankYou(false); // Reset thank you message
     setFieldErrors({}); // Reset field errors
+    setResendError(null);
+    setResendSuccess(false);
     
     const formDataObj = new FormData(e.currentTarget);
     const formObject = Object.fromEntries(formDataObj.entries());
@@ -193,63 +199,42 @@ export default function BookingRequestPage() {
     }
     
     // FIRST: Validate email doesn't exist in contractor or landlord tables (case-insensitive)
-    let emailExists = false;
-    
     try {
-      // Check if email exists in contractor table (case-insensitive)
-      const { data: contractors, error: contractorCheckError } = await supabase
+      // Check if email exists in contractor table
+      const { data: existingContractor, error: contractorCheckError } = await supabase
         .from('contractor')
-        .select('id, email');
+        .select('id')
+        .eq('email', normalizedEmail)
+        .maybeSingle();
 
       if (contractorCheckError) {
         console.error('Error checking contractor table:', contractorCheckError);
-        // If we can't check, block submission to be safe
         setEmailError("This email is already in use, Try a different email.");
         setIsSubmitting(false);
         return;
       }
 
-      if (contractors && Array.isArray(contractors)) {
-        const existingContractor = contractors.find(
-          (c) => {
-            if (!c || !c.email) return false;
-            const dbEmail = String(c.email).toLowerCase().trim();
-            return dbEmail === normalizedEmail;
-          }
-        );
-        if (existingContractor) {
-          emailExists = true;
-        }
+      if (existingContractor) {
+        setEmailError("This email is already in use, Try a different email.");
+        setIsSubmitting(false);
+        return;
       }
 
-      // Check if email exists in landlord table (case-insensitive)
-      const { data: landlords, error: landlordCheckError } = await supabase
+      // Check if email exists in landlord table
+      const { data: existingLandlord, error: landlordCheckError } = await supabase
         .from('landlord')
-        .select('id, email');
+        .select('id')
+        .eq('email', normalizedEmail)
+        .maybeSingle();
 
       if (landlordCheckError) {
         console.error('Error checking landlord table:', landlordCheckError);
-        // If we can't check, block submission to be safe
         setEmailError("This email is already in use, Try a different email.");
         setIsSubmitting(false);
         return;
       }
 
-      if (landlords && Array.isArray(landlords)) {
-        const existingLandlord = landlords.find(
-          (l) => {
-            if (!l || !l.email) return false;
-            const dbEmail = String(l.email).toLowerCase().trim();
-            return dbEmail === normalizedEmail;
-          }
-        );
-        if (existingLandlord) {
-          emailExists = true;
-        }
-      }
-
-      // If email exists in either table, block submission
-      if (emailExists) {
+      if (existingLandlord) {
         setEmailError("This email is already in use, Try a different email.");
         setIsSubmitting(false);
         return;
@@ -271,14 +256,14 @@ export default function BookingRequestPage() {
     if (!/[^A-Za-z0-9]/.test(password)) passwordErrors.push('a special character');
     
     if (passwordErrors.length > 0) {
-      alert(`Password must contain ${passwordErrors.join(', ')}.`);
+      setFieldErrors(prev => ({ ...prev, password: `Password must contain ${passwordErrors.join(', ')}.` }));
       setIsSubmitting(false);
       return;
     }
     
     // Validate password confirmation
     if (passwordValue !== formObject.confirmPassword) {
-      alert('Passwords do not match. Please try again.');
+      setFieldErrors(prev => ({ ...prev, confirmPassword: 'Passwords do not match. Please try again.' }));
       setIsSubmitting(false);
       return;
     }
@@ -293,8 +278,8 @@ export default function BookingRequestPage() {
 
     try {
       // Call backend API endpoint
-      const backendUrl = 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
-      const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/booking-requests`, {
+      const backendUrl = 'http://localhost:5000';
+      const response = await fetch(`http://localhost:5000/api/booking-requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -318,6 +303,7 @@ export default function BookingRequestPage() {
         const result = await response.json();
         
         // Show success message
+        setSubmittedEmail(normalizedEmail);
         setShowThankYou(true);
         
         // Reset form
@@ -357,6 +343,44 @@ export default function BookingRequestPage() {
       console.error('Error submitting booking request:', error);
       setEmailError("This email is already in use, Try a different email.");
       setIsSubmitting(false);
+    }
+  };
+
+  const handleResendEmail = async () => {
+    if (!submittedEmail || resendLoading) return;
+
+    setResendLoading(true);
+    setResendError(null);
+    setResendSuccess(false);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
+      const response = await fetch(`${backendUrl}/client-signup/resend`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: submittedEmail }),
+        signal: controller.signal,
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setResendError(result.error || 'Failed to resend. Please try again.');
+      } else {
+        setResendSuccess(true);
+      }
+    } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        setResendError('The request timed out. Please check your connection and try again.');
+      } else {
+        setResendError('An error occurred. Please try again.');
+      }
+    } finally {
+      clearTimeout(timeoutId);
+      setResendLoading(false);
     }
   };
 
@@ -921,49 +945,68 @@ export default function BookingRequestPage() {
               )}
 
               {/* Terms and Conditions Checkbox */}
-              <div className="flex items-center gap-2.5 sm:gap-3 pt-1 sm:pt-2">
-              <input
-                type="checkbox"
-                id="termsAccepted"
-                name="termsAccepted"
-                checked={termsAccepted}
-                onChange={(e) => {
-                  setTermsAccepted(e.target.checked);
-                  if (e.target.checked && termsError) {
-                    setTermsError(null);
-                  }
-                }}
-                className={`w-4 h-4 sm:w-5 sm:h-5 rounded border-2 cursor-pointer transition-colors duration-200 focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 focus:outline-none ${
-                  termsError
-                    ? 'border-red-500 text-red-600 focus:ring-red-500'
-                    : 'border-gray-300 text-booking-teal focus:border-booking-teal'
-                }`}
-              />
-                <label
-                  htmlFor="termsAccepted"
-                  className={`flex-1 text-xs sm:text-sm leading-relaxed cursor-pointer select-none ${
-                    termsError 
-                      ? 'text-red-700' 
-                      : 'text-gray-700'
-                  }`}
-                  style={{ fontFamily: 'var(--font-avenir-regular)' }}
-                >
-                  I agree to{' '}
-                  <Link
-                    href="/terms"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`font-medium underline hover:no-underline transition-colors duration-200 ${
+              <div className="flex flex-col gap-1 pt-1 sm:pt-2">
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  <input
+                    type="checkbox"
+                    id="termsAccepted"
+                    name="termsAccepted"
+                    checked={termsAccepted}
+                    onChange={(e) => {
+                      setTermsAccepted(e.target.checked);
+                      if (e.target.checked && termsError) {
+                        setTermsError(null);
+                      }
+                    }}
+                    className={`w-4 h-4 sm:w-5 sm:h-5 rounded border-2 cursor-pointer transition-colors duration-200 focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 focus:outline-none ${
                       termsError
-                        ? 'text-red-600 hover:text-red-700'
-                        : 'text-booking-teal hover:text-booking-dark'
+                        ? 'border-red-500 text-red-600 focus:ring-red-500'
+                        : 'border-gray-300 text-booking-teal focus:border-booking-teal'
                     }`}
-                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <label
+                    htmlFor="termsAccepted"
+                    className={`text-xs sm:text-sm leading-relaxed cursor-pointer select-none ${
+                      termsError 
+                        ? 'text-red-700' 
+                        : 'text-gray-700'
+                    }`}
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
                   >
-                    client terms and conditions
-                  </Link>
-                </label>
+                    I agree to{' '}
+                    <Link
+                      href="/terms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`font-medium underline hover:no-underline transition-colors duration-200 ${
+                        termsError
+                          ? 'text-red-600 hover:text-red-700'
+                          : 'text-booking-teal hover:text-booking-dark'
+                      }`}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      client terms and conditions
+                    </Link>
+                  </label>
+                </div>
+                {showThankYou && (
+                  <button
+                    type="button"
+                    onClick={handleResendEmail}
+                    disabled={resendLoading}
+                    className="font-medium underline hover:no-underline transition-colors duration-200 text-booking-teal hover:text-booking-dark text-xs sm:text-sm whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                  >
+                    {resendLoading ? 'Sending...' : 'Resend Confirmation Email'}
+                  </button>
+                )}
               </div>
+              {resendError && (
+                <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{resendError}</p>
+              )}
+              {resendSuccess && (
+                <p className="mt-1 text-xs sm:text-sm text-green-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>Confirmation email resent successfully.</p>
+              )}
               {termsError && (
                 <p className="mt-1 text-xs sm:text-sm text-red-600 flex items-start gap-1.5" style={{ fontFamily: 'var(--font-avenir-regular)' }}>
                   <svg

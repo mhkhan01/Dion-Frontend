@@ -38,6 +38,10 @@ export default function LandlordSignupPage() {
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState<string>('');
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendError, setResendError] = useState<string | null>(null);
+  const [resendSuccess, setResendSuccess] = useState(false);
 
   const {
     register,
@@ -51,11 +55,51 @@ export default function LandlordSignupPage() {
   // Watch password for real-time criteria validation
   const passwordValue = watch('password', '');
 
+  const handleResendEmail = async () => {
+    if (!submittedEmail || resendLoading) return;
+
+    setResendLoading(true);
+    setResendError(null);
+    setResendSuccess(false);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
+      const response = await fetch(`${backendUrl}/partner-signup/resend`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: submittedEmail }),
+        signal: controller.signal,
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setResendError(result.error || 'Failed to resend. Please try again.');
+      } else {
+        setResendSuccess(true);
+      }
+    } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        setResendError('The request timed out. Please check your connection and try again.');
+      } else {
+        setResendError('An error occurred. Please try again.');
+      }
+    } finally {
+      clearTimeout(timeoutId);
+      setResendLoading(false);
+    }
+  };
+
   const onSubmit = async (data: SignupForm) => {
     setLoading(true);
     setError(null);
     setIsSigningUp(true);
     setSuccess(false);
+    setResendError(null);
+    setResendSuccess(false);
     
     // Normalize email to lowercase for case-insensitive comparison
     const normalizedEmail = data.email.toLowerCase().trim();
@@ -63,49 +107,35 @@ export default function LandlordSignupPage() {
     // Validate email doesn't exist in contractor or landlord tables (case-insensitive)
     try {
       // Check contractor table
-      const { data: contractors, error: contractorCheckError } = await supabase
+      const { data: existingContractor, error: contractorCheckError } = await supabase
         .from('contractor')
-        .select('id, email');
+        .select('id')
+        .eq('email', normalizedEmail)
+        .maybeSingle();
 
       if (contractorCheckError) {
         console.error('Error checking contractor table:', contractorCheckError);
-      } else if (contractors && Array.isArray(contractors)) {
-        const existingContractor = contractors.find(
-          (c) => {
-            if (!c || !c.email) return false;
-            const dbEmail = String(c.email).toLowerCase().trim();
-            return dbEmail === normalizedEmail;
-          }
-        );
-        if (existingContractor) {
-          setError("This email is already in use, Try a different email.");
-          setLoading(false);
-          setIsSigningUp(false);
-          return;
-        }
+      } else if (existingContractor) {
+        setError("This email is already in use, Try a different email.");
+        setLoading(false);
+        setIsSigningUp(false);
+        return;
       }
 
       // Check landlord table
-      const { data: landlords, error: landlordCheckError } = await supabase
+      const { data: existingLandlord, error: landlordCheckError } = await supabase
         .from('landlord')
-        .select('id, email');
+        .select('id')
+        .eq('email', normalizedEmail)
+        .maybeSingle();
 
       if (landlordCheckError) {
         console.error('Error checking landlord table:', landlordCheckError);
-      } else if (landlords && Array.isArray(landlords)) {
-        const existingLandlord = landlords.find(
-          (l) => {
-            if (!l || !l.email) return false;
-            const dbEmail = String(l.email).toLowerCase().trim();
-            return dbEmail === normalizedEmail;
-          }
-        );
-        if (existingLandlord) {
-          setError("This email is already in use, Try a different email.");
-          setLoading(false);
-          setIsSigningUp(false);
-          return;
-        }
+      } else if (existingLandlord) {
+        setError("This email is already in use, Try a different email.");
+        setLoading(false);
+        setIsSigningUp(false);
+        return;
       }
     } catch (emailCheckError) {
       console.error('Email validation check failed:', emailCheckError);
@@ -117,8 +147,8 @@ export default function LandlordSignupPage() {
 
     try {
       // Call backend API for partner signup
-      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com';
-      const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/partner-signup`, {
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
+      const response = await fetch(`${backendUrl}/partner-signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -155,6 +185,7 @@ export default function LandlordSignupPage() {
       }
 
       // Show success message - user stays on page until they confirm email
+      setSubmittedEmail(normalizedEmail);
       setSuccess(true);
       setLoading(false);
       setIsSigningUp(false);
@@ -480,42 +511,61 @@ export default function LandlordSignupPage() {
             </div>
 
             {/* Terms and Conditions Checkbox */}
-            <div className="flex items-center gap-2.5 sm:gap-3">
-              <input
-                {...register('termsAccepted')}
-                type="checkbox"
-                id="termsAccepted"
-                className={`w-4 h-4 sm:w-5 sm:h-5 rounded border-2 cursor-pointer transition-colors duration-200 focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 focus:outline-none ${
-                  errors.termsAccepted
-                    ? 'border-red-500 text-red-600 focus:ring-red-500'
-                    : 'border-gray-300 text-booking-teal focus:border-booking-teal'
-                }`}
-              />
-              <label
-                htmlFor="termsAccepted"
-                className={`flex-1 text-xs sm:text-sm leading-relaxed cursor-pointer select-none ${
-                  errors.termsAccepted 
-                    ? 'text-red-700' 
-                    : 'text-gray-700'
-                }`}
-                style={{ fontFamily: 'var(--font-avenir-regular)' }}
-              >
-                I agree to{' '}
-                <Link
-                  href="/partner-terms"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`font-medium underline hover:no-underline transition-colors duration-200 ${
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <input
+                  {...register('termsAccepted')}
+                  type="checkbox"
+                  id="termsAccepted"
+                  className={`w-4 h-4 sm:w-5 sm:h-5 rounded border-2 cursor-pointer transition-colors duration-200 focus:ring-2 focus:ring-booking-teal focus:ring-offset-2 focus:outline-none ${
                     errors.termsAccepted
-                      ? 'text-red-600 hover:text-red-700'
-                      : 'text-booking-teal hover:text-booking-dark'
+                      ? 'border-red-500 text-red-600 focus:ring-red-500'
+                      : 'border-gray-300 text-booking-teal focus:border-booking-teal'
                   }`}
-                  onClick={(e) => e.stopPropagation()}
+                />
+                <label
+                  htmlFor="termsAccepted"
+                  className={`text-xs sm:text-sm leading-relaxed cursor-pointer select-none ${
+                    errors.termsAccepted 
+                      ? 'text-red-700' 
+                      : 'text-gray-700'
+                  }`}
+                  style={{ fontFamily: 'var(--font-avenir-regular)' }}
                 >
-                  partner terms and conditions
-                </Link>
-              </label>
+                  I agree to{' '}
+                  <Link
+                    href="/partner-terms"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`font-medium underline hover:no-underline transition-colors duration-200 ${
+                      errors.termsAccepted
+                        ? 'text-red-600 hover:text-red-700'
+                        : 'text-booking-teal hover:text-booking-dark'
+                    }`}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    partner terms and conditions
+                  </Link>
+                </label>
+              </div>
+              {success && (
+                <button
+                  type="button"
+                  onClick={handleResendEmail}
+                  disabled={resendLoading}
+                  className="font-medium underline hover:no-underline transition-colors duration-200 text-booking-teal hover:text-booking-dark text-xs sm:text-sm whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ fontFamily: 'var(--font-avenir-regular)' }}
+                >
+                  {resendLoading ? 'Sending...' : 'Resend Confirmation Email'}
+                </button>
+              )}
             </div>
+            {resendError && (
+              <p className="mt-1 text-xs sm:text-sm text-red-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>{resendError}</p>
+            )}
+            {resendSuccess && (
+              <p className="mt-1 text-xs sm:text-sm text-green-600" style={{ fontFamily: 'var(--font-avenir-regular)' }}>Confirmation email resent successfully.</p>
+            )}
             {errors.termsAccepted && (
               <p className="mt-1 text-xs sm:text-sm text-red-600 flex items-start gap-1.5" style={{ fontFamily: 'var(--font-avenir-regular)' }}>
                 <svg

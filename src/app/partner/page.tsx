@@ -159,7 +159,7 @@ export default function PartnerDashboard() {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/auth/login');
+      router.push('/auth/login?type=partner');
       return;
     }
 
@@ -596,7 +596,7 @@ export default function PartnerDashboard() {
     }
   };
 
-  if (loading) {
+  if (loading || !user) {
     return (
       <div className="min-h-screen bg-booking-bg">
         <div className="flex items-center justify-center h-64">

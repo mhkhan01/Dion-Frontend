@@ -182,7 +182,7 @@ export default function ContractorDashboard() {
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/auth/login');
+      router.push('/auth/login?type=client');
       return;
     }
 
@@ -427,7 +427,7 @@ export default function ContractorDashboard() {
     }
   };
 
-  if (loading) {
+  if (loading || !user)  {
     return (
       <div className="min-h-screen bg-booking-bg">
         <div className="flex items-center justify-center h-64">

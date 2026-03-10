@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchingProfileRef = useRef(false);
   const isMountedRef = useRef(true);
 
-  const fetchUserProfile = async (supabaseUser: User) => {
+  const fetchUserProfile = async (supabaseUser: User, accessToken?: string) => {
     if (fetchedUsersRef.current.has(supabaseUser.id) || fetchingProfileRef.current) {
       return;
     }
@@ -51,11 +51,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
+      const token = accessToken ?? (await supabase.auth.getSession()).data.session?.access_token ?? '';
 
       const [partnerResponse, clientResponse] = await Promise.all([
         fetch(`${backendUrl}/partner-login-check`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
           body: JSON.stringify({ userId: supabaseUser.id }),
         })
           .then(res => (res.ok ? res.json() : { exists: false }))
@@ -63,7 +67,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         fetch(`${backendUrl}/client-login-check`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Bearer ${token}` }),
+          },
           body: JSON.stringify({ userId: supabaseUser.id }),
         })
           .then(res => (res.ok ? res.json() : { exists: false }))
@@ -127,7 +134,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (session?.user) {
         // fetchedUsersRef is always current (ref, not state) — no stale closure
         if (!fetchedUsersRef.current.has(session.user.id)) {
-          await fetchUserProfile(session.user);
+          await fetchUserProfile(session.user, session.access_token);
         }
       } else {
         setUser(null);

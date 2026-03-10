@@ -420,53 +420,36 @@ export default function PartnerDashboard() {
 
   const fetchConfirmedBookings = async () => {
     if (!user?.id) return;
-    
+
     try {
       setLoadingConfirmedBookings(true);
-      
-      // First get the landlord_id from the landlord table
-      const { data: landlordProfile, error: profileError } = await supabase
-        .from('landlord')
-        .select('id')
-        .eq('id', user.id)
-        .single();
 
-      if (profileError) {
-        console.error('Error fetching landlord profile:', profileError);
+      const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token;
+
+      if (!token) {
         setBookedProperties([]);
         return;
       }
 
-      // Fetch booked properties for this landlord with status 'active' or 'completed'
-      const { data: bookedPropertiesData, error: bookedPropertiesError } = await supabase
-        .from('booked_properties')
-        .select(`
-          *,
-          value,
-          properties (
-            id,
-            property_name,
-            house_address,
-            locality,
-            city,
-            county,
-            postcode,
-            country
-          ),
-          booking_requests (
-            city
-          )
-        `)
-        .eq('landlord_id', landlordProfile.id)
-        .in('status', ['active', 'completed'])
-        .order('created_at', { ascending: false });
+      const response = await fetch(`${backendUrl}/partner-booked-properties`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        cache: 'no-store',
+      });
 
-      if (bookedPropertiesError) {
-        console.error('Error fetching confirmed bookings:', bookedPropertiesError);
+      if (!response.ok) {
+        console.error('Error fetching confirmed bookings:', response.status, response.statusText);
         setBookedProperties([]);
-      } else {
-        setBookedProperties(bookedPropertiesData || []);
+        return;
       }
+
+      const result = await response.json().catch(() => ({}));
+      setBookedProperties(result.bookedProperties ?? []);
     } catch (error) {
       console.error('Error fetching confirmed bookings:', error);
       setBookedProperties([]);
@@ -752,16 +735,6 @@ export default function PartnerDashboard() {
                               <div className="text-[5px] sm:text-xs font-medium text-gray-600 uppercase mb-0.5 sm:mb-1">Number of Nights</div>
                               <div className="text-[6px] sm:text-lg font-bold text-gray-900">
                                 {Math.round((new Date(bookedProperty.end_date).getTime() - new Date(bookedProperty.start_date).getTime()) / (1000 * 60 * 60 * 24))}
-                              </div>
-                            </div>
-                          )}
-                          {bookedProperty.value !== undefined && bookedProperty.value !== null && (
-                            <div className="mt-0.5 sm:mt-3 text-center">
-                              <div className="text-[5px] sm:text-xs font-medium text-gray-600 uppercase mb-0.5 sm:mb-1">Booking value</div>
-                              <div className="text-[6px] sm:text-lg font-bold text-gray-900">
-                                {typeof bookedProperty.value === 'number' 
-                                  ? `£${bookedProperty.value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                                  : `£${String(bookedProperty.value)}`}
                               </div>
                             </div>
                           )}

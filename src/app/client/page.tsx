@@ -58,6 +58,7 @@ export default function ContractorDashboard() {
   const [contractorFullName, setContractorFullName] = useState('');
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [selectedBookingDetails, setSelectedBookingDetails] = useState<any>(null);
+  const [selectedBookingValueFromBackend, setSelectedBookingValueFromBackend] = useState<number | string | null>(null);
   const [isBookingDetailsModalOpen, setIsBookingDetailsModalOpen] = useState(false);
   const [isBookingFormModalOpen, setIsBookingFormModalOpen] = useState(false);
   const [editingBookingRequestId, setEditingBookingRequestId] = useState<string | null>(null);
@@ -304,22 +305,47 @@ export default function ContractorDashboard() {
       }
 
       // Filter to only show the specific booking_date that was clicked
+      let resolvedStatus = bookingRequest?.status;
       if (bookingRequest && bookingRequest.booking_dates) {
         const specificDate = bookingRequest.booking_dates.find(
           (date: any) => date.id === bookingDateId
         );
-        
-        // Use the booking_date status if available, otherwise fall back to booking_request status
         if (specificDate && specificDate.status) {
           bookingRequest.status = specificDate.status;
+          resolvedStatus = specificDate.status;
         }
-        
         bookingRequest.booking_dates = bookingRequest.booking_dates.filter(
           (date: any) => date.id === bookingDateId
         );
       }
 
       setSelectedBookingDetails(bookingRequest);
+      setSelectedBookingValueFromBackend(null);
+
+      if (resolvedStatus === 'confirmed') {
+        try {
+          const { data: sessionData } = await supabase.auth.getSession();
+          if (sessionData.session) {
+            const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
+            const response = await fetch(`${backendUrl}/booking-values/${bookingDateId}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionData.session.access_token}`,
+              },
+            });
+            if (response.ok) {
+              const result = await response.json();
+              if (result.success && result.value != null) {
+                setSelectedBookingValueFromBackend(result.value);
+              }
+            }
+          }
+        } catch (err) {
+          console.error('Error fetching booking value for details:', err);
+        }
+      }
+
       setIsBookingDetailsModalOpen(true);
     } catch (error) {
       console.error('Error fetching booking details:', error);
@@ -361,29 +387,25 @@ export default function ContractorDashboard() {
               // Determine the actual status (same logic as displayed status)
               const actualStatus = (bookingDate.status || request.status);
               
-              // Fetch value from backend API for confirmed bookings (requires auth)
+              // Fetch value from booked_properties via backend for confirmed bookings only
               let bookingValue: number | string | undefined = undefined;
               if (actualStatus === 'confirmed') {
                 try {
-                  // Get auth session for authorization
                   const { data: sessionData } = await supabase.auth.getSession();
-                  
                   if (sessionData.session) {
-                    const response = await fetch(`https://jfgm6v6pkw.us-east-1.awsapprunner.com/api/booking-values/${bookingDate.id}`, {
+                    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://jfgm6v6pkw.us-east-1.awsapprunner.com/api';
+                    const response = await fetch(`${backendUrl}/booking-values/${bookingDate.id}`, {
                       method: 'GET',
                       headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${sessionData.session.access_token}`,
                       },
                     });
-                    
                     if (response.ok) {
                       const result = await response.json();
-                      if (result.success && result.value) {
+                      if (result.success && result.value != null) {
                         bookingValue = result.value;
                       }
-                    } else {
-                      console.error('Failed to fetch booking value from backend:', response.status);
                     }
                   }
                 } catch (error) {
@@ -427,7 +449,7 @@ export default function ContractorDashboard() {
     }
   };
 
-  if (loading || !user)  {
+  if (loading || !user) {
     return (
       <div className="min-h-screen bg-booking-bg">
         <div className="flex items-center justify-center h-64">
@@ -1065,14 +1087,12 @@ export default function ContractorDashboard() {
                             </div>
                             <div className="flex items-center space-x-4 flex-shrink-0">
                               <div className="text-right">
-                                <div className="text-sm font-avenir font-semibold tracking-wide text-booking-dark">{booking.property.price}</div>
+                                <div className="text-sm font-avenir font-semibold tracking-wide text-booking-dark">
+                                  {booking.status === 'confirmed' && booking.value != null
+                                    ? (typeof booking.value === 'number' ? `£${Number(booking.value).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : `£${String(booking.value)}`)
+                                    : `£${Number.isInteger(Number(booking.property.price || 0)) ? Number(booking.property.price || 0).toLocaleString('en-GB') : Number(booking.property.price || 0).toLocaleString('en-GB', { maximumFractionDigits: 2 })}`}
+                                </div>
                                 <div className="text-xs font-avenir font-medium tracking-wide text-booking-gray">per night</div>
-                                {booking.status === 'confirmed' && booking.value && (
-                                  <>
-                                    <div className="text-sm font-avenir font-semibold tracking-wide text-green-700 mt-1">{booking.value}</div>
-                                    <div className="text-xs font-avenir font-medium tracking-wide text-green-600">booking value</div>
-                                  </>
-                                )}
                               </div>
                               <span className={`px-3 py-1 rounded-full text-xs font-avenir font-medium tracking-wide ${
                                 booking.status === 'confirmed' 
@@ -1144,13 +1164,10 @@ export default function ContractorDashboard() {
                               {new Date(booking.start_date).toLocaleDateString()} - {new Date(booking.end_date).toLocaleDateString()}
                             </span>
                             <span className="text-xs lg:text-sm font-avenir font-semibold tracking-wide text-booking-teal">
-                              {booking.property.price || 0} per night
+                              {booking.status === 'confirmed' && booking.value != null
+                                ? (typeof booking.value === 'number' ? `£${Number(booking.value).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : `£${String(booking.value)}`) + ' per night'
+                                : `£${Number.isInteger(Number(booking.property.price || 0)) ? Number(booking.property.price || 0).toLocaleString('en-GB') : Number(booking.property.price || 0).toLocaleString('en-GB', { maximumFractionDigits: 2 })} per night`}
                             </span>
-                            {booking.status === 'confirmed' && booking.value && (
-                              <span className="text-xs lg:text-sm font-avenir font-semibold tracking-wide text-green-700 mt-1">
-                                Booking Value: {booking.value}
-                              </span>
-                            )}
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
@@ -1580,6 +1597,7 @@ export default function ContractorDashboard() {
                 onClick={() => {
                   setIsBookingDetailsModalOpen(false);
                   setSelectedBookingDetails(null);
+                  setSelectedBookingValueFromBackend(null);
                 }}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
@@ -1639,7 +1657,11 @@ export default function ContractorDashboard() {
                   
                   <div>
                     <label className="block text-base font-avenir tracking-wide text-booking-gray mb-1">Nightly Budget (per person)</label>
-                    <p className="text-sm font-avenir-regular text-booking-dark">£{selectedBookingDetails.budget_per_person_week || 'N/A'}</p>
+                    <p className="text-sm font-avenir-regular text-booking-dark">
+                      £{selectedBookingDetails.status === 'confirmed' && selectedBookingValueFromBackend != null
+                        ? (typeof selectedBookingValueFromBackend === 'number' ? Number(selectedBookingValueFromBackend).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : String(selectedBookingValueFromBackend))
+                        : (selectedBookingDetails.budget_per_person_week ?? 'N/A')}
+                    </p>
                   </div>
                   
                   <div>
@@ -1694,6 +1716,7 @@ export default function ContractorDashboard() {
                 onClick={() => {
                   setIsBookingDetailsModalOpen(false);
                   setSelectedBookingDetails(null);
+                  setSelectedBookingValueFromBackend(null);
                 }}
                 className="w-full sm:w-auto px-6 py-3 bg-booking-teal text-white rounded-lg font-avenir-regular font-medium hover:bg-opacity-90 transition-all duration-200"
               >
